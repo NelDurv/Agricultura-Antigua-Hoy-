@@ -1,0 +1,6 @@
+{
+  "name": "Agricultura Antigua",
+  "description": "Campus digital y base de conocimientos de agricultura sostenible para pequeños productores y capacitadores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

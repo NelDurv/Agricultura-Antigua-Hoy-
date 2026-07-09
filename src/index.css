@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "Fira Code", ui-monospace, monospace;
+  
+  --color-primary: #003459;
+  --color-secondary: #54595F;
+  --color-accent: #61CE70;
+  --color-accent-alt: #FFBC7D;
+  --color-gold: #ffcc05;
+  --color-text-dark: #222222;
+  --color-text-light: #7A7A7A;
+}
+
+/* Custom scrollbar and aesthetics to avoid clutter */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  background-color: #fcfcfc;
+  color: #222222;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Plantilla Machu Picchu: Cards e Interacciones */
+.machu-card {
+  background: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+  border-bottom: 3.5px solid #ffcc05;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.machu-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.machu-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  background: #ffcc05;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
+.machu-btn:hover {
+  background: #003459;
+  color: #ffffff;
+}
+
+input[type="range"] {
+  cursor: pointer;
+}
+
+/* Accessibility toolbar classes (toggled on <html>) */
+html.a11y-high-contrast {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.a11y-high-contrast img,
+html.a11y-high-contrast video,
+html.a11y-high-contrast [class*="lucide"] {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.a11y-grayscale {
+  filter: grayscale(100%);
+}
+html.a11y-underline-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+/* Modo de ahorro de datos: deshabilita animaciones y transiciones pesadas */
+div[data-data-saver="true"] *,
+div[data-data-saver="true"] *::before,
+div[data-data-saver="true"] *::after {
+  animation-delay: 0s !important;
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-property: none !important;
+  scroll-behavior: auto !important;
+}
+
+
