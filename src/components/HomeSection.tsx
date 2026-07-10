@@ -5,18 +5,8 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  ArrowRight, 
-  GraduationCap, 
-  BookOpen, 
-  ShieldCheck, 
-  Sprout, 
-  Calendar,
-  Sparkles,
-  ChevronLeft,
-  ChevronRight
-} from "lucide-react";
-import { COURSES, BIBLIOTECA } from "../data";
+import { ArrowRight, Sprout, Calendar, Sparkles, ChevronLeft, ChevronRight, FlaskConical, Droplets } from "lucide-react";
+import { COURSES, BIBLIOTECA, PILARES, MITOS, RECETAS, NUMEROS_CLAVE } from "../data";
 import { useAuth, useUI } from "../contexts";
 import SearchBar from "./SearchBar";
 
@@ -25,7 +15,7 @@ const HERO_SLIDES = [
     badge: "Campus Virtual • Sabiduría Ancestral",
     title: "Preservamos saberes de la tierra, respaldados por la ciencia moderna.",
     description: (name: string) => <>Hola, <strong className="text-stone-100 font-semibold">{name}</strong>. Bienvenido a Agricultura Antigua. Ponemos a tu disposición guías técnicas, cursos de microbiología de suelos y herramientas interactivas diseñadas para agricultores familiares y organizaciones comunitarias.</>,
-    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c3aa?auto=format&fit=crop&q=100&w=2400",
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=100&w=2400",
     showSearch: true,
   },
   {
@@ -123,11 +113,11 @@ export default function HomeSection() {
   const slide = HERO_SLIDES[slideIdx];
 
   return (
-    <div className="space-y-12 py-4" id="home-section">
+    <div className="space-y-6 py-2" id="home-section">
       {/* Hero Carousel */}
       <div className="relative overflow-hidden rounded-3xl shadow-lg" id="hero-banner" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
         {/* Slides */}
-        <div className="relative min-h-[360px] sm:min-h-[460px] md:min-h-[520px] lg:min-h-[580px]">
+        <div className="relative min-h-[300px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[460px]">
           {HERO_SLIDES.map((s, i) => (
             <div
               key={i}
@@ -215,23 +205,13 @@ export default function HomeSection() {
 
       {/* Metrics Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4" id="home-metrics">
-        {[
-          { label: "Base de Saberes", value: "Una sola fuente", desc: "Contenidos no duplicados", icon: Sprout },
-          { label: "Cursos Disponibles", value: "Capacitación Práctica", desc: "Inscripción libre", icon: GraduationCap },
-          { label: "Documentos Técnicos", value: "100% Descargables", desc: "Formatos simplificados", icon: BookOpen },
-          { label: "Certificación", value: "Código Unico", desc: "Registro Institucional", icon: ShieldCheck },
-        ].map((stat, idx) => {
-          const Icon = stat.icon;
+        {[0, 1, 5, 2].map((idx) => {
+          const item = NUMEROS_CLAVE[idx];
           return (
-            <div key={idx} className="bg-white border border-stone-200/80 rounded-2xl p-5 shadow-xs hover:shadow-md border-b-3 border-gold flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] text-primary tracking-wider uppercase font-bold">{stat.label}</span>
-                <Icon className="h-4.5 w-4.5 text-primary" />
-              </div>
-              <div className="mt-2.5">
-                <p className="text-sm font-serif font-bold text-stone-900 leading-tight">{stat.value}</p>
-                <p className="text-[10px] text-stone-500 mt-0.5">{stat.desc}</p>
-              </div>
+            <div key={idx} className="bg-white border border-stone-200/80 rounded-2xl p-4 shadow-xs hover:shadow-md border-b-3 border-gold flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-0.5">
+              <span className="text-4xl font-serif font-bold text-primary">{item.valor}</span>
+              <Sprout className="h-4 w-4 text-primary mt-1 mb-1" />
+              <p className="text-xs text-stone-600 leading-snug max-w-[90%]">{item.label}</p>
             </div>
           );
         })}
@@ -243,62 +223,188 @@ export default function HomeSection() {
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">Programas de Formación Activos</h3>
-              <p className="text-xs text-stone-500 mt-1">Aprende con nuestro modelo ordenado en rutas de aprendizaje continuas.</p>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">Pilares del Saber</h3>
+              <p className="text-xs text-stone-500 mt-1">Fundamentos de la transición agroecológica científica.</p>
             </div>
             <button
-              onClick={() => navigate("/academia")}
+              onClick={() => navigate("/recursos")}
               className="text-xs font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
             >
-              <span>Ver catálogo</span>
+              <span>Explorar todo</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
           </div>
 
           <div className="ocn-grid">
-            {COURSES.slice(0, 9).map((course) => {
-              const optimizedImage = dataSaver
-                ? course.image.replace("q=100", "q=20").replace("w=2400", "w=400")
-                : course.image;
-              return (
-                <div 
-                  key={course.id} 
-                  className="ocn-card"
+            {PILARES.filter(p => p.id !== 'bioinsumos').map((pilar) => (
+              <div
+                key={pilar.id}
+                className="ocn-card"
+              >
+                <div
+                  className="ocn-card-img flex items-center justify-center text-3xl"
+                  style={{ backgroundColor: pilar.bgColor }}
                 >
-                  <img 
-                    src={optimizedImage} 
-                    alt={course.title}
-                    referrerPolicy="no-referrer"
-                    className="ocn-card-img"
-                  />
-                  <div className="ocn-card-body">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
-                            {course.category}
-                          </span>
-                          <span className="text-[10px] font-semibold text-stone-500 uppercase font-mono">{course.level}</span>
-                        </div>
-                        <span className="text-xs text-stone-900 font-semibold">★ {course.rating}</span>
-                      </div>
-                    <h4 className="font-serif text-base font-bold text-stone-950 line-clamp-1">{course.title}</h4>
-                    <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">{course.description}</p>
+                  <span>{pilar.icono}</span>
+                </div>
+                <div className="ocn-card-body">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: pilar.color, backgroundColor: pilar.bgColor, border: `1px solid ${pilar.color}20` }}>
+                          {pilar.subtitulo}
+                        </span>
+          </div>
+        </div>
+                    <h4 className="font-serif text-base font-bold text-stone-950 line-clamp-1">{pilar.titulo}</h4>
+                    <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">{pilar.descripcion}</p>
                   </div>
                   <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-stone-500">{course.duration} • {course.lessonsCount} módulos</span>
+                    <span className="text-[10px] font-mono text-stone-500">{pilar.temas.length} temas clave</span>
                     <button
-                      onClick={() => navigate("/academia/" + course.id)}
+                      onClick={() => navigate("/recursos")}
                       className="ocn-btn ocn-btn-primary"
                     >
-                      <span>Comenzar</span>
+                      <span>Ver temas</span>
                       <ArrowRight className="h-3 w-3" />
                     </button>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* Mitos header */}
+          <div className="flex items-center justify-between pt-4">
+            <div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">Mitos vs Realidad</h3>
+              <p className="text-xs text-stone-500 mt-1">Creencias populares confrontadas con evidencia científica.</p>
+            </div>
+            <button
+              onClick={() => navigate("/recursos")}
+              className="text-xs font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
+            >
+              <span>Explorar todo</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="ocn-grid">
+            {MITOS.slice(0, 4).map((mito) => (
+              <div
+                key={mito.id}
+                className="ocn-card"
+              >
+                <div
+                  className="ocn-card-img flex items-center justify-center text-3xl"
+                  style={{ backgroundColor: `${mito.color}15` }}
+                >
+                  <span>{mito.icono}</span>
+                </div>
+                <div className="ocn-card-body">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-stone-500 bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-full">
+                          MITO
+                        </span>
+                      </div>
+                    </div>
+                    <h4 className="font-serif text-base font-bold text-stone-950 line-clamp-1">{mito.titulo}</h4>
+                    <p className="text-xs text-stone-500 italic line-clamp-2 leading-relaxed">&ldquo;{mito.mito}&rdquo;</p>
+                  </div>
+                  <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-stone-500">Clic para ver realidad</span>
+                    <button
+                      onClick={() => navigate("/recursos")}
+                      className="text-[10px] font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
+                    >
+                      <span>Ver realidad</span>
+                      <ArrowRight className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Recetas & Calculadoras header */}
+          <div className="flex items-center justify-between pt-4">
+            <div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">Recetas de Bioinsumos y Calculadora de Campo</h3>
+              <p className="text-xs text-stone-500 mt-1">Recetas paso a paso y herramientas interactivas para tu biofábrica.</p>
+            </div>
+            <button
+              onClick={() => navigate("/recursos")}
+              className="text-xs font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
+            >
+              <span>Ir a herramientas</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="ocn-grid">
+            {RECETAS.map((receta) => (
+              <div
+                key={receta.id}
+                className="ocn-card"
+              >
+                <div className="ocn-card-img flex items-center justify-center text-4xl bg-stone-100">
+                  <FlaskConical className="h-8 w-8 text-primary" />
+                </div>
+                <div className="ocn-card-body">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-stone-500 bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-full">
+                          {receta.categoria}
+                        </span>
+                      </div>
+                    </div>
+                    <h4 className="font-serif text-base font-bold text-stone-950 line-clamp-1">{receta.titulo}</h4>
+                    <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">{receta.descripcion}</p>
+                  </div>
+                  <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-stone-500">{receta.tiempo} • {receta.ingredientes.length} ingredientes</span>
+                    <button
+                      onClick={() => navigate("/recursos")}
+                      className="ocn-btn ocn-btn-primary"
+                    >
+                      <span>Ver receta</span>
+                      <ArrowRight className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="ocn-card">
+              <div className="ocn-card-img flex items-center justify-center text-4xl bg-emerald-50">
+                <Droplets className="h-8 w-8 text-emerald-600" />
+              </div>
+              <div className="ocn-card-body">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                        Calculadora
+                      </span>
+                    </div>
+                  </div>
+                  <h4 className="font-serif text-base font-bold text-stone-950 line-clamp-1">Calculadora de Humedad</h4>
+                  <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">Estima la humedad ideal para compostaje mezclando materia verde y seca.</p>
+                </div>
+                <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-stone-500">Herramienta interactiva</span>
+                  <button
+                    onClick={() => navigate("/recursos")}
+                    className="ocn-btn ocn-btn-primary"
+                  >
+                    <span>Usar calculadora</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -361,19 +467,15 @@ export default function HomeSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-[1.05rem]">
           {[
-            { step: "01", title: "Manejo del Suelo", desc: "Suelo Vivo, red alimentaria y microbiología.", active: true },
-            { step: "02", title: "Bioinsumos Líquidos", desc: "Elaboración de fermentados y caldos minerales.", active: true },
-            { step: "03", title: "Nutrición Sólida", desc: "Compostaje termófilo y Bokashi acelerado.", active: false },
-            { step: "04", title: "Manejo de Plagas", desc: "Estrategias de control biológico y vegetal.", active: false },
+            { step: "01", title: "Manejo del Suelo", desc: "Suelo Vivo, red alimentaria y microbiología." },
+            { step: "02", title: "Bioinsumos Líquidos", desc: "Elaboración de fermentados y caldos minerales." },
+            { step: "03", title: "Nutrición Sólida", desc: "Compostaje termófilo y Bokashi acelerado." },
+            { step: "04", title: "Manejo de Plagas", desc: "Estrategias de control biológico y vegetal." },
           ].map((item, idx) => (
-            <div key={idx} className={`p-4 rounded-xl border flex flex-col justify-between h-[5.6rem] transition-all ${item.active ? "bg-stone-50 border-gold/60 shadow-xs" : "bg-stone-50/50 border-stone-200/60 opacity-70"}`}>
+            <div key={idx} className="p-4 rounded-xl border flex flex-col justify-between h-[5.6rem] transition-all bg-stone-50 border-gold/60 shadow-xs">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10px] font-bold text-stone-400">{item.step}</span>
-                {item.active ? (
-                  <span className="text-[9px] bg-primary text-white px-1.5 py-0.5 rounded font-bold font-mono border border-gold/40">Disponible</span>
-                ) : (
-                  <span className="text-[9px] bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded font-medium font-mono border border-stone-200">Próximamente</span>
-                )}
+                <span className="text-[9px] bg-primary text-white px-1.5 py-0.5 rounded font-bold font-mono border border-gold/40">Disponible</span>
               </div>
               <div className="mt-2">
                 <p className="text-xs font-serif font-bold text-stone-900">{item.title}</p>
@@ -385,7 +487,7 @@ export default function HomeSection() {
       </div>
 
       {/* Events / News Banner */}
-      <div className="bg-white border border-stone-200 rounded-3xl p-[1.2rem] sm:p-[1.6rem] flex flex-col md:flex-row gap-6 items-center justify-between border-b-4 border-gold shadow-xs" id="home-events">
+      <div className="bg-white border border-stone-200 rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 items-center justify-between border-b-4 border-gold shadow-xs" id="home-events">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 text-stone-950 border border-gold/40 px-2.5 py-0.5 text-[10px] font-mono tracking-wider font-bold">
             <Calendar className="h-3 w-3 text-primary" />

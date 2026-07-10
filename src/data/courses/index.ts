@@ -10,7 +10,7 @@ export const COURSES: Course[] = [
     category: "Nutrición de Suelos",
     duration: "12 horas",
     lessonsCount: 4,
-    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c3aa?auto=format&fit=crop&q=80&w=600",
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600",
     rating: 4.9,
     isPremium: false,
     author: "Ing. Alejandro Salazar - Especialista en Microbiología de Suelos",

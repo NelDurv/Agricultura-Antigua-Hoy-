@@ -282,19 +282,20 @@ export default function RecursosSection() {
             {/* Pillar Detail View (Spans Full Width 100%) */}
             <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs w-full">
               {/* Header card with background */}
-              <div className="p-6 rounded-2xl space-y-3" style={{ backgroundColor: selectedPilar.bgColor }}>
-                <div className="flex items-center gap-3">
+              <div className="p-6 rounded-2xl space-y-3 relative overflow-hidden" style={{ backgroundColor: selectedPilar.bgColor }}>
+                <span className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ backgroundColor: selectedPilar.color }} />
+                <div className="flex items-center gap-3 pl-2">
                   <span className="text-4xl">{selectedPilar.icono}</span>
                   <div>
-                    <span className="text-[10px] font-mono font-black uppercase tracking-widest" style={{ color: selectedPilar.color }}>
+                    <span className="text-[10px] font-mono font-black uppercase tracking-widest text-black">
                       {selectedPilar.subtitulo}
                     </span>
-                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900 mt-0.5">
+                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-black mt-0.5">
                       {selectedPilar.titulo}
                     </h3>
                   </div>
                 </div>
-                <p className="text-xs text-stone-800 leading-relaxed font-sans max-w-4xl pt-2 border-t border-stone-950/5">
+                <p className="text-xs text-black leading-relaxed font-sans max-w-4xl pt-2 border-t border-black/10 pl-2">
                   {selectedPilar.descripcion}
                 </p>
               </div>
