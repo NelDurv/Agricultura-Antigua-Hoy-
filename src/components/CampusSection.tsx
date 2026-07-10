@@ -213,26 +213,26 @@ export default function CampusSection() {
         </div>
 
         {/* Mode Selector Segmented Controls */}
-        <div className="inline-flex rounded-xl bg-stone-200/70 p-1 self-start md:self-center border border-stone-300/40">
+        <div className="inline-flex rounded-xl bg-stone-200/70 p-1.5 self-start md:self-center border border-stone-300/40 gap-1">
           <button
             onClick={() => setCampusMode("fundamentos")}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
+            className={`px-6 py-3 text-sm font-bold rounded-lg transition-all ${
               campusMode === "fundamentos"
                 ? "bg-white text-stone-950 shadow-xs"
-                : "text-stone-600 hover:text-stone-950"
+                : "text-gold"
             }`}
           >
             🏫 Talleres Iniciales
           </button>
           <button
             onClick={() => setCampusMode("utopia")}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
+            className={`px-6 py-3 text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 ${
               campusMode === "utopia"
                 ? "bg-emerald-600 text-stone-50 shadow-xs"
                 : "text-stone-600 hover:text-stone-950"
             }`}
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Sparkles className="h-5 w-5" />
             <span>Ruta Utopía (32 Cursos)</span>
           </button>
         </div>
@@ -605,11 +605,11 @@ export default function CampusSection() {
                     {/* Collapsed Row Header */}
                     <div 
                       onClick={() => setExpandedCourseId(isExpanded ? null : course.id)}
-                      className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer select-none"
+                      className="p-4 sm:p-5 flex flex-wrap items-center gap-2 sm:gap-4 cursor-pointer select-none"
                     >
-                      <div className="flex items-center gap-4 min-w-0">
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                         {/* Course Number Badge */}
-                        <span className={`h-9 w-9 rounded-xl flex items-center justify-center font-mono text-sm font-bold shrink-0 ${
+                        <span className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl flex items-center justify-center font-mono text-xs sm:text-sm font-bold shrink-0 ${
                           isCourseDone
                             ? "bg-emerald-600 text-white shadow-2xs"
                             : isExpanded
@@ -621,9 +621,6 @@ export default function CampusSection() {
 
                         <div className="space-y-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-sm bg-stone-100 text-stone-600 border border-stone-200">
-                              {getCategoryLabel(category)}
-                            </span>
                             {isCourseDone && (
                               <span className="inline-flex items-center gap-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-mono px-1.5 py-0.5 rounded font-semibold border border-emerald-200">
                                 <CheckCircle className="h-3 w-3" /> Completado
@@ -636,18 +633,17 @@ export default function CampusSection() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 w-full sm:w-auto justify-end">
                         {/* Material de estudio button */}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setMaterialFullScreen(false); setViewMaterial(course.id);
                           }}
-                          className="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-stone-50 text-[10px] font-semibold transition-all flex items-center gap-1 shadow-xs"
+                          className="px-1.5 py-1 sm:px-2 sm:py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-stone-50 text-[10px] sm:text-[11px] font-semibold tracking-wide transition-all whitespace-nowrap shadow-xs"
                           title="Leer material de estudio antes de rendir el curso"
                         >
-                          <FileText className="h-3 w-3" />
-                          <span className="hidden sm:inline">Material de estudio</span>
+                          <span>Material de estudio</span>
                         </button>
                         {/* Interactive complete toggle checkbox on row */}
                         <button
@@ -662,14 +658,14 @@ export default function CampusSection() {
                           }`}
                           title={isCourseDone ? "Marcar como pendiente" : "Marcar como aprobado"}
                         >
-                          <CheckCircle2 className={`h-5 w-5 ${isCourseDone ? "text-emerald-600 fill-emerald-100" : "text-stone-300"}`} />
-                        </button>
-                        
-                        {isExpanded ? (
-                          <ChevronUp className="h-5 w-5 text-stone-500" />
-                        ) : (
-                          <ChevronDown className="h-5 w-5 text-stone-500" />
-                        )}
+                        <CheckCircle2 className={`h-4 w-4 sm:h-5 sm:w-5 ${isCourseDone ? "text-emerald-600 fill-emerald-100" : "text-stone-300"}`} />
+                          </button>
+                          
+                          {isExpanded ? (
+                            <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5 text-stone-500" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-stone-500" />
+                          )}
                       </div>
                     </div>
 
@@ -774,8 +770,8 @@ export default function CampusSection() {
                                     {/* Collapsible Hidden Answer field */}
                                     {isAnswerRevealed ? (
                                       <div className="p-4 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-lg text-base text-stone-800 font-sans leading-relaxed transition-all duration-300">
-                                        <p className="font-mono text-xs uppercase text-emerald-800 font-bold mb-1">✓ Respuesta Técnica:</p>
-                                        <p>{q.a}</p>
+                                        <p className="font-mono text-xs uppercase text-black font-bold mb-1">✓ Respuesta Técnica:</p>
+                                        <p className="text-black font-sans leading-relaxed">{q.a}</p>
                                       </div>
                                     ) : (
                                       <div className="h-[54px] border-2 border-dashed border-orange-300 rounded-xl flex items-center justify-center bg-orange-100/50">
@@ -789,7 +785,7 @@ export default function CampusSection() {
                                     className={`py-2.5 w-full rounded-xl text-sm font-mono font-bold flex items-center justify-center gap-2 transition-colors ${
                                       isAnswerRevealed 
                                         ? "bg-stone-200 hover:bg-stone-300 text-stone-700" 
-                                        : "bg-orange-500 hover:bg-orange-600 text-white shadow-sm"
+                                        : "bg-gradient-to-r from-[#496d56] to-[#85b096] hover:from-[#3a5a45] hover:to-[#6d9a7d] text-white shadow-sm"
                                     }`}
                                   >
                                     {isAnswerRevealed ? (
