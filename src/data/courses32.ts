@@ -156,6 +156,88 @@ export const COURSES32: Course32[] = [
       "Realizar la 'Prueba del Puño' para asegurar que la mezcla de MM sólidos tenga un 50% de humedad (que forme un terrón que no gotee).",
       "Montar una trampa de captura de microorganismos usando arroz cocido en una caja de madera enterrada en el bosque.",
       "Preparar un inóculo líquido de 20 litros usando MM sólidos, melaza y agua sin cloro."
+    ],
+    studyContent: [
+      {
+        topic: "Objetivo de la Estación 2",
+        subtitle: "Transformando los microbios del bosque en un tónico líquido",
+        body: "El objetivo principal de esta estación es realizar la solubilización y multiplicación de los microorganismos capturados en sólido en la Estación 1. Al pasar la vida microscópica a un medio acuoso, facilitamos su aplicación masiva a través del riego o aspersión foliar, permitiendo que estos \"obreros\" lleguen rápidamente a la raíz y a las hojas para empezar a trabajar. Este proceso permite que una pequeña cantidad de cultivo sólido (5 kg) rinda para producir hasta 1,000 litros de biofertilizante líquido. Es el paso fundamental para democratizar la tecnología, pues permite que un campesino con pocos recursos fabrique suficiente vida biológica para cubrir varias hectáreas con una inversión mínima.",
+        farmerNote: "Imagine que los microorganismos de la Estación 1 son como una semilla de maíz guardada en un costal. La Estación 2 es como sembrar esa semilla en una parcela con agua y abono para que nazcan miles de plantas nuevas."
+      },
+      {
+        topic: "Materiales e insumos necesarios",
+        subtitle: "Los ingredientes básicos para la biofábrica líquida",
+        body: "Para instalar esta estación se requiere un contenedor plástico de 200 litros, preferiblemente con tapa de rosca para evitar contaminaciones. Los insumos biológicos incluyen 5 kg de microorganismos sólidos de la Estación 1 y 5 kg de melaza pura. Estos elementos se mezclan con agua limpia, preferiblemente sin cloro, que funciona como el solvente donde ocurrirán todas las reacciones químicas. Además, se utiliza un material poroso, como un costal de fibra o tela tergalina, que funciona como una \"bolsa de té\" gigante. Este costal permite que los microorganismos y sus enzimas salgan al agua mientras que los sedimentos (salvado, tierra) se quedan atrapados, facilitando que el producto final sea un líquido limpio que no tape las boquillas de las mochilas de aspersión."
+      },
+      {
+        topic: "La función de la Melaza",
+        subtitle: "El combustible para la explosión de vida",
+        body: "La melaza es el componente crítico que actúa como la principal fuente de carbono y energía de fácil asimilación para los microbios. Sin estos azúcares, los microorganismos no tendrían la fuerza necesaria para multiplicarse rápidamente y entrarían en un estado de dormancia o morirían. Al proporcionar una dieta rica en azúcares (idealmente al 75%), aseguramos que las poblaciones microbianas crezcan de forma acelerada y se vuelvan fuertes. La calidad de la fermentación y la potencia del biofertilizante final dependen directamente de la cantidad y calidad de los azúcares entregados en esta etapa.",
+        farmerNote: "La melaza es como la leña para el fogón. Si usted pone poca leña o leña mojada, el fuego no calienta. Con mucha melaza pura, el \"fuego\" de la vida microbiana arde con mucha fuerza."
+      },
+      {
+        topic: "El método de la \"Bolsa de Té\"",
+        subtitle: "Filtración biológica para una aplicación eficiente",
+        body: "El uso de un costal poroso para contener los microorganismos sólidos dentro del tambo de agua es lo que define operativamente a la Estación 2. Dentro de este costal, se mezclan los 5 kg de MM sólido con la melaza hasta formar una pasta. Al sumergir esta bolsa en el agua, los microorganismos comienzan a \"nadar\" hacia afuera atraídos por el medio acuoso. Esta técnica es vital porque separa la biomasa activa del rastrojo y el salvado de la Estación 1. El resultado es un extracto líquido rico en bacterias, hongos y levaduras, pero libre de partículas gruesas que dificultarían su uso en sistemas de riego por goteo o aspersión."
+      },
+      {
+        topic: "Por qué evitar el uso de agua en la mezcla inicial",
+        subtitle: "Manteniendo la potencia máxima de los azúcares",
+        body: "Un error común es diluir la melaza con agua antes de mezclarla con los microorganismos sólidos dentro del costal. Las fuentes advierten que el agua \"seca\" el fermento con el tiempo y reduce la concentración de azúcares del 75% al 30%. Con menos azúcar disponible, los microorganismos se vuelven más débiles y se reproducen en poblaciones mucho menores. El uso de melaza pura sin diluir garantiza que los microorganismos permanezcan activos y bien alimentados durante todo el proceso. Esto permite que el inoculo dure mucho más tiempo y que la microbiología resultante tenga la energía necesaria para descompactar suelos y nutrir plantas de manera eficiente."
+      },
+      {
+        topic: "Parámetros de pH y su significado",
+        subtitle: "El ácido que protege y alimenta",
+        body: "Un biofertilizante de la Estación 2 bien elaborado debe alcanzar un pH ácido de entre 4.0 y 5.5. Este descenso en el pH es la \"prueba de vida\", pues indica que los microbios han consumido los azúcares y han excretado ácidos orgánicos benéficos. El ambiente ácido actúa como un conservador natural que impide que bacterias dañinas o de putrefacción invadan el tambo. Si el pH no baja de 6 o 7, significa que la actividad microbiana es baja o inexistente. Por el contrario, un pH estable y ácido asegura que el producto es rico en metabolitos y minerales solubles, listo para ser asimilado por el suelo y la planta sin causar enfermedades."
+      },
+      {
+        topic: "Reutilización de la \"Bolsa de Té\"",
+        subtitle: "Maximizando la inversión en cada carga",
+        body: "Una de las grandes ventajas económicas de este sistema es que la misma bolsa de microorganismos sólidos puede ser utilizada para preparar hasta 1,000 litros de MM líquido antes de ser desechada. Esto significa que se pueden sacar hasta cuatro tandas de 250 litros cada una con los mismos 5 kg iniciales, simplemente reponiendo la melaza en cada ciclo. Esta capacidad de reutilización permite que el costo por litro de fertilizante sea extremadamente bajo, permitiendo al agricultor una soberanía tecnológica real. Al final del ciclo, los sólidos sobrantes dentro de la bolsa no se tiran, sino que pueden ser reincorporados a la composta para no desperdiciar nada.",
+        farmerNote: "Es como un hueso para el caldo. Usted puede hacer varias ollas de sopa con el mismo hueso y todavía tiene sabor, hasta que ya le sacó toda la sustancia."
+      },
+      {
+        topic: "Importancia de la oxigenación (Aeróbico vs. Anaeróbico)",
+        subtitle: "Respirar para multiplicar la energía",
+        body: "El Modelo Utopía enfatiza que todos los procesos de la biofábrica deben ser aeróbicos, es decir, en presencia de oxígeno. A diferencia de los métodos viejos que sellaban los tambos (anaeróbicos), aquí se busca que el aire circule. El oxígeno es el aceptor final de energía; sin él, las biomoléculas se destruyen por fermentaciones violentas que huelen mal y tienen poca energía. La oxigenación manual (agitación) asegura que se críen microbios fuertes, capaces de realizar ciclos biogeoquímicos completos en el suelo. Un proceso sin aire genera alcoholes y ácidos lácticos que, en lugar de ayudar, pueden atraer hongos patógenos hacia el cultivo."
+      },
+      {
+        topic: "El concepto de 28 ATP vs. 2 ATP",
+        subtitle: "La diferencia entre un trabajador fuerte y uno débil",
+        body: "La ciencia de frontera explica que, con oxígeno (respiración aeróbica), la planta y los microbios obtienen 28 unidades de energía (ATP) por cada molécula de azúcar. En cambio, si no hay aire (proceso anaeróbico), apenas obtienen 2 unidades de energía. Esto significa que un biofertilizante oxigenado tiene 14 veces más potencia para activar el suelo que uno hecho sin aire. Un microorganismo con 28 ATP es como un tractor con el tanque lleno: puede romper la compactación del suelo y liberar minerales rápidamente. Un microbio con solo 2 ATP está en \"modo supervivencia\" y no tiene la fuerza necesaria para producir los cambios que el cultivo demanda para dar altos rendimientos."
+      },
+      {
+        topic: "El olor como indicador de calidad",
+        subtitle: "La nariz como herramienta de laboratorio",
+        body: "Un MM líquido de alta calidad debe tener un olor agradable a bosque húmedo, dulce o a fermento frutal. Este aroma confirma que la microbiología benéfica (como levaduras y bacterias lácticas) domina el proceso y que hay suficiente oxígeno en el sistema. Si el preparado huele a podrido, a alcantarilla o a alcohol muy fuerte, es una señal de alerta. Un mal olor indica falta de oxígeno o falta de azúcares, lo que permite el crecimiento de bacterias de putrefacción que pueden dañar las plantas en lugar de nutrirlas.",
+        farmerNote: "Cuando usted hace pan, la masa huele rico a levadura. Si la masa se le echa a perder y huele agrio o feo, usted no se come ese pan porque le va a hacer daño. Con el bioabono es igual."
+      },
+      {
+        topic: "Límites de temperatura",
+        subtitle: "El rango de confort para la vida microscópica",
+        body: "La temperatura ideal para la fermentación y reproducción de los microorganismos de la Estación 2 es entre 25°C y 30°C. En este rango, las enzimas microbianas trabajan a su máxima velocidad. Si el tambo se calienta demasiado (por encima de los 32-35°C), los microorganismos entran en estrés y la producción de energía ATP se detiene. Mantener los tambos a la sombra y protegidos de la radiación solar directa es crucial para asegurar una calidad constante. Una temperatura controlada garantiza que el proceso sea lento y estable, permitiendo la formación de moléculas complejas que actúan como \"vacunas\" para las plantas."
+      },
+      {
+        topic: "Función en la descompactación del suelo",
+        subtitle: "Micro-túneles biológicos para soltar la tierra",
+        body: "Al aplicar MM líquido al suelo, introducimos millones de bacterias, hongos y protozoarios que tienen una acción descompactadora. Estos organismos se mueven a través de los poros del suelo creando micro-túneles que permiten que el aire (oxígeno) y el agua penetren más profundamente. Además, los microorganismos secretan sustancias pegajosas (como la glomalina) que juntan los granos pequeños de tierra para formar terrones porosos (agregados). Un suelo tratado regularmente con MM líquido deja de ser una \"lápida de cemento\" y se convierte en una esponja viva que respira y retiene humedad."
+      },
+      {
+        topic: "Estimulación radicular",
+        subtitle: "Construyendo el estómago de la planta",
+        body: "La aplicación de la Estación 2, especialmente cuando se mezcla con ácidos húmicos (Estación 6), estimula el crecimiento explosivo de raicillas blancas y pelos radiculares. Estos pelos son los encargados de absorber el agua y los minerales; a mayor cantidad de raíces, mayor es la capacidad de la planta para alimentarse y producir frutos grandes. Los microorganismos aplicados colonizan la superficie de la raíz (rizósfera), protegiéndola del ataque de hongos malos y ayudándole a \"masticar\" los minerales del suelo que antes estaban bloqueados. Una planta con un sistema radicular fuerte gracias al MM líquido es mucho más resistente a las sequías y a las plagas."
+      },
+      {
+        topic: "Parámetros técnicos: El ORP",
+        subtitle: "Midiendo la carga de energía del biofertilizante",
+        body: "El Potencial de Óxido-Reducción (ORP) es una medida avanzada que nos dice qué tan capaz es el líquido de \"donar energía\" a la planta. Un buen MM líquido debe tener un ORP negativo (alrededor de -300 mV). Esto indica que el producto es rico en electrones y actúa como un poderoso antioxidante que fortalece el sistema inmunológico del cultivo. Un ORP negativo significa que el líquido está en un estado \"reducido\", lo cual es ideal para la nutrición cuántica y carbónica. Medir este parámetro permite al agricultor científico saber con certeza si su biofábrica está produciendo un insumo de alta energía o simplemente agua sucia.",
+        farmerNote: "El ORP mide la \"electricidad\" del abono. Es como una batería. Si el medidor marca negativo, la batería está bien cargada y va a encender el tractor. Si marca positivo, la batería está descargada y no sirve."
+      },
+      {
+        topic: "Almacenamiento adecuado",
+        subtitle: "Protegiendo la vida hasta el momento del uso",
+        body: "Una vez cosechado el MM líquido del tambo, debe almacenarse en recipientes cerrados pero no herméticos (para permitir que respiren mínimamente) y mantenerse en un lugar fresco y oscuro. La luz solar directa degrada los nutrientes y puede calentar el líquido, matando a los microorganismos que tanto costó reproducir. Si se almacena correctamente, el MM líquido puede conservar su potencia por varios meses, especialmente si el pH se mantuvo ácido durante la fermentación. Es recomendable revisar el olor antes de cada aplicación para asegurar que la vida dentro del envase sigue siendo benéfica y vigorosa."
+      }
     ]
   },
   {
@@ -184,6 +266,87 @@ export const COURSES32: Course32[] = [
       "Elaborar un quelato de calcio artesanal usando cáscaras de huevo molidas y vinagre blanco.",
       "Preparar un lote de Jabón Potásico usando aceite vegetal usado y lejía de ceniza.",
       "Preparar un 'Apichi' (insecticida de ajo, pimienta y chile) para control preventivo de plagas."
+    ],
+    studyContent: [
+      {
+        topic: "El objetivo de la Estación 3",
+        subtitle: 'Fabricando "Mierda Artificial" de alta densidad nutritiva',
+        body: 'El objetivo principal de esta estación es crear un sustrato sólido concentrado, conocido coloquialmente como "mierda artificial" o pasto fermentado. A diferencia de una composta común, este proceso busca multiplicar de forma masiva la carga microbiana y nutricional, transformando materiales vegetales simples y salvado en un insumo de alta energía que imita (y a menudo supera) la calidad del mejor estiércol animal. Este sustrato sólido no solo sirve para mejorar la estructura del suelo, sino que funciona como la "materia prima" esencial para la Estación 4. Al fermentar rastrojos y leguminosas con microorganismos, el agricultor garantiza que los nutrientes ya estén "pre-digeridos", facilitando que la planta los absorba de inmediato una vez aplicados.',
+        farmerNote: "Hacer pasto fermentado es como hacer un \"queso fuerte\" o un fermento para pan. No es solo comida amontonada; es una receta donde el azúcar y los microbios transforman hierbas simples en un alimento súper concentrado que da mucha fuerza a la tierra."
+      },
+      {
+        topic: "Los componentes clave: Gramíneas y Leguminosas",
+        subtitle: "El equilibrio perfecto entre Nitrógeno y Energía",
+        body: "Para que este fermento sea exitoso, se requiere una mezcla equilibrada de 65 kg de gramíneas (pastos de corte) y 65 kg de leguminosas (como frijol, moringa o botón de oro). Las gramíneas aportan la estructura y carbohidratos complejos, mientras que las leguminosas son la fuente principal de nitrógeno y proteínas necesarias para que los microorganismos se multipliquen con vigor. Esta combinación asegura que el producto final tenga un perfil completo de aminoácidos y hormonas de crecimiento. Al usar materiales verdes y frescos, capturamos la \"energía viva\" de las plantas antes de que se sequen, permitiendo que esa vitalidad se transfiera directamente al suelo de nuestro cultivo.",
+        farmerNote: "Las gramíneas son plantas como el maíz o el pasto, ricas en fibra y silicio. Las leguminosas son plantas que dan vaina, famosas por atrapar nitrógeno del aire y guardarlo en sus hojas."
+      },
+      {
+        topic: "La función del Salvado (Afrecho)",
+        subtitle: "La base estructural y el hogar de los microbios",
+        body: "El salvado de maíz o arroz (80 kg) actúa como una matriz lignocelulósica que proporciona el esqueleto físico para el fermento. Su función es doble: por un lado, absorbe el exceso de humedad para evitar que el material se pudra; por el otro, ofrece una fuente de energía constante y lenta que mantiene a los microorganismos trabajando durante semanas. Sin el salvado, la mezcla de pastos verdes se apelmazaría, impidiendo que el aire circule y provocando olores fétidos. El afrecho garantiza que el sustrato permanezca \"suelto\" y poroso, creando millones de pequeños espacios donde las bacterias y hongos benéficos pueden establecer sus colonias de forma segura."
+      },
+      {
+        topic: "El inoculante: Uso de Microorganismos Sólidos (Estación 1)",
+        subtitle: "Despertando a los obreros del bosque",
+        body: "El motor biológico de esta estación son los 15 kg de microorganismos sólidos provenientes de la Estación 1. Estos microbios capturados en el bosque son los encargados de realizar la \"digestión\" de todos los materiales; son los trabajadores especializados que rompen las fibras duras del pasto y el salvado para liberar los minerales atrapados. Al mezclar el MM sólido con los nuevos materiales, estamos realizando una siembra biológica. Los microbios que estaban en dormancia se activan al contacto con el azúcar y la humedad del pasto tierno, iniciando una explosión poblacional que convierte un montón de desperdicios vegetales en una \"mina de oro\" biológica."
+      },
+      {
+        topic: "La Melaza como combustible de arranque",
+        subtitle: "Azúcar pura para encender el motor de la vida",
+        body: "Se utilizan 10 kg de melaza como la fuente de carbono de rápida asimilación. Su papel es crítico en los primeros días del proceso: proporciona la energía inmediata para que los microorganismos \"despierten\" y comiencen a colonizar el salvado y el pasto. Es el combustible que eleva la temperatura interna del montón, señal de que la vida está activa. La melaza debe distribuirse de forma uniforme para que no queden \"zonas muertas\" donde los microbios no tengan qué comer. Una buena aplicación de melaza garantiza que el pH baje rápidamente hacia la acidez, lo cual es fundamental para proteger el preparado de bacterias dañinas que causan pudrición."
+      },
+      {
+        topic: "Importancia del tamaño de la partícula",
+        subtitle: "Picar fino para alimentar a todos por igual",
+        body: "Un paso operativo innegociable es picar los materiales verdes y desbaratar los terrones de microorganismos sólidos. Si los pedazos de pasto son muy grandes o los MM están en bolas gruesas, los microbios del centro no recibirán la melaza ni el salvado, provocando que solo una parte del material se fermente correctamente. Fraccionar los materiales aumenta el área de contacto para los microorganismos. Esto permite que cada pequeña fibra de pasto sea atacada por las enzimas microbianas, asegurando que el producto final sea uniforme en color, olor y potencia nutricional.",
+        farmerNote: "Imagine que va a alimentar a cien personas pero les sirve la carne en un solo bloque gigante. Solo los que están afuera comerán. Si usted pica la carne en trozos pequeños, todos alcanzan y quedan bien alimentados. Con los microbios es exactamente igual."
+      },
+      {
+        topic: "La Prueba del Puño: Control de Humedad",
+        subtitle: "El punto exacto del 50% de humedad",
+        body: "La humedad ideal para el pasto fermentado es del 50%. Se verifica tomando un puñado de la mezcla y apretándolo con fuerza: si se forma un terrón que mantiene su forma al abrir la mano, pero no gotea, el punto es perfecto. Si gotea, hay demasiada agua; si se desmorona, falta melaza o humedad de las plantas. Mantener este límite es vital porque el exceso de agua desplaza al oxígeno, creando un ambiente donde se reproducen patógenos y la energía cae de 28 ATP a solo 2 ATP. El exceso de humedad \"ahoga\" a los microbios buenos y atrae moscas y malos olores que arruinan la inversión."
+      },
+      {
+        topic: "El proceso de mezcla y oxigenación",
+        subtitle: "Agitación para una fermentación aeróbica vigorosa",
+        body: "Aunque el material se compactará después, el mezclado inicial debe asegurar la entrada de oxígeno. Durante la preparación en el tambo de 200 litros, se debe agitar y revolver bien para que cada componente se integre. El oxígeno actúa como el aceptor final de energía, permitiendo que la reproducción microbiana sea eficiente y potente. Una mezcla bien oxigenada al inicio previene fermentaciones violentas o alcohólicas. El objetivo es que los microbios respiren aire (proceso aeróbico) para que produzcan 28 unidades de energía por cada molécula de azúcar, lo que resulta en un fertilizante mucho más \"cargado\" eléctricamente."
+      },
+      {
+        topic: "Parámetros de control: Olor y Color",
+        subtitle: "La nariz y la vista como laboratorios de campo",
+        body: "Un pasto fermentado exitoso debe tener un olor dulce, a fermento frutal o a vino, y un color que tiende al café o ámbar. Estos indicadores sensoriales confirman que el proceso está dominado por levaduras y bacterias lácticas benéficas. Si el material huele a podrido o a alcantarilla, es una señal clara de contaminación o falta de aire. El color uniforme indica que la melaza y el salvado se distribuyeron correctamente. La observación diaria durante los primeros 8 días permite al agricultor detectar cualquier desviación a tiempo, pudiendo corregir la humedad o la aireación antes de que el lote se pierda."
+      },
+      {
+        topic: "Manejo de la temperatura interna",
+        subtitle: "El calor como señal de trabajo biológico",
+        body: "Durante los primeros días de la fermentación, es normal y deseable que la temperatura interna del sustrato suba (se sienta tibia al tacto). Este calor es el resultado del metabolismo de los microorganismos que están \"quemando\" la melaza y el salvado. Una temperatura tibia sostenida indica que la \"fábrica\" biológica está a plena marcha. Sin embargo, el material no debe llegar a quemarse o estar \"caliente\" por demasiado tiempo, ya que esto podría matar a los propios microorganismos. El control de la humedad y la sombra son los reguladores naturales que mantienen el proceso en el rango ideal para que la vida no se detenga por exceso de calor."
+      },
+      {
+        topic: "Parámetros técnicos: El pH ácido",
+        subtitle: "La barrera ácida que garantiza la sanidad",
+        body: "El producto terminado de la Estación 3 debe alcanzar un pH ácido entre 3.5 y 3.8. Este nivel de acidez es extremo para la mayoría de los hongos y bacterias que causan enfermedades en las plantas (como Fusarium o Phytophthora), por lo que el fermento actúa como un desinfectante natural del suelo. Un pH bajo también garantiza que los minerales que estaban \"trabados\" en el pasto y el salvado se vuelvan solubles. El ácido es la \"llave\" que abre los minerales para que, cuando el agricultor aplique este abono, la planta pueda comer de inmediato sin esperar meses a que el material se descomponga en la tierra.",
+        farmerNote: "El pH mide qué tan ácido o alcalino es algo. Un pH de 3.5 es similar al del jugo de limón; es muy fuerte y ayuda a \"limpiar\" el suelo de microbios malos."
+      },
+      {
+        topic: "Tiempo de maduración y almacenamiento",
+        subtitle: "Paciencia para lograr la máxima potencia",
+        body: "El tiempo promedio para que el pasto fermentado esté listo es de 30 días. Durante este mes, las comunidades microbianas pasan por diferentes fases de crecimiento hasta alcanzar una estabilidad donde el sustrato está cargado de enzimas y nutrientes disponibles. Forzar el uso antes de tiempo significa aplicar un producto \"crudo\" que aún no ha alcanzado su máximo potencial. Una vez maduro, el material debe guardarse en un lugar fresco y a la sombra. Si se mantiene en el tambo con tapa de rosca, puede conservar su calidad por varios meses, permitiendo al agricultor tener una reserva de \"fertilidad sólida\" lista para cualquier etapa crítica del cultivo."
+      },
+      {
+        topic: "Beneficios económicos y soberanía",
+        subtitle: "Reduciendo costos con insumos de la propia finca",
+        body: "La Estación 3 es un pilar de la rentabilidad porque utiliza esquilmos (restos de cosecha) que normalmente el agricultor tira o quema. Reincorporar estos materiales transformados permite devolver al suelo hasta el 70% de los nutrientes extraídos en la cosecha anterior, ahorrando miles de dólares en bultos de abono químico. Este modelo permite producir fertilizantes de alta calidad a un costo marginal. Al fabricar su propia \"mierda artificial\", el campesino deja de ser un cliente de las transnacionales de venenos y se convierte en un productor de riqueza biológica, aumentando su margen de ganancia real por cada hectárea."
+      },
+      {
+        topic: "Uso como base para la Estación 4",
+        subtitle: "El concentrado sólido para el tónico líquido",
+        body: "La aplicación más potente de la Estación 3 es servir como el ingrediente principal para el Biol de Pasto Fermentado (Estación 4). Para esto, se toman 5 kg del sustrato sólido y se colocan en un costal (como una bolsa de té) dentro de un tambo con agua y azúcar. Esto permite extraer toda la vida y nutrición del sólido hacia un medio líquido de fácil aplicación. Esta transición de sólido a líquido multiplica la eficiencia del producto. Lo que se fabricó en la Estación 3 se convierte en un \"concentrado\" que puede cubrir muchas más hectáreas cuando se aplica vía riego o foliar, llevando los beneficios del fermento a cada hoja y raíz del cultivo."
+      },
+      {
+        topic: "Aplicación directa al suelo y rastrojos",
+        subtitle: "Acelerando la regeneración de la tierra cansada",
+        body: "Aunque su uso principal es para bioles, el pasto fermentado también puede aplicarse directamente al suelo durante la preparación del terreno (números negativos). Esparcirlo sobre los rastrojos del ciclo anterior actúa como un acelerador de descomposición, convirtiendo la paja seca en humus rico en cuestión de semanas en lugar de meses. Esta aplicación directa mejora la retención de agua y ayuda a romper la compactación del suelo (piso de arado). Al introducir esta \"esponja\" biológica, el suelo recupera su capacidad de respirar, permitiendo que las raíces crezcan profundas y fuertes desde el primer día de la siembra."
+      }
     ]
   },
   {

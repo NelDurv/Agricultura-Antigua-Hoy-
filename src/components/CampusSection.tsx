@@ -759,47 +759,47 @@ export default function CampusSection() {
                               return (
                                 <div 
                                   key={qIdx}
-                                  className="bg-white border border-stone-200 rounded-xl p-4 flex flex-col justify-between gap-3 hover:shadow-2xs transition-shadow"
+                                  className="bg-orange-50 border border-orange-200 rounded-xl p-5 flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
                                 >
-                                  <div className="space-y-2">
-                                    <div className="flex items-start gap-2">
-                                      <span className="text-[10px] font-mono bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded font-bold">
+                                  <div className="space-y-3">
+                                    <div className="flex items-start gap-3">
+                                      <span className="text-xs font-mono bg-orange-200/70 text-orange-800 px-2 py-1 rounded font-bold">
                                         Q{qIdx + 1 < 10 ? `0${qIdx + 1}` : qIdx + 1}
                                       </span>
-                                      <p className="font-serif text-xs font-bold text-stone-900 leading-snug">
+                                      <p className="font-serif text-[18px] font-bold text-stone-900 leading-snug">
                                         {q.q}
                                       </p>
                                     </div>
 
                                     {/* Collapsible Hidden Answer field */}
                                     {isAnswerRevealed ? (
-                                      <div className="p-3 bg-stone-50 border-l-2 border-emerald-600 rounded-r-lg text-xs text-stone-800 font-sans leading-relaxed transition-all duration-300">
-                                        <p className="font-mono text-[9px] uppercase text-emerald-800 font-bold mb-1">✓ Respuesta Técnica:</p>
+                                      <div className="p-4 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-lg text-base text-stone-800 font-sans leading-relaxed transition-all duration-300">
+                                        <p className="font-mono text-xs uppercase text-emerald-800 font-bold mb-1">✓ Respuesta Técnica:</p>
                                         <p>{q.a}</p>
                                       </div>
                                     ) : (
-                                      <div className="h-[42px] border border-dashed border-stone-200 rounded-lg flex items-center justify-center bg-stone-50/50">
-                                        <p className="text-[10px] font-mono text-stone-400">Respuesta oculta • Pulse revelar abajo</p>
+                                      <div className="h-[54px] border-2 border-dashed border-orange-300 rounded-xl flex items-center justify-center bg-orange-100/50">
+                                        <p className="text-sm font-mono text-orange-600 font-semibold">🔒 Respuesta oculta • Pulse revelar abajo</p>
                                       </div>
                                     )}
                                   </div>
 
                                   <button
                                     onClick={() => toggleAnswer(course.id, qIdx)}
-                                    className={`py-1 w-full rounded-lg text-[10px] font-mono font-bold flex items-center justify-center gap-1.5 transition-colors ${
+                                    className={`py-2.5 w-full rounded-xl text-sm font-mono font-bold flex items-center justify-center gap-2 transition-colors ${
                                       isAnswerRevealed 
-                                        ? "bg-stone-100 hover:bg-stone-200 text-stone-700" 
-                                        : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                        ? "bg-stone-200 hover:bg-stone-300 text-stone-700" 
+                                        : "bg-orange-500 hover:bg-orange-600 text-white shadow-sm"
                                     }`}
                                   >
                                     {isAnswerRevealed ? (
                                       <>
-                                        <EyeOff className="h-3 w-3" />
+                                        <EyeOff className="h-4 w-4" />
                                         <span>Ocultar Respuesta</span>
                                       </>
                                     ) : (
                                       <>
-                                        <Eye className="h-3 w-3" />
+                                        <Eye className="h-4 w-4" />
                                         <span>Revelar Respuesta</span>
                                       </>
                                     )}
@@ -889,9 +889,9 @@ export default function CampusSection() {
         const course = COURSES32.find(c => c.id === viewMaterialId);
         if (!course) return null;
         return (
-          <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto transition-colors ${materialFullScreen ? 'bg-stone-800/90 backdrop-blur-sm' : 'bg-amber-900/30 backdrop-blur-xs'}`}>
-            <div className={`relative w-full rounded-3xl bg-amber-50 border border-amber-200 shadow-2xl overflow-hidden transition-all duration-300 ${materialFullScreen ? 'max-w-7xl h-[95vh] my-0' : 'max-w-4xl my-8'}`}>
-              <div className={`sticky top-0 z-10 bg-gradient-to-r from-blue-700 to-blue-900 p-6 sm:p-8 text-stone-50 flex items-start justify-between gap-4 ${materialFullScreen ? 'flex-shrink-0' : ''}`}>
+          <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto transition-colors ${materialFullScreen ? 'bg-[#3f405b]/90 backdrop-blur-sm' : 'bg-[#3f405b]/40 backdrop-blur-xs'}`}>
+            <div className={`relative w-full rounded-3xl bg-[#f2f1db] border border-[#85b096] shadow-2xl overflow-hidden transition-all duration-300 ${materialFullScreen ? 'max-w-7xl h-[95vh] my-0' : 'max-w-4xl my-8'}`}>
+              <div className={`sticky top-0 z-10 bg-gradient-to-r from-[#3f405b] to-[#496d56] p-6 sm:p-8 text-[#f2f1db] flex items-start justify-between gap-4 ${materialFullScreen ? 'flex-shrink-0' : ''}`}>
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2 text-[10px] font-mono opacity-80 uppercase tracking-wider">
                     <FileText className="h-4 w-4" />
@@ -919,29 +919,29 @@ export default function CampusSection() {
                 </div>
               </div>
               {/* Font size controls */}
-              <div className="flex-shrink-0 bg-amber-100/90 border-b border-amber-200 px-6 sm:px-8 py-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="text-[10px] font-mono font-bold text-amber-800 uppercase tracking-wider">Tamaño:</span>
+              <div className="flex-shrink-0 bg-[#e8e7d1] border-b border-[#85b096] px-6 sm:px-8 py-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span className="text-[10px] font-mono font-bold text-[#496d56] uppercase tracking-wider">Tamaño:</span>
                 {(['lg', 'xl'] as const).map(size => (
                   <button
                     key={size}
                     onClick={() => setMaterialFontSize(size)}
-                    className={`h-8 px-4 rounded-lg text-sm font-semibold transition-colors ${materialFontSize === size ? 'bg-blue-700 text-stone-50' : 'bg-amber-200/70 text-amber-900 hover:bg-amber-200'}`}
+                    className={`h-8 px-4 rounded-lg text-sm font-semibold transition-colors ${materialFontSize === size ? 'bg-[#496d56] text-[#f2f1db]' : 'bg-[#d3785d]/70 text-[#f2f1db] hover:bg-[#d3785d]'}`}
                     aria-label={`Tamaño de fuente ${size === 'lg' ? '20px' : '24px'}`}
                   >
                     {size === 'lg' ? '20px' : '24px'}
                   </button>
                 ))}
-                <span className="text-[10px] text-amber-600 font-mono hidden sm:inline">({materialFontSize === 'lg' ? 'Mediano' : 'Grande (recomendado)'})</span>
+                <span className="text-[10px] text-[#496d56] font-mono hidden sm:inline">({materialFontSize === 'lg' ? 'Mediano' : 'Grande (recomendado)'})</span>
                 <span className="flex-1" />
               </div>
-              <div className={`p-6 sm:p-8 overflow-y-auto space-y-8 ${materialFullScreen ? 'h-[calc(95vh-186px)]' : 'max-h-[500px]'}`}>
+              <div className={`p-6 sm:p-8 overflow-y-auto space-y-8 bg-[#f2f1db] ${materialFullScreen ? 'h-[calc(95vh-186px)]' : 'max-h-[500px]'}`}>
                 {course.studyContent ? (
                   <div className={`space-y-8 ${materialFontSize === 'lg' ? 'text-[20px]' : 'text-[24px]'}`}>
                     {course.id === 'c1' && (
                       <div className="flex justify-center">
                         <button
                           onClick={() => setLightboxImage('/images/infografia-curso-1.png')}
-                          className="group relative w-full max-w-2xl rounded-xl overflow-hidden border border-stone-200 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                          className="group relative w-full max-w-2xl rounded-xl overflow-hidden border border-[#85b096]/30 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#496d56]"
                           aria-label="Ver infografía en grande"
                         >
                           <img
@@ -949,8 +949,28 @@ export default function CampusSection() {
                             alt="Infografía resumen del Curso 1"
                             className="w-full"
                           />
-                          <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 transition-colors flex items-center justify-center">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-stone-900/60 text-stone-50 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                          <div className="absolute inset-0 bg-[#3f405b]/0 group-hover:bg-[#3f405b]/20 transition-colors flex items-center justify-center">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#3f405b]/80 text-[#f2f1db] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                              <Maximize2 className="h-3.5 w-3.5" /> Ampliar
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    )}
+                    {course.id === 'c2' && (
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => setLightboxImage('/images/infografia-curso-2.png')}
+                          className="group relative w-full max-w-2xl rounded-xl overflow-hidden border border-[#85b096]/30 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#496d56]"
+                          aria-label="Ver infografía en grande"
+                        >
+                          <img
+                            src="/images/infografia-curso-2.png"
+                            alt="Infografía resumen del Curso 2"
+                            className="w-full"
+                          />
+                          <div className="absolute inset-0 bg-[#3f405b]/0 group-hover:bg-[#3f405b]/20 transition-colors flex items-center justify-center">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#3f405b]/80 text-[#f2f1db] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                               <Maximize2 className="h-3.5 w-3.5" /> Ampliar
                             </span>
                           </div>
@@ -960,15 +980,15 @@ export default function CampusSection() {
                     {course.studyContent.map((s, si) => (
                       <div key={si} className="space-y-3">
                         <div className="flex items-start gap-3">
-                          <span className="h-6 w-6 rounded-lg bg-blue-600 text-stone-50 flex items-center justify-center text-[10px] font-mono font-bold shrink-0 mt-0.5">{si + 1}</span>
+                          <span className="h-6 w-6 rounded-lg bg-[#496d56] text-[#f2f1db] flex items-center justify-center text-[10px] font-mono font-bold shrink-0 mt-0.5">{si + 1}</span>
                           <div>
-                            <h4 className="font-serif font-bold text-stone-900">{s.topic}</h4>
-                            <p className="font-mono text-stone-500 italic">{s.subtitle}</p>
+                            <h4 className="font-serif font-bold text-[#3f405b]">{s.topic}</h4>
+                            <p className="font-mono text-[#6b7280] italic">{s.subtitle}</p>
                           </div>
                         </div>
-                        <p className="text-stone-700 leading-relaxed font-sans pl-9">{s.body}</p>
+                        <p className="text-[#333333] leading-relaxed font-sans pl-9">{s.body}</p>
                         {s.farmerNote && (
-                          <div className="ml-9 p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg text-amber-900 leading-relaxed">
+                          <div className="ml-9 p-3 bg-[#e8e7d1] border-l-4 border-[#d3785d] rounded-r-lg text-[#3f405b] leading-relaxed">
                             <span className="font-bold block text-[10px] font-mono uppercase tracking-wider mb-0.5">Nota para el campo:</span>
                             {s.farmerNote}
                           </div>
@@ -979,16 +999,16 @@ export default function CampusSection() {
                 ) : (
                   /* Fallback: Q&A format for courses without studyContent */
                   <div className={`space-y-6 ${materialFontSize === 'lg' ? 'text-[20px]' : 'text-[24px]'}`}>
-                    <h4 className="font-serif font-bold text-stone-900 border-b border-stone-200 pb-2">Guía de Estudio (Preguntas y Respuestas)</h4>
+                    <h4 className="font-serif font-bold text-[#3f405b] border-b border-[#85b096]/30 pb-2">Guía de Estudio (Preguntas y Respuestas)</h4>
                     {course.questions.map((q, qi) => (
                       <div key={qi} className="space-y-2">
-                        <h5 className="flex items-start gap-2 font-bold text-emerald-800">
-                          <span className="h-5 w-5 rounded bg-emerald-100 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-700 shrink-0 mt-0.5">{qi + 1}</span>
+                        <h5 className="flex items-start gap-2 font-bold text-[#496d56]">
+                          <span className="h-5 w-5 rounded bg-[#496d56]/20 flex items-center justify-center text-[10px] font-mono font-bold text-[#496d56] shrink-0 mt-0.5">{qi + 1}</span>
                           <span>{q.q}</span>
                         </h5>
-                        <div className="ml-7 p-3 bg-emerald-50/50 border border-emerald-100 rounded-lg">
-                          <span className="text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-wider block mb-1">Respuesta:</span>
-                          <p className="text-stone-700 leading-relaxed font-sans">{q.a}</p>
+                        <div className="ml-7 p-3 bg-[#f2f1db] border border-[#85b096]/30 rounded-lg">
+                          <span className="text-[10px] font-mono font-bold text-[#496d56] uppercase tracking-wider block mb-1">Respuesta:</span>
+                          <p className="text-[#333333] leading-relaxed font-sans">{q.a}</p>
                         </div>
                       </div>
                     ))}
@@ -996,16 +1016,16 @@ export default function CampusSection() {
                 )}
                 {/* Practical Tests reference */}
                 {course.practicalTests.length > 0 && (
-                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
-                    <h5 className="font-mono font-bold text-amber-900 uppercase tracking-wider">Talleres Prácticos Relacionados</h5>
-                    <ul className="space-y-1 text-amber-800 list-disc pl-4">
+                  <div className="p-4 bg-[#f2f1db] border border-[#85b096] rounded-xl space-y-2">
+                    <h5 className="font-mono font-bold text-[#496d56] uppercase tracking-wider">Talleres Prácticos Relacionados</h5>
+                    <ul className="space-y-1 text-[#333333] list-disc pl-4">
                       {course.practicalTests.map((t, ti) => <li key={ti}>{t}</li>)}
                     </ul>
                   </div>
                 )}
               </div>
-              <div className="sticky bottom-0 bg-amber-100/80 border-t border-amber-200 p-4 flex items-center justify-between backdrop-blur-sm">
-                <span className="text-xs text-amber-900 font-mono">{course.studyContent ? course.studyContent.length + ' temas de estudio' : course.questions.length + ' preguntas'}</span>
+              <div className="sticky bottom-0 bg-[#e8e7d1] border-t border-[#85b096]/30 p-4 flex items-center justify-between backdrop-blur-sm">
+                <span className="text-xs text-[#496d56] font-mono">{course.studyContent ? course.studyContent.length + ' temas de estudio' : course.questions.length + ' preguntas'}</span>
                 <button
                   onClick={() => { setViewMaterial(null); setMaterialFullScreen(false); }}
                   className="px-5 py-2 bg-blue-700 hover:bg-blue-800 text-stone-50 text-sm font-semibold rounded-xl transition-colors"
@@ -1023,16 +1043,16 @@ export default function CampusSection() {
         const doc = BIBLIOTECA.find(d => d.id === viewDocId);
         if (!doc) return null;
         return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 sm:p-6 backdrop-blur-xs overflow-y-auto">
-            <div className="relative w-full max-w-3xl rounded-3xl bg-stone-50 border border-stone-200 shadow-2xl overflow-hidden my-8">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#3f405b]/60 p-4 sm:p-6 backdrop-blur-xs overflow-y-auto">
+            <div className="relative w-full max-w-3xl rounded-3xl bg-[#f2f1db] border border-[#85b096] shadow-2xl overflow-hidden my-8">
               <button
                 onClick={() => setViewDocId(null)}
-                className="absolute top-5 right-5 h-8 w-8 rounded-full bg-stone-900/40 text-stone-100 hover:bg-stone-900/60 flex items-center justify-center transition-colors border border-stone-100/10"
+                className="absolute top-5 right-5 h-8 w-8 rounded-full bg-[#496d56]/60 text-[#f2f1db] hover:bg-[#496d56] flex items-center justify-center transition-colors border border-[#85b096]/30"
                 aria-label="Cerrar documento"
               >
                 <X className="h-4 w-4" />
               </button>
-              <div className="p-6 sm:p-8 pb-4 bg-primary text-stone-50">
+              <div className="p-6 sm:p-8 pb-4 bg-gradient-to-r from-[#3f405b] to-[#496d56] text-[#f2f1db]">
                 <div className="flex items-center gap-2 mb-1">
                   <FileText className="h-5 w-5" />
                   <span className="text-[10px] font-mono opacity-80 uppercase tracking-wider">{doc.category}</span>
@@ -1062,12 +1082,12 @@ export default function CampusSection() {
       {/* Image lightbox */}
       {lightboxImage && (
         <div
-          className="fixed inset-0 z-[60] bg-stone-900/85 flex items-center justify-center p-4 cursor-pointer"
+          className="fixed inset-0 z-[60] bg-[#3f405b]/90 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setLightboxImage(null)}
         >
           <button
             onClick={() => setLightboxImage(null)}
-            className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-stone-900/50 hover:bg-stone-900/70 text-stone-50 flex items-center justify-center transition-colors border border-stone-100/10"
+            className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-[#496d56]/50 hover:bg-[#496d56] text-[#f2f1db] flex items-center justify-center transition-colors border border-[#85b096]/30"
             aria-label="Cerrar imagen"
           >
             <X className="h-5 w-5" />

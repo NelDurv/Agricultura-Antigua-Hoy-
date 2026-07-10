@@ -26,11 +26,11 @@ export default function HomeSection() {
   return (
     <div className="space-y-12 py-4" id="home-section">
       {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-[#04243b] to-[#011422] px-6 py-12 text-stone-50 sm:px-12 sm:py-16 shadow-lg border-b-4 border-gold" id="hero-banner">
+      <div className="ocn-hero" id="hero-banner">
         <div className="absolute top-0 right-0 -mt-16 -mr-16 h-80 w-80 rounded-full bg-gold/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-96 w-96 rounded-full bg-accent/15 blur-3xl"></div>
 
-        <div className="relative max-w-3xl space-y-6">
+        <div className="relative w-full space-y-6">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-medium text-gold border border-gold/30">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Campus Virtual • Sabiduría Ancestral</span>
@@ -40,12 +40,12 @@ export default function HomeSection() {
             Preservamos saberes de la tierra, respaldados por la ciencia moderna.
           </h2>
 
-          <p className="text-sm sm:text-base text-stone-300 max-w-xl font-sans leading-relaxed">
+          <p className="text-sm sm:text-base text-stone-300 max-w-2xl font-sans leading-relaxed">
             Hola, <strong className="text-stone-100 font-semibold">{userName}</strong>. Bienvenido a Agricultura Antigua. Ponemos a tu disposición guías técnicas, cursos de microbiología de suelos y herramientas interactivas diseñadas para agricultores familiares y organizaciones comunitarias.
           </p>
 
           {/* Global Search */}
-          <div className="max-w-lg mt-4">
+          <div className="w-full max-w-xl mt-4">
             <SearchBar variant="hero" placeholder="Buscar cursos, documentos, recetas..." />
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function HomeSection() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="ocn-grid">
             {COURSES.slice(0, 2).map((course) => {
               const optimizedImage = dataSaver
                 ? course.image.replace("q=80", "q=20").replace("w=600", "w=200")
@@ -101,17 +101,15 @@ export default function HomeSection() {
               return (
                 <div 
                   key={course.id} 
-                  className="bg-white border border-stone-200/80 hover:border-gold rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col border-b-3 border-gold"
+                  className="ocn-card"
                 >
-                  <div className="h-40 w-full bg-stone-100 overflow-hidden">
-                    <img 
-                      src={optimizedImage} 
-                      alt={course.title}
-                      referrerPolicy="no-referrer"
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-5 flex-grow flex flex-col justify-between space-y-3">
+                  <img 
+                    src={optimizedImage} 
+                    alt={course.title}
+                    referrerPolicy="no-referrer"
+                    className="ocn-card-img"
+                  />
+                  <div className="ocn-card-body">
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
                         <div className="flex flex-wrap items-center gap-1.5">
@@ -129,7 +127,7 @@ export default function HomeSection() {
                     <span className="text-[10px] font-mono text-stone-500">{course.duration} • {course.lessonsCount} módulos</span>
                     <button
                       onClick={() => navigate("/academia/" + course.id)}
-                      className="px-3.5 py-1.5 bg-primary text-stone-50 hover:bg-gold hover:text-stone-950 text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-2xs"
+                      className="ocn-btn ocn-btn-primary"
                     >
                       <span>Comenzar</span>
                       <ArrowRight className="h-3 w-3" />
@@ -190,8 +188,8 @@ export default function HomeSection() {
       </div>
 
       {/* Specializations & Routes (Learning path example) */}
-      <div className="p-8 bg-white border border-stone-200 rounded-3xl space-y-6 border-b-4 border-gold shadow-xs" id="home-specialization">
-        <div className="max-w-2xl space-y-2">
+      <div className="ocn-section ocn-section-light rounded-3xl" id="home-specialization">
+        <div className="w-full space-y-2">
           <span className="font-mono text-[10px] text-primary tracking-wider uppercase font-bold">Ruta Profesional Certificada</span>
           <h3 className="font-serif text-2xl font-bold text-stone-900">Especialista en Agroecología de Montaña y Suelo Vivo</h3>
           <p className="text-xs leading-relaxed text-stone-600">
@@ -234,7 +232,7 @@ export default function HomeSection() {
           <h4 className="font-serif text-lg font-bold text-stone-900">
             Diseño Hidrológico Keyline para Captura de Agua en Terrenos Inclinados
           </h4>
-          <p className="text-xs text-stone-600 max-w-xl">
+          <p className="text-xs text-stone-600 max-w-2xl">
             Aprende a mapear y canalizar el agua de escorrentía para infiltrarla uniformemente en tus laderas de cultivo, eliminando la erosión y la sequía. Impartido por asesores técnicos de Agricultura Antigua.
           </p>
         </div>
@@ -243,7 +241,7 @@ export default function HomeSection() {
           <p className="text-xs font-serif font-bold text-stone-950 mt-1">10:00 AM (Hora Local)</p>
           <button 
             onClick={() => navigate("/comunidad")}
-            className="mt-3.5 px-4 py-2 bg-primary hover:bg-gold hover:text-stone-950 text-stone-50 text-[11px] font-bold rounded-lg transition-all inline-flex items-center gap-1 shadow-sm duration-200 uppercase tracking-wider"
+            className="ocn-btn ocn-btn-primary"
           >
             <span>Reservar cupo</span>
             <ArrowRight className="h-3 w-3" />

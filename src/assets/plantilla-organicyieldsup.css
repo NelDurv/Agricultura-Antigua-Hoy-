@@ -1,0 +1,273 @@
+/* =====================================================
+   Plantilla de Estilos — inspirada en OrganicYieldsUP
+   https://www.organicyieldsup.eu/lighthouse-farms
+   ===================================================== */
+
+/* ─── Variables ─── */
+:root {
+  --oy-bg: #ffffff;
+  --oy-bg-alt: #f5f7f6;
+  --oy-text: #1a1a2e;
+  --oy-text-muted: #6b7280;
+  --oy-primary: #1e5631;
+  --oy-primary-light: #e8f0eb;
+  --oy-accent: #d4a017;
+  --oy-accent-light: #fdf6e3;
+  --oy-border: #e5e7eb;
+  --oy-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --oy-shadow-hover: 0 8px 40px rgba(0,0,0,0.10);
+  --oy-radius: 16px;
+  --oy-radius-sm: 10px;
+  --oy-font-sans: 'Inter', 'Lato', system-ui, sans-serif;
+  --oy-font-display: 'Bricolage Grotesque', 'Montserrat', serif;
+  --oy-font-mono: 'SF Mono', 'Fira Code', monospace;
+  --oy-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Hero Banner ─── */
+.oy-hero {
+  background: linear-gradient(135deg, #0d2b1d 0%, #1a4a2e 50%, #0f3823 100%);
+  color: #f8fafc;
+  padding: 5rem 2rem;
+  border-radius: var(--oy-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.oy-hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(212, 160, 23, 0.08);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.oy-hero h1 {
+  font-family: var(--oy-font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 720px;
+}
+
+.oy-hero p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  max-width: 600px;
+}
+
+/* ─── Cards Grid (Lighthouse Farms) ─── */
+.oy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.oy-card {
+  background: var(--oy-bg);
+  border: 1px solid var(--oy-border);
+  border-radius: var(--oy-radius);
+  overflow: hidden;
+  box-shadow: var(--oy-shadow);
+  transition: transform var(--oy-transition), box-shadow var(--oy-transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.oy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--oy-shadow-hover);
+}
+
+.oy-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.oy-card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.oy-card-title {
+  font-family: var(--oy-font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--oy-text);
+  line-height: 1.3;
+}
+
+/* ─── Buttons ─── */
+.oy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  font-family: var(--oy-font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--oy-transition);
+  text-decoration: none;
+}
+
+.oy-btn-primary {
+  background: var(--oy-primary);
+  color: #fff;
+}
+
+.oy-btn-primary:hover {
+  background: #154525;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 86, 49, 0.3);
+}
+
+.oy-btn-outline {
+  background: transparent;
+  border: 2px solid var(--oy-primary);
+  color: var(--oy-primary);
+}
+
+.oy-btn-outline:hover {
+  background: var(--oy-primary);
+  color: #fff;
+}
+
+.oy-btn-download {
+  background: var(--oy-primary-light);
+  color: var(--oy-primary);
+  font-size: 0.8rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.oy-btn-download:hover {
+  background: #d4e4d8;
+}
+
+/* ─── Section Headers ─── */
+.oy-section-title {
+  font-family: var(--oy-font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: var(--oy-text);
+  margin-bottom: 0.5rem;
+}
+
+.oy-section-subtitle {
+  font-size: 0.95rem;
+  color: var(--oy-text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+/* ─── Description / Text Blocks ─── */
+.oy-text-block {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--oy-text-muted);
+  max-width: 780px;
+}
+
+.oy-text-block strong,
+.oy-text-block .is-bold {
+  color: var(--oy-text);
+  font-weight: 600;
+}
+
+/* ─── Tag / Badge ─── */
+.oy-badge {
+  display: inline-block;
+  font-family: var(--oy-font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--oy-primary-light);
+  color: var(--oy-primary);
+  border: 1px solid rgba(30, 86, 49, 0.15);
+}
+
+/* ─── Navigation Style ─── */
+.oy-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-family: var(--oy-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.oy-nav a,
+.oy-nav button {
+  color: var(--oy-text-muted);
+  text-decoration: none;
+  transition: color var(--oy-transition);
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.25rem 0;
+}
+
+.oy-nav a::after,
+.oy-nav button::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--oy-primary);
+  transition: width var(--oy-transition);
+}
+
+.oy-nav a:hover,
+.oy-nav button:hover {
+  color: var(--oy-primary);
+}
+
+.oy-nav a:hover::after,
+.oy-nav button:hover::after {
+  width: 100%;
+}
+
+/* ─── Utility: color primary ─── */
+.text-oy-primary {
+  color: var(--oy-primary);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .oy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .oy-hero {
+    padding: 3rem 1.25rem;
+  }
+
+  .oy-card-image {
+    height: 160px;
+  }
+}

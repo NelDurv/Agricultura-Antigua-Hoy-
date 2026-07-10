@@ -11,8 +11,33 @@
   --color-accent: #61CE70;
   --color-accent-alt: #FFBC7D;
   --color-gold: #ffcc05;
-  --color-text-dark: #222222;
-  --color-text-light: #7A7A7A;
+  --color-text-dark: #1C1917;
+  --color-text-light: #57534E;
+
+  /* Semantic theme tokens */
+  --color-bg-body: #F8F6F3;
+  --color-bg-surface: #FDFCFA;
+  --color-bg-card: #FFFFFF;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-border-light: #E7E5E4;
+  --color-border-medium: #D6D3D1;
+}
+
+/* ===== DARK MODE (class-based toggle) ===== */
+html.dark-mode {
+  --color-bg-body: #1C1917;
+  --color-bg-surface: #292524;
+  --color-bg-card: #292524;
+  --color-text-primary: #F5F5F4;
+  --color-text-secondary: #A8A29E;
+  --color-border-light: #44403C;
+  --color-border-medium: #57534E;
+}
+
+html.dark-mode body {
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
 }
 
 /* Custom scrollbar and aesthetics to avoid clutter */
@@ -25,14 +50,15 @@
 }
 
 body {
-  background-color: #fcfcfc;
-  color: #222222;
+  background-color: var(--color-bg-body);
+  color: var(--color-text-primary);
   font-family: "Poppins", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Plantilla Machu Picchu: Cards e Interacciones */
 .machu-card {
-  background: #ffffff;
+  background: var(--color-bg-card);
   padding: 2.5rem 2rem;
   border-radius: 16px;
   box-shadow: 0 0 2px rgba(0,0,0,0.1);
@@ -71,21 +97,26 @@ input[type="range"] {
 }
 
 /* Accessibility toolbar classes (toggled on <html>) */
-html.a11y-high-contrast {
-  filter: invert(1) hue-rotate(180deg);
-}
-html.a11y-high-contrast img,
-html.a11y-high-contrast video,
-html.a11y-high-contrast [class*="lucide"] {
-  filter: invert(1) hue-rotate(180deg);
-}
-html.a11y-grayscale {
-  filter: grayscale(100%);
-}
 html.a11y-underline-links a {
   text-decoration: underline !important;
   text-underline-offset: 2px;
 }
+
+/* Dark mode utility overrides for common Tailwind classes */
+html.dark-mode .bg-white { background-color: var(--color-bg-card) !important; }
+html.dark-mode .bg-stone-50 { background-color: #3A3532 !important; }
+html.dark-mode .bg-stone-100 { background-color: #403B38 !important; }
+html.dark-mode .bg-stone-200 { background-color: #4A4542 !important; }
+html.dark-mode .text-stone-900 { color: var(--color-text-primary) !important; }
+html.dark-mode .text-stone-800 { color: #E7E5E4 !important; }
+html.dark-mode .text-stone-700 { color: #D6D3D1 !important; }
+html.dark-mode .text-stone-600 { color: #A8A29E !important; }
+html.dark-mode .text-stone-500 { color: #A8A29E !important; }
+html.dark-mode .text-stone-400 { color: #78716C !important; }
+html.dark-mode .border-stone-200 { border-color: var(--color-border-light) !important; }
+html.dark-mode .border-stone-100 { border-color: #3A3532 !important; }
+html.dark-mode .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; }
+html.dark-mode .shadow-md { box-shadow: 0 4px 6px rgba(0,0,0,0.4) !important; }
 
 /* Modo de ahorro de datos: deshabilita animaciones y transiciones pesadas */
 div[data-data-saver="true"] *,
