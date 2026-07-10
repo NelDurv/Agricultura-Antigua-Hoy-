@@ -224,6 +224,7 @@ export default function AIReadySection() {
     <div className="space-y-8 py-4" id="ai-ready-section">
       {/* Dynamic Header Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-[#0c2a43] via-[#091b29] to-[#040c14] border border-stone-800 p-6 sm:p-8 text-stone-100 shadow-xl" id="aiready-hero">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
         <div className="absolute top-0 right-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-1/3 -mb-20 h-72 w-72 rounded-full bg-gold/15 blur-3xl"></div>
 

@@ -116,6 +116,110 @@ export const BIBLIOTECA: BibliotecaDoc[] = [
       "Autonomous Greenhouse Challenge - Reports on LED and CO2 integration (2024-2026)",
       "Signify Philips Lighting - Light Recipes for Greenhouse Vegetables"
     ]
+  },
+  {
+    id: "ficha-caldo-sulfocalcico",
+    title: "Preparación y Aplicación del Caldo Sulfocálcico",
+    category: "Fichas Técnicas",
+    subcategory: "Bioinsumos Protectores",
+    difficulty: "Medio",
+    cultivo: "Frutales, Hortalizas, Vid",
+    author: "Laboratorio de Bioinsumos - Agricultura Antigua",
+    date: "15 de Febrero de 2026",
+    version: "v1.2",
+    licencia: "Creative Commons BY-NC-SA 4.0",
+    tags: ["Caldo Sulfocálcico", "Azufre", "Cal", "Hongo", "Ácaros"],
+    description: "Guía completa de cocción, filtrado y almacenamiento del caldo sulfocálcico para el control preventivo de hongos y ácaros en cultivos orgánicos.",
+    fullText: "El caldo sulfocálcico es un fungicida y acaricida preventivo de origen mineral preparado por cocción de azufre y cal viva. \n\n" +
+              "MATERIALES: 2 kg de azufre elemental en polvo, 1 kg de cal viva (óxido de calcio), 10 litros de agua limpia (preferiblemente de lluvia), recipiente de hierro o acero inoxidable (nunca de aluminio), palo de madera para agitar, filtro de tela. \n\n" +
+              "PROCEDIMIENTO: Calienta el agua hasta ebullición suave. Agrega la cal viva lentamente (la reacción es exotérmica). Incorpora el azufre en forma de lluvia fina mientras agitas constantemente. Cocina a fuego lento durante 45-60 minutos hasta que la mezcla adquiera un color ámbar oscuro o ladrillo. Retira del fuego, deja enfriar y filtra con tela. Almacena en envases plásticos oscuros y herméticos, etiquetando con fecha de preparación. \n\n" +
+              "DOSIS: Aplicar al 1-2% (100-200 ml por 10L de agua) en aspersión foliar cada 15 días como preventivo. No mezclar con aceites ni jabones. Aplicar en horas frescas.",
+    downloads: 1870,
+    relatedCourses: ["biofertilizantes"],
+    sources: ["Manual de Agricultura Orgánica - Jairo Restrepo", "Experiencias de campo de Agricultura Antigua"]
+  },
+  {
+    id: "guia-abonos-verdes",
+    title: "Guía de Abonos Verdes y Coberturas Vegetales",
+    category: "Guías",
+    subcategory: "Manejo de Suelos",
+    difficulty: "Bajo",
+    cultivo: "General",
+    author: "Colectivo Regenerativo de Agricultura Antigua",
+    date: "20 de Abril de 2026",
+    version: "v2.0",
+    licencia: "Creative Commons BY-NC",
+    tags: ["Abonos Verdes", "Cobertura", "Nitrógeno", "Biomasa"],
+    description: "Selección de especies, épocas de siembra y manejo de abonos verdes para protección, fertilización y estructuración del suelo.",
+    fullText: "Los abonos verdes son cultivos temporales que se siembran no para cosechar, sino para incorporar biomasa vegetal al suelo. \n\n" +
+              "ESPECIES RECOMENDADAS: \n- Leguminosas (fijadoras de nitrógeno): Canavalia, Crotalaria, Mucuna, Vicia, Trébol. \n- Gramíneas (alta producción de biomasa): Avena, Centeno, Mijo, Sorgo forrajero. \n- Crucíferas (biofumigación): Mostaza blanca, Nabo forrajero. \n\n" +
+              "ÉPOCAS DE SIEMBRA: En climas tropicales se pueden sembrar todo el año aprovechando las lluvias. En temporales: 60-90 días antes del cultivo principal. \n\n" +
+              "MANEJO: Corte a ras del suelo en floración (máximo contenido de nutrientes). Picar y dejar como mulch superficial o incorporar superficialmente. Esperar 15-20 días antes de transplantar el cultivo comercial para permitir la descomposición inicial.",
+    downloads: 1650,
+    relatedCourses: ["suelo-vivo"],
+    sources: ["FAO - Abonos Verdes y Cultivos de Cobertura", "Experiencias de Agricultura Regenerativa en Latinoamérica"]
+  },
+  {
+    id: "protocolo-bocashi",
+    title: "Protocolo de Elaboración de Abono Fermentado Bokashi",
+    category: "Protocolos",
+    subcategory: "Fermentación Aeróbica",
+    difficulty: "Medio",
+    cultivo: "General",
+    author: "MSc. Kenji Takahashi",
+    date: "10 de Junio de 2026",
+    version: "v1.0",
+    licencia: "GPLv3 Open Source",
+    tags: ["Bokashi", "Fermentación", "Compostaje Rápido", "Microorganismos"],
+    description: "Protocolo detallado de preparación del Bokashi en 15 días, con control de temperatura, humedad y volteos.",
+    fullText: "El Bokashi es un método de compostaje fermentativo acelerado de origen japonés, listo en 12-15 días. \n\n" +
+              "INGREDIENTES: 50 kg de salvado de arroz o afrechillo, 50 kg de cascarilla de arroz o carbón molido, 30 kg de tierra negra tamizada, 20 kg de estiércol seco de vaca, 5 kg de melaza de caña, 200 gramos de levadura de pan (Saccharomyces cerevisiae), 2 kg de carbón vegetal molido, agua limpia. \n\n" +
+              "PROCEDIMIENTO DÍA A DÍA: \nDía 1: Mezclar todos los ingredientes secos homogéneamente. Disolver melaza y levadura en 10 litros de agua tibia. Agregar el líquido a la mezcla y humedecer hasta alcanzar 50-60% de humedad (prueba del puño: al apretar la mezcla, debe formarse un terrón que se deshace al tocarlo). Formar una pila de 30-40 cm de altura. \nDías 2-12: Voltear la pila 1-2 veces al día. Monitorear temperatura (meta: 55-65°C). Si supera los 70°C, voltear inmediatamente. \nDías 13-15: Reducir volteos. La temperatura debe estabilizarse a temperatura ambiente. El Bokashi está listo cuando huele a fermento agridulce y tiene aspecto desmenuzable.",
+    downloads: 2340,
+    relatedCourses: ["bokashi-avanzado"],
+    sources: ["Manual de Agricultura Orgánica - Jairo Restrepo", "Técnicas de Fermentación Aeróbica - EMRO Japan"]
+  },
+  {
+    id: "guia-identificacion-plagas",
+    title: "Guía de Identificación de Plagas y Enemigos Naturales",
+    category: "Guías",
+    subcategory: "Manejo Integrado",
+    difficulty: "Medio",
+    cultivo: "General",
+    author: "Ing. Lucía Mendoza",
+    date: "18 de Mayo de 2026",
+    version: "v1.0",
+    licencia: "Creative Commons BY-NC",
+    tags: ["Plagas", "Identificación", "Control Biológico", "Depredadores"],
+    description: "Guía ilustrada con fotografías de campo para identificar las principales plagas agrícolas y sus depredadores naturales asociados.",
+    fullText: "MANUAL DE IDENTIFICACIÓN RÁPIDA DE PLAGAS Y CONTROLADORES BIOLÓGICOS \n\n" +
+              "PLAGAS COMUNES: \n- Áfidos o pulgones (Aphididae): Insectos pequeños de cuerpo blando, color verde, negro o amarillo. Se agrupan en brotes tiernos y envés de hojas. Secretan melaza que atrae hormigas y produce fumagina. Control biológico: Crisopas, mariquitas, avispas parasitoides (Aphidius). \n- Trips (Frankliniella occidentalis): Insectos alargados de 1-2 mm, color amarillo a marrón. Producen plateado en hojas y deformación de frutos. Control biológico: Amblyseius swirskii, Orius laevigatus. \n- Arañita roja (Tetranychus urticae): Ácaros minúsculos en envés con telaraña fina. Manchas cloróticas en haz. Control biológico: Phytoseiulus persimilis. \n- Mosca blanca (Bemisia tabaci): Pequeñas moscas blancas que vuelan al agitar la planta. Causan debilitamiento y transmisión de virus. Control biológico: Encarsia formosa. \n\n" +
+              "CÓMO MUESTREAR: Revisar 10 plantas al azar por hectárea, observar el envés de 3 hojas por planta. Registrar presencia de plagas y depredadores. Solo aplicar control si se supera el umbral de daño económico.",
+    downloads: 2100,
+    relatedCourses: ["control-biologico"],
+    sources: ["Manual de Control Biológico - INIA", "Experiencias de Manejo Integrado - Agricultura Antigua"]
+  },
+  {
+    id: "ficha-riego-goteo",
+    title: "Ficha Técnica: Diseño de Riego por Goteo para Fincas Familiares",
+    category: "Fichas Técnicas",
+    subcategory: "Infraestructura de Riego",
+    difficulty: "Medio",
+    cultivo: "Hortalizas, Frutales",
+    author: "Centro de Investigación Agroecológica de Agricultura Antigua",
+    date: "22 de Marzo de 2026",
+    version: "v1.0",
+    licencia: "Creative Commons BY-NC-SA 4.0",
+    tags: ["Riego", "Goteo", "Diseño", "Ahorro de Agua", "Ficha Técnica"],
+    description: "Cálculo y diseño de sistemas de riego por goteo de bajo costo para pequeñas fincas, con materiales accesibles y mantenimiento sencillo.",
+    fullText: "DISEÑO DE SISTEMA DE RIEGO POR GOTEO PARA PEQUEÑAS FINCAS \n\n" +
+              "1. COMPONENTES BÁSICOS: \n- Tanque de almacenamiento (elevado mínimo 1.5 m para presión por gravedad). \n- Filtro de malla o anillas (120 mesh). \n- Tubería principal de PVC de 1/2\" o 3/4\". \n- Laterales de cinta de goteo o manguera de 16 mm con goteros cada 20-30 cm. \n- Goteros autocompensantes (caudal 1-4 L/h). \n\n" +
+              "2. CÁLCULO RÁPIDO: \n- Caudal total (L/h) = Número de goteros × Caudal por gotero (L/h). \n- Tiempo de riego (h) = Lámina de riego necesaria (mm) × Área (m²) / Caudal total (L/h). \n- Para hortalizas en clima cálido: 4-6 mm/día. \n\n" +
+              "3. MANTENIMIENTO: \n- Lavar filtros semanalmente. \n- Inyectar ácido nítrico o cloro cada 15 días para destapar goteros (solo si se usa fertilización). \n- Revisar presión al final del sistema: debe haber al menos 0.5 bar. \n\n" +
+              "4. VENTAJAS: Ahorro de agua del 40-60% comparado con riego por surcos. Reduce incidencia de hongos foliares. Permite fertirriego eficiente.",
+    downloads: 1890,
+    relatedCourses: ["riego-keyline"],
+    sources: ["FAO - Riego por Goteo para Pequeños Agricultores", "Manual Técnico de Riego Localizado - INTI"]
   }
 ];
 

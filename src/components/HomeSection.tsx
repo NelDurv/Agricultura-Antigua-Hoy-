@@ -256,7 +256,7 @@ export default function HomeSection() {
           </div>
 
           <div className="ocn-grid">
-            {COURSES.slice(0, 2).map((course) => {
+            {COURSES.slice(0, 9).map((course) => {
               const optimizedImage = dataSaver
                 ? course.image.replace("q=100", "q=20").replace("w=2400", "w=400")
                 : course.image;
@@ -318,14 +318,14 @@ export default function HomeSection() {
             </button>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {BIBLIOTECA.map((doc) => (
               <div 
                 key={doc.id} 
                 onClick={() => navigate("/biblioteca/" + doc.id)}
-                className="p-4 bg-white border border-stone-200 hover:border-gold rounded-xl cursor-pointer transition-all flex flex-col justify-between hover:shadow-xs border-b-2 border-gold/40 group"
+                className="p-3 bg-white border border-stone-200 hover:border-gold rounded-xl cursor-pointer transition-all flex flex-col justify-between hover:shadow-xs border-b-2 border-gold/40 group"
               >
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   <div className="flex items-center justify-between">
                     <span className="text-[9px] font-mono tracking-wider font-semibold text-primary bg-stone-100 border border-stone-200 px-1.5 py-0.5 rounded">
                       {doc.category}
@@ -339,7 +339,7 @@ export default function HomeSection() {
                     {doc.description}
                   </p>
                 </div>
-                <div className="mt-3.5 pt-2 border-t border-stone-100/60 flex items-center justify-between text-[10px] font-mono text-stone-400">
+                <div className="mt-2 pt-1.5 border-t border-stone-100/60 flex items-center justify-between text-[10px] font-mono text-stone-400">
                   <span>Dificultad: <strong className="text-stone-600 font-medium">{doc.difficulty}</strong></span>
                   <span className="text-primary font-bold flex items-center gap-0.5">Leer Ficha <ArrowRight className="h-2.5 w-2.5 inline" /></span>
                 </div>
@@ -350,8 +350,8 @@ export default function HomeSection() {
       </div>
 
       {/* Specializations & Routes (Learning path example) */}
-      <div className="ocn-section ocn-section-light rounded-3xl" id="home-specialization">
-        <div className="w-full space-y-2">
+      <div className="ocn-section ocn-section-light rounded-3xl !py-3" id="home-specialization">
+        <div className="w-full space-y-[0.35rem]">
           <span className="font-mono text-[10px] text-primary tracking-wider uppercase font-bold">Ruta Profesional Certificada</span>
           <h3 className="font-serif text-2xl font-bold text-stone-900">Especialista en Agroecología de Montaña y Suelo Vivo</h3>
           <p className="text-xs leading-relaxed text-stone-600">
@@ -359,14 +359,14 @@ export default function HomeSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-[1.05rem]">
           {[
             { step: "01", title: "Manejo del Suelo", desc: "Suelo Vivo, red alimentaria y microbiología.", active: true },
             { step: "02", title: "Bioinsumos Líquidos", desc: "Elaboración de fermentados y caldos minerales.", active: true },
             { step: "03", title: "Nutrición Sólida", desc: "Compostaje termófilo y Bokashi acelerado.", active: false },
             { step: "04", title: "Manejo de Plagas", desc: "Estrategias de control biológico y vegetal.", active: false },
           ].map((item, idx) => (
-            <div key={idx} className={`p-4 rounded-xl border flex flex-col justify-between h-32 transition-all ${item.active ? "bg-stone-50 border-gold/60 shadow-xs" : "bg-stone-50/50 border-stone-200/60 opacity-70"}`}>
+            <div key={idx} className={`p-4 rounded-xl border flex flex-col justify-between h-[5.6rem] transition-all ${item.active ? "bg-stone-50 border-gold/60 shadow-xs" : "bg-stone-50/50 border-stone-200/60 opacity-70"}`}>
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10px] font-bold text-stone-400">{item.step}</span>
                 {item.active ? (
@@ -385,7 +385,7 @@ export default function HomeSection() {
       </div>
 
       {/* Events / News Banner */}
-      <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row gap-6 items-center justify-between border-b-4 border-gold shadow-xs" id="home-events">
+      <div className="bg-white border border-stone-200 rounded-3xl p-[1.2rem] sm:p-[1.6rem] flex flex-col md:flex-row gap-6 items-center justify-between border-b-4 border-gold shadow-xs" id="home-events">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 text-stone-950 border border-gold/40 px-2.5 py-0.5 text-[10px] font-mono tracking-wider font-bold">
             <Calendar className="h-3 w-3 text-primary" />

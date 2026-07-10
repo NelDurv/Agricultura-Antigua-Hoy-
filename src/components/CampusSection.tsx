@@ -200,41 +200,45 @@ export default function CampusSection() {
   return (
     <div className="space-y-8 py-4" id="campus-section">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 pb-5">
-        <div className="space-y-1.5">
-          <span className="font-mono text-[10px] text-emerald-700 tracking-wider uppercase font-semibold">Aula Interactiva de la Finca</span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 flex items-center gap-2">
-            <GraduationCap className="h-7 w-7 text-emerald-700" />
-            <span>Campus & Rutas de Aprendizaje</span>
-          </h2>
-          <p className="text-xs text-stone-600 max-w-2xl">
-            Aprende a transitar del modelo químico al biológico. Explora nuestros programas fundacionales o sumérgete en el currículum avanzado de la agricultura regenerativa.
-          </p>
-        </div>
+      <div className="relative overflow-hidden rounded-3xl p-6 sm:p-10">
+        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">Aula Interactiva de la Finca</span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-50 flex items-center gap-2">
+              <GraduationCap className="h-7 w-7 text-gold" />
+              <span>Campus & Rutas de Aprendizaje</span>
+            </h2>
+            <p className="text-xs text-stone-300 max-w-2xl">
+              Aprende a transitar del modelo químico al biológico. Explora nuestros programas fundacionales o sumérgete en el currículum avanzado de la agricultura regenerativa.
+            </p>
+          </div>
 
-        {/* Mode Selector Segmented Controls */}
-        <div className="inline-flex rounded-xl bg-stone-200/70 p-1.5 self-start md:self-center border border-stone-300/40 gap-1">
-          <button
-            onClick={() => setCampusMode("fundamentos")}
-            className={`px-6 py-3 text-sm font-bold rounded-lg transition-all ${
-              campusMode === "fundamentos"
-                ? "bg-white text-stone-950 shadow-xs"
-                : "text-gold"
-            }`}
-          >
-            🏫 Talleres Iniciales
-          </button>
-          <button
-            onClick={() => setCampusMode("utopia")}
-            className={`px-6 py-3 text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 ${
-              campusMode === "utopia"
-                ? "bg-emerald-600 text-stone-50 shadow-xs"
-                : "text-stone-600 hover:text-stone-950"
-            }`}
-          >
-            <Sparkles className="h-5 w-5" />
-            <span>Ruta Utopía (32 Cursos)</span>
-          </button>
+          {/* Mode Selector Segmented Controls */}
+          <div className="inline-flex rounded-xl bg-stone-900/50 p-1.5 self-start md:self-center border border-stone-100/10 gap-1 backdrop-blur-sm">
+            <button
+              onClick={() => setCampusMode("fundamentos")}
+              className={`px-6 py-3 text-sm font-bold rounded-lg transition-all ${
+                campusMode === "fundamentos"
+                  ? "bg-white text-stone-950 shadow-xs"
+                  : "text-gold hover:text-white"
+              }`}
+            >
+              🏫 Talleres Iniciales
+            </button>
+            <button
+              onClick={() => setCampusMode("utopia")}
+              className={`px-6 py-3 text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 ${
+                campusMode === "utopia"
+                  ? "bg-emerald-600 text-stone-50 shadow-xs"
+                  : "text-stone-400 hover:text-white"
+              }`}
+            >
+              <Sparkles className="h-5 w-5" />
+              <span>Ruta Utopía (32 Cursos)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -603,9 +607,9 @@ export default function CampusSection() {
                     id={`course-32-card-${course.id}`}
                   >
                     {/* Collapsed Row Header */}
-                    <div 
+                      <div 
                       onClick={() => setExpandedCourseId(isExpanded ? null : course.id)}
-                      className="p-4 sm:p-5 flex flex-wrap items-center gap-2 sm:gap-4 cursor-pointer select-none"
+                      className="p-4 sm:p-5 flex flex-wrap items-center gap-2 sm:gap-4 cursor-pointer select-none bg-emerald-800/80"
                     >
                       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                         {/* Course Number Badge */}
@@ -702,7 +706,7 @@ export default function CampusSection() {
                                   className={`p-4 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-3 select-none ${
                                     isTestDone
                                       ? "bg-emerald-50/50 border-emerald-300 text-emerald-950 font-medium"
-                                      : "bg-white border-stone-200 hover:border-stone-300 text-stone-700"
+                                      : "bg-emerald-800/80 border-stone-200 hover:border-stone-300 text-stone-700"
                                   }`}
                                 >
                                   <span className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-sm border text-[10px] font-mono ${
@@ -755,7 +759,7 @@ export default function CampusSection() {
                               return (
                                 <div 
                                   key={qIdx}
-                                  className="bg-orange-50 border border-orange-200 rounded-xl p-5 flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
+                                  className="bg-[#85b096]/50 border border-orange-200 rounded-xl p-5 flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
                                 >
                                   <div className="space-y-3">
                                     <div className="flex items-start gap-3">

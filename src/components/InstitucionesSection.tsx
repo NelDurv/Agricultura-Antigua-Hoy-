@@ -71,12 +71,16 @@ export default function InstitucionesSection() {
   return (
     <div className="space-y-8 py-4" id="instituciones-section">
       {/* Header */}
-      <div className="space-y-2">
-        <span className="font-mono text-[10px] text-emerald-700 tracking-wider uppercase font-semibold">Consola Cooperativa</span>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Panel para Instituciones</h2>
-        <p className="text-xs text-stone-600 max-w-2xl">
-          Diseñado para cooperativas de productores, municipios y ONGs que implementan programas de capacitación agrícola asistida en sus comunidades. Monitorea el avance de tus agricultores asociados en tiempo real.
-        </p>
+      <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
+        <div className="relative z-10 space-y-2">
+          <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">Consola Cooperativa</span>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-50">Panel para Instituciones</h2>
+          <p className="text-xs text-stone-300 max-w-2xl">
+            Diseñado para cooperativas de productores, municipios y ONGs que implementan programas de capacitación agrícola asistida en sus comunidades. Monitorea el avance de tus agricultores asociados en tiempo real.
+          </p>
+        </div>
       </div>
 
       {/* Metrics Strip */}
