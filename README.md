@@ -27,7 +27,11 @@ Plataforma educativa de agricultura orgánica con enfoque en el **Modelo Utopía
 
 ```
 src/
-├── components/        # Componentes de UI (secciones de página)
+├── components/
+│   ├── blocks/                  # [NUEVO] Sistema de bloques reutilizables
+│   │   ├── types.ts             #   10 tipos de bloque tipados
+│   │   ├── PageRenderer.tsx     #   Renderizador secuencial de PageBlock[]
+│   │   └── index.ts             #   Barrel
 │   ├── InterfaceOrchestrator.tsx # Orquestador de vista primaria + capas mobile
 │   ├── ResourceLayer.tsx         # Renderiza curso/doc/receta/recursos/nodo como capa
 │   ├── ConversationPanel.tsx     # Chat persistente con composer simplificado
@@ -41,7 +45,7 @@ src/
 │   ├── InstitucionesSection.tsx # Panel cooperativo
 │   ├── PerfilSection.tsx      # Perfil de usuario
 │   ├── AIReadySection.tsx     # Laboratorio IA
-│   ├── Navbar.tsx             # Navbar con logo + navegación escritorio + búsqueda
+│   ├── Navbar.tsx             # Navbar con logo + navegación escritorio (iconos h-3.5) + búsqueda
 │   ├── SearchBar.tsx          # Búsqueda global
 │   └── AccessibilityToolbar.tsx
 │
@@ -150,6 +154,77 @@ Actualmente indexa: `COURSES[10]` + `BIBLIOTECA[9]` + `RECETAS[3]` + `GLOSARIO[8
 | `src/components/Navbar.tsx` | Simplificado: solo logo + búsqueda + badge de usuario |
 
 #### Estado del build: ✅ Build exitoso (1726 módulos)
+
+### 2026-07-13 — Sesión 8: Migración Masiva a Bloques de Contenido
+
+#### Cambios realizados:
+1. **Hero Blocks unificados** — 6 de 8 secciones migradas del patrón duplicado (imagen + gradiente + badge + título + subtítulo) al bloque `hero` del sistema de bloques:
+   - `BibliotecaSection` ✅
+   - `RecursosSection` ✅
+   - `AcademiaSection` ✅
+   - `ComunidadSection` ✅
+   - `InstitucionesSection` ✅
+   - `PerfilSection` ✅
+   - Se mantienen como custom: `CampusSection` (tiene mode selector integrado) y `AIReadySection` (layout oscuro con panel crawler)
+
+2. **Impacto**: Reducción de ~40 líneas de HTML duplicado por sección (~240 líneas total). Ahora cambiar el diseño del hero banner se hace en un solo lugar: `PageRenderer.tsx` → `HeroBlock`.
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/components/BibliotecaSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+| `src/components/RecursosSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+| `src/components/AcademiaSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+| `src/components/ComunidadSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+| `src/components/InstitucionesSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+| `src/components/PerfilSection.tsx` | Hero reemplazado por PageRenderer con hero block |
+
+#### Estado del build: ✅ Build exitoso (1729 módulos, ~542KB bundle)
+
+### 2026-07-13 — Sesión 7: Sistema de Bloques de Contenido Reutilizables
+
+#### Cambios realizados:
+1. **Sistema de Bloques** (`src/components/blocks/`) — NUEVO
+   - 10 tipos de bloque tipados en `types.ts`: `hero`, `stats`, `card-grid`, `feature-grid`, `accordion`, `tabs`, `cta-banner`, `text`, `two-column`, `search-filter`
+   - Cada bloque define su interfaz de props de forma estricta (discriminated union)
+   - `PageRenderer.tsx` itera un array de `PageBlock[]` y renderiza el componente correspondiente
+   - Registro centralizado `blockRenderers` para mapear tipo → componente
+
+2. **HomeSection** — Refactorizada a ~280 líneas (antes 592)
+   - Hero carousel se mantiene inline (lógica de auto-play única)
+   - Todo el contenido inferior se define como `blocks: PageBlock[]`
+   - Estadísticas → `stats`, pilares/mitos/recetas → `card-grid`, sidebar → `two-column`, ruta profesional → `feature-grid`, webinar → `cta-banner`
+
+3. **Componentes de Bloque** creados:
+   - `HeroBlock`: banner con gradiente, badge, título, subtítulo, searchBar opcional
+   - `StatsBlock`: grilla de métricas con icono + valor + label
+   - `CardGridBlock`: grilla de tarjetas responsive (2/3/4 cols), soporta icono, imagen, badge, tags, meta, footer, link
+   - `FeatureGridBlock`: grilla de características con icono + título + descripción (2-5 cols)
+   - `AccordionBlock`: secciones expandibles con icono y chevron
+   - `TabsBlock`: pestañas con contenido intercambiable
+   - `CTABannerBlock`: banner promocional con gradiente, icono, badge, CTA
+   - `TextBlock`: sección de texto rico
+   - `TwoColumnBlock`: layout de dos columnas (grid 12-column)
+   - `SearchFilterBlock`: barra de búsqueda + filtros tipo pill
+
+#### Archivos nuevos:
+| Archivo | Propósito |
+|---|---|
+| `src/components/blocks/types.ts` | Tipos de bloque (PageBlock, interfaces por tipo) |
+| `src/components/blocks/PageRenderer.tsx` | Renderizador secuencial de bloques |
+| `src/components/blocks/index.ts` | Barrel export |
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/components/HomeSection.tsx` | Refactorizada a bloques: de 592 → ~280 líneas |
+
+#### Próximos pasos para migración:
+- Migrar `CampusSection`, `BibliotecaSection`, `RecursosSection`, etc. a bloques progresivamente
+- Cada página exporta `blocks: PageBlock[]` y se renderiza con `<PageRenderer blocks={blocks} />`
+- Agregar nuevo tipo de bloque: crear componente + registrar en `blockRenderers`
+
+#### Estado del build: ✅ Build exitoso (1729 módulos, ~542KB bundle)
 
 ### 2026-07-12 — Sesión 6: Navegación Vuelve al Navbar + Toolbar al Footer
 

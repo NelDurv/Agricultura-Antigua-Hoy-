@@ -18,6 +18,8 @@ import {
 import { UserMembership, Certificate } from "../types";
 import { BIBLIOTECA } from "../data";
 import { useAuth, useProgress, useUI } from "../contexts";
+import { PageRenderer } from "./blocks";
+import type { PageBlock } from "./blocks";
 
 export default function PerfilSection() {
   const navigate = useNavigate();
@@ -68,17 +70,16 @@ export default function PerfilSection() {
   return (
     <div className="space-y-8 py-4" id="perfil-section">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12">
-        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
-        <div className="relative z-10 space-y-2">
-          <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">Mi Espacio Académico</span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-50">Mi Perfil Estudiantil</h2>
-          <p className="text-xs text-stone-300 max-w-2xl">
-            Administra tus datos personales, consulta tus certificados oficiales descargables y revisa tu catálogo personal de lecturas técnicas marcadas como favoritas.
-          </p>
-        </div>
-      </div>
+      <PageRenderer blocks={[{
+        type: 'hero',
+        id: 'perfil-hero',
+        props: {
+          badge: 'Mi Espacio Académico',
+          title: 'Mi Perfil Estudiantil',
+          subtitle: 'Administra tus datos personales, consulta tus certificados oficiales descargables y revisa tu catálogo personal de lecturas técnicas marcadas como favoritas.',
+          backgroundImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=100&w=2400',
+        },
+      }]} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         

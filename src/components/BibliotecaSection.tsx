@@ -20,6 +20,8 @@ import { BibliotecaDoc } from "../types";
 import { useProgress } from "../contexts";
 import { getRelatedNodes } from "../core/knowledge/graph";
 import GlossaryTooltip from "./GlossaryTooltip";
+import { PageRenderer } from "./blocks";
+import type { PageBlock } from "./blocks";
 
 export default function BibliotecaSection() {
   const { docId } = useParams();
@@ -75,20 +77,20 @@ export default function BibliotecaSection() {
     }, 4000);
   };
 
+  const heroBlock: PageBlock = {
+    type: 'hero',
+    id: 'biblioteca-hero',
+    props: {
+      badge: 'Base de Saberes',
+      title: 'Biblioteca Agroecológica',
+      subtitle: 'Nuestra biblioteca no es una simple carpeta de PDFs. Es una base documental estructurada donde cada artículo, protocolo y guía técnica está interconectado con cursos de la academia y validado por fuentes científicas de confianza.',
+      backgroundImage: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=100&w=2400',
+    },
+  };
+
   return (
     <div className="space-y-8 py-4" id="biblioteca-section">
-      {/* Header */}
-      <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12">
-        <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
-        <div className="relative z-10 space-y-2">
-          <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">Base de Saberes</span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-50">Biblioteca Agroecológica</h2>
-          <p className="text-xs text-stone-300 max-w-2xl">
-            Nuestra biblioteca no es una simple carpeta de PDFs. Es una base documental estructurada donde cada artículo, protocolo y guía técnica está interconectado con cursos de la academia y validado por fuentes científicas de confianza.
-          </p>
-        </div>
-      </div>
+      <PageRenderer blocks={[heroBlock]} />
 
       {/* Download Alert Toast */}
       {downloadSuccess && (

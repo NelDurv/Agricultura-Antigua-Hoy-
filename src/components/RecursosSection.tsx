@@ -30,6 +30,8 @@ import { useNavigate } from "react-router-dom";
 import { PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, RECETAS, GLOSARIO, SUBTEMAS } from "../data";
 import type { Pilar } from "../types";
 import { getRelatedNodes } from "../core/knowledge/graph";
+import { PageRenderer } from "./blocks";
+import type { PageBlock } from "./blocks";
 
 export default function RecursosSection() {
   const navigate = useNavigate();
@@ -167,21 +169,16 @@ export default function RecursosSection() {
   return (
     <div className="space-y-8 py-4" id="recursos-hub">
       {/* Welcome & Section Intro */}
-      <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12">
-        <img src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
-        <div className="relative z-10 space-y-2">
-          <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">
-            Sabiduría y Ciencia de la Tierra
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-stone-50">
-            Centro de Recursos Interactivos
-          </h2>
-          <p className="text-xs sm:text-sm text-stone-300 max-w-3xl leading-relaxed font-medium">
-            Explora la base de datos completa de **Agricultura Antigua**. Accede de forma interactiva a los pilares fundamentales, desmiente mitos agrícolas con datos científicos, calcula formulaciones rústicas en tiempo real y aprende recetas biológicas probadas para tu finca.
-          </p>
-        </div>
-      </div>
+      <PageRenderer blocks={[{
+        type: 'hero',
+        id: 'recursos-hero',
+        props: {
+          badge: 'Sabiduría y Ciencia de la Tierra',
+          title: 'Centro de Recursos Interactivos',
+          subtitle: 'Explora la base de datos completa de Agricultura Antigua. Accede de forma interactiva a los pilares fundamentales, desmiente mitos agrícolas con datos científicos, calcula formulaciones rústicas en tiempo real y aprende recetas biológicas probadas para tu finca.',
+          backgroundImage: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&q=100&w=2400',
+        },
+      }]} />
 
       {/* Main Hub Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-stone-200/80 pb-1" id="hub-navigation">

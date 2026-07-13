@@ -24,6 +24,8 @@ import {
 import { COURSES, BIBLIOTECA } from "../data";
 import type { Course, Module, Certificate, BibliotecaDoc } from "../types";
 import { useAuth, useProgress } from "../contexts";
+import { PageRenderer } from "./blocks";
+import type { PageBlock } from "./blocks";
 
 /* eslint-disable react-hooks/purity */
 export default function AcademiaSection() {
@@ -648,22 +650,21 @@ export default function AcademiaSection() {
   // General Academy Catalog
   return (
     <div className="space-y-8 py-4" id="academia-landing">
-      <div className="relative overflow-hidden rounded-3xl p-8 sm:p-12">
-        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b2a]/85 via-[#1b263b]/70 to-[#415a77]/50" />
-        <div className="relative z-10 space-y-2">
-          {showCatalog && (
-            <button onClick={() => setShowCatalog(false)} className="flex items-center gap-1.5 text-xs font-semibold text-stone-300 hover:text-white mb-2">
-              <ArrowLeft className="h-4 w-4" /> Volver al Dashboard
-            </button>
-          )}
-          <span className="font-mono text-[10px] text-gold tracking-wider uppercase font-semibold">Formación Profesional</span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-50">Academia Agricultura Antigua</h2>
-          <p className="text-xs text-stone-300 max-w-2xl">
-            Nuestra aula virtual ofrece metodologías prácticas probadas en campo. Todos los cursos son guiados por especialistas en agroecología, con evaluaciones por competencia y emisión de certificados respaldados.
-          </p>
-        </div>
-      </div>
+      <PageRenderer blocks={[{
+        type: 'hero',
+        id: 'academia-hero',
+        props: {
+          badge: 'Formación Profesional',
+          title: 'Academia Agricultura Antigua',
+          subtitle: 'Nuestra aula virtual ofrece metodologías prácticas probadas en campo. Todos los cursos son guiados por especialistas en agroecología, con evaluaciones por competencia y emisión de certificados respaldados.',
+          backgroundImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=100&w=2400',
+        },
+      }]} />
+      {showCatalog && (
+        <button onClick={() => setShowCatalog(false)} className="flex items-center gap-1.5 text-xs font-semibold text-stone-300 hover:text-white mb-2 -mt-4">
+          <ArrowLeft className="h-4 w-4" /> Volver al Dashboard
+        </button>
+      )}
 
       <div className="space-y-6">
         <h3 className="text-xs font-mono tracking-wider text-stone-500 uppercase font-semibold">Oferta Académica</h3>

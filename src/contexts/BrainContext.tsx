@@ -155,7 +155,7 @@ export function BrainProvider({ children }: { children: ReactNode }) {
         content,
         suggestions: [
           ...relatedSuggestions,
-          ...(top.length > 1 ? [{ label: '¿Algo más específico?', action: 'preguntar', icon: '💬' }] : []),
+          ...(top.length > 1 ? [{ label: '¿Nueva Pregunta?', action: 'preguntar', icon: '💬' }] : []),
         ],
         newLayers,
       };
