@@ -5,8 +5,8 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Sprout, Calendar, Sparkles, ChevronLeft, ChevronRight, FlaskConical, Droplets } from "lucide-react";
-import { COURSES, BIBLIOTECA, PILARES, MITOS, RECETAS, NUMEROS_CLAVE } from "../data";
+import { ArrowRight, Sprout, Calendar, Sparkles, ChevronLeft, ChevronRight, FlaskConical, Droplets, BookOpen, Star } from "lucide-react";
+import { COURSES, BIBLIOTECA, PILARES, MITOS, RECETAS, NUMEROS_CLAVE, CASOS_EXITO, GLOSARIO } from "../data";
 import { useAuth, useUI } from "../contexts";
 import SearchBar from "./SearchBar";
 
@@ -452,10 +452,85 @@ export default function HomeSection() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Specializations & Routes (Learning path example) */}
+          {/* Glosario */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-stone-900">Glosario Técnico</h3>
+                <p className="text-[10px] text-stone-500">Términos clave de agroecología.</p>
+              </div>
+              <button
+                onClick={() => navigate("/recursos")}
+                className="text-[10px] font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
+              >
+                <span>Glosario</span>
+                <ArrowRight className="h-2.5 w-2.5" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {GLOSARIO.slice(0, 5).map((g) => (
+                <div
+                  key={g.termino}
+                  className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl hover:border-gold/50 transition-colors cursor-default group"
+                >
+                  <div className="flex items-start gap-2">
+                    <BookOpen className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-xs font-bold font-serif text-stone-950">{g.termino}</h4>
+                      <p className="text-[10px] text-stone-600 leading-relaxed mt-0.5 line-clamp-2">{g.definicion}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+          </div>
+
+          {/* Casos de Éxito header */}
+          <div className="flex items-center justify-between pt-4">
+            <div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">Casos de Éxito</h3>
+              <p className="text-xs text-stone-500 mt-1">Resultados reales del modelo Utopía en campo.</p>
+            </div>
+            <button
+              onClick={() => navigate("/recursos")}
+              className="text-xs font-bold text-primary hover:text-gold flex items-center gap-1 hover:underline transition-colors"
+            >
+              <span>Ver todos</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {CASOS_EXITO.map((ce) => (
+              <div
+                key={ce.id}
+                className="bg-white border border-stone-200 rounded-2xl p-4 hover:shadow-md transition-all hover:border-gold/60 group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-2xl">{ce.icono}</span>
+                  <div className="min-w-0">
+                    <h4 className="font-serif text-sm font-bold text-stone-950 line-clamp-1">{ce.titulo}</h4>
+                    <p className="text-[10px] text-stone-500 font-mono">{ce.cultivo} • {ce.ubicacion}</p>
+                  </div>
+                </div>
+                <p className="text-[11px] text-stone-600 line-clamp-2 leading-relaxed mb-3">{ce.descripcion}</p>
+                <div className="space-y-1">
+                  {ce.resultados.slice(0, 3).map((r, i) => (
+                    <div key={i} className="flex items-start gap-1.5">
+                      <Star className="h-3 w-3 text-gold shrink-0 mt-0.5" />
+                      <span className="text-[10px] text-stone-700 leading-tight">{r}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Specializations & Routes (Learning path example) */}
       <div className="ocn-section ocn-section-light rounded-3xl !py-3" id="home-specialization">
         <div className="w-full space-y-[0.35rem]">
           <span className="font-mono text-[10px] text-primary tracking-wider uppercase font-bold">Ruta Profesional Certificada</span>

@@ -5,3 +5,5 @@ export { PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, SUBTEMAS } from './home/ind
 export { RECETAS, GLOSARIO } from './recursos/index';
 export type { Course32 } from './courses32';
 export { COURSES32 } from './courses32';
+export { INSTITUCIONES_ESTUDIANTES } from './instituciones';
+export type { EstudianteInstitucional } from './instituciones';

@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import { COURSES, BIBLIOTECA } from "../data";
 import { COURSES32 } from "../data/courses32";
 import { useProgress } from "../contexts";
+import GlossaryTooltip from "./GlossaryTooltip";
 
 export default function CampusSection() {
   const navigate = useNavigate();
@@ -482,9 +483,9 @@ export default function CampusSection() {
                 Especialización Universitaria Avanzada
               </span>
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-50 leading-tight">
-                Ruta del Especialista Orgánico del Modelo Utopía
+                Ruta del Especialista Orgánico
               </h3>
-              <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
+              <p className="text-[15px] text-stone-300 leading-relaxed font-sans">
                 Domina los 32 pilares del conocimiento creados por el Dr. Edgar Quero. Lleva un registro de los cursos asimilados y las pruebas de campo ejecutadas. Completa el 100% para postular a tu certificación.
               </p>
             </div>
@@ -986,11 +987,11 @@ export default function CampusSection() {
                             <p className="font-mono text-[#6b7280] italic">{s.subtitle}</p>
                           </div>
                         </div>
-                        <p className="text-[#333333] leading-relaxed font-sans pl-9">{s.body}</p>
+                        <p className="text-[#333333] leading-relaxed font-sans pl-9"><GlossaryTooltip text={s.body} /></p>
                         {s.farmerNote && (
                           <div className="ml-9 p-3 bg-[#e8e7d1] border-l-4 border-[#d3785d] rounded-r-lg text-[#3f405b] leading-relaxed">
                             <span className="font-bold block text-[10px] font-mono uppercase tracking-wider mb-0.5">Nota para el campo:</span>
-                            {s.farmerNote}
+                            <GlossaryTooltip text={s.farmerNote} />
                           </div>
                         )}
                       </div>
@@ -1063,7 +1064,7 @@ export default function CampusSection() {
                 <p className="text-xs text-stone-200 mt-1 opacity-80">{doc.description}</p>
               </div>
               <div className="p-6 sm:p-8 max-h-[400px] overflow-y-auto space-y-4 text-stone-800 text-sm leading-relaxed whitespace-pre-wrap font-sans">
-                {doc.fullText}
+                <GlossaryTooltip text={doc.fullText} />
               </div>
               <div className="p-4 bg-stone-100 border-t border-stone-200 flex items-center justify-between">
                 <span className="text-[10px] text-stone-500">Autor: {doc.author} • {doc.date} • v{doc.version}</span>

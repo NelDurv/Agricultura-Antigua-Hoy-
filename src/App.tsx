@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider, ProgressProvider, UIProvider } from './contexts';
+import { AuthProvider, ProgressProvider, UIProvider, BrainProvider } from './contexts';
 import Layout from './layouts/Layout';
 import HomeSection from './components/HomeSection';
 
@@ -18,7 +18,9 @@ function Providers({ children }: { children: React.ReactNode }) {
     <UIProvider>
       <AuthProvider>
         <ProgressProvider>
-          {children}
+          <BrainProvider>
+            {children}
+          </BrainProvider>
         </ProgressProvider>
       </AuthProvider>
     </UIProvider>

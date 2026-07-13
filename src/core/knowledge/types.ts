@@ -10,7 +10,9 @@ export interface KnowledgeNode {
   type: KnowledgeType;
   title: string;
   description: string;
+  fullText: string;
   tags: string[];
+  keywords: string[];
   relatedTo: string[];
   taxons: string[];
   difficulty?: DifficultyLevel | CourseLevel;

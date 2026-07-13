@@ -19,6 +19,7 @@ import { BIBLIOTECA } from "../data";
 import { BibliotecaDoc } from "../types";
 import { useProgress } from "../contexts";
 import { getRelatedNodes } from "../core/knowledge/graph";
+import GlossaryTooltip from "./GlossaryTooltip";
 
 export default function BibliotecaSection() {
   const { docId } = useParams();
@@ -296,9 +297,9 @@ export default function BibliotecaSection() {
             {/* Document Body */}
             <div className="p-6 sm:p-8 max-h-[400px] overflow-y-auto space-y-6">
               {/* Main text content */}
-              <div className="space-y-4 text-stone-800 text-sm leading-relaxed whitespace-pre-wrap font-sans">
-                {selectedDoc.fullText}
-              </div>
+                  <div className="space-y-4 text-stone-800 text-sm leading-relaxed whitespace-pre-wrap font-sans">
+                    <GlossaryTooltip text={selectedDoc.fullText} />
+                  </div>
 
               {/* Related Courses (Chapter 2 principle - relational architecture) */}
               {selectedDoc.relatedCourses.length > 0 && (

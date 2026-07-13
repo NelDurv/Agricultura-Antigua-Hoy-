@@ -56,16 +56,16 @@ export default function AccessibilityToolbar() {
   }, []);
 
   return (
-    <div className="fixed left-3 top-1/3 z-50 flex flex-col items-start">
+    <div className="fixed left-3 bottom-8 z-50 flex flex-col items-start">
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2.5 py-2 shadow-md hover:bg-emerald-50 transition-all text-stone-700 hover:text-emerald-700"
+        className="flex flex-col items-center gap-0.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2 py-2.5 shadow-md hover:bg-emerald-50 transition-all text-stone-700 hover:text-emerald-700"
         aria-label="Accesibilidad"
         title="Herramientas de accesibilidad"
       >
         <Accessibility className="h-4 w-4" />
-        <span className="text-[9px] font-bold font-mono uppercase tracking-wider hidden md:inline">
+        <span className="text-[8px] font-bold font-mono uppercase tracking-wider hidden md:inline leading-tight text-center">
           Accesibilidad
         </span>
       </button>
