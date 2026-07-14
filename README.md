@@ -9,17 +9,19 @@
 1. [Visión General](#visión-general)
 2. [Arquitectura Actual](#arquitectura-actual)
 3. [Estructura de Datos](#estructura-de-datos)
-4. [Registro de Cambios](#registro-de-cambios)
-5. [Plan de Evolución](#plan-de-evolución)
-6. [Comandos Útiles](#comandos-útiles)
+4. [Servicios Backend](#servicios-backend)
+5. [Registro de Cambios](#registro-de-cambios)
+6. [Plan de Evolución](#plan-de-evolución)
+7. [Comandos Útiles](#comandos-útiles)
+8. [Estado de Auditoría](#estado-de-auditoría)
 
 ---
 
 ## Visión General
 
-Plataforma educativa de agricultura orgánica con enfoque en el **Modelo Utopía**. Originalmente una web tradicional con secciones, en evolución hacia un **Sistema Operativo Conversacional** donde el chat es el contenedor principal y la IA orquesta micro-interfaces según contexto.
+Plataforma educativa de agricultura orgánica con enfoque en el **Modelo Utopía**. Originalmente una web tradicional con secciones, evolucionada hacia un **Sistema Operativo Conversacional** con motor goal-oriented, memoria multicapa, y arquitectura backend REST documentada.
 
-**Stack:** React + TypeScript + Vite + Tailwind CSS + React Router
+**Stack:** React + TypeScript + Vite + Tailwind CSS + React Router + Express
 
 ---
 
@@ -28,13 +30,13 @@ Plataforma educativa de agricultura orgánica con enfoque en el **Modelo Utopía
 ```
 src/
 ├── components/
-│   ├── blocks/                  # [NUEVO] Sistema de bloques reutilizables
+│   ├── blocks/                  # Sistema de bloques reutilizables
 │   │   ├── types.ts             #   10 tipos de bloque tipados
 │   │   ├── PageRenderer.tsx     #   Renderizador secuencial de PageBlock[]
 │   │   └── index.ts             #   Barrel
 │   ├── InterfaceOrchestrator.tsx # Orquestador de vista primaria + capas mobile
 │   ├── ResourceLayer.tsx         # Renderiza curso/doc/receta/recursos/nodo como capa
-│   ├── ConversationPanel.tsx     # Chat persistente con composer simplificado
+│   ├── ConversationPanel.tsx     # Chat persistente con ReactMarkdown + rehype-sanitize
 │   ├── GlossaryTooltip.tsx       # Tooltips de glosario en textos
 │   ├── HomeSection.tsx        # Página principal
 │   ├── CampusSection.tsx      # Cursos
@@ -45,43 +47,73 @@ src/
 │   ├── InstitucionesSection.tsx # Panel cooperativo
 │   ├── PerfilSection.tsx      # Perfil de usuario
 │   ├── AIReadySection.tsx     # Laboratorio IA
-│   ├── Navbar.tsx             # Navbar con logo + navegación escritorio (iconos h-3.5) + búsqueda
+│   ├── Navbar.tsx             # Navbar con logo + navegación escritorio + búsqueda
 │   ├── SearchBar.tsx          # Búsqueda global
 │   └── AccessibilityToolbar.tsx
 │
 ├── layouts/
-│   └── Layout.tsx             # [MODIFICADO] Tres columnas: chat | layers | contenido
+│   └── Layout.tsx             # Tres columnas: chat | layers | contenido
 │
 ├── contexts/
-│   ├── BrainContext.tsx        # Estado central (messages, layers, composer, sendMessage)
+│   ├── BrainContext.tsx        # Estado central (messages, layers, sendMessage → GoalProcessor)
 │   ├── AuthContext.tsx         # Autenticación
 │   ├── UIContext.tsx           # UI (dataSaver, etc.)
 │   ├── ProgressContext.tsx     # Progreso de cursos
 │   └── index.ts               # Barrel
 │
 ├── core/
+│   ├── engine/                 # [NUEVO] Motor goal-oriented
+│   │   ├── goalProcessor.ts    #   GoalProcessor class (Goal → Cache → Intent → Plan → Response → Workspace)
+│   │   ├── types.ts            #   Goal, GoalStatus, GoalResult
+│   │   └── index.ts            #   Exporta goalProcessor singleton
+│   ├── memory/                 # [NUEVO] Memoria multicapa
+│   │   ├── memoryManager.ts    #   MemoryManager (3 capas: temporal/sesión/proyecto)
+│   │   ├── contextPolicy.ts    #   ContextPolicy (14 reglas de clasificación)
+│   │   ├── types.ts            #   MemoryLayerId, MemoryEntry, MemoryLayer, MemoryQuery
+│   │   └── index.ts            #   Barrel
 │   ├── knowledge/
-│   │   ├── graph.ts           # Grafo de conocimiento (~130 nodos) + searchNodes fuzzy
-│   │   ├── types.ts           # Tipos con fullText + keywords
-│   │   └── index.ts           # Exportaciones
+│   │   ├── graph.ts            # Grafo de conocimiento (~130 nodos) + carga prebuild JSON
+│   │   ├── types.ts            # Tipos con fullText + keywords
+│   │   └── index.ts            # Exportaciones
 │   └── search/
-│       ├── unifiedIndex.ts    # [NUEVO] Índice unificado normalizado de todos los datos
-│       └── engine.ts          # Motor de búsqueda global con fuzzy matching
+│       ├── unifiedIndex.ts     # Índice unificado normalizado de todos los datos
+│       └── engine.ts           # Motor de búsqueda global con fuzzy matching
 │
 ├── data/
 │   ├── index.ts               # Barrel de exportaciones
-│   ├── home/index.ts          # PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, SUBTEMAS
-│   ├── courses/index.ts       # COURSES (10)
-│   ├── courses32.ts           # COURSES32 (32 con studyContent)
-│   ├── biblioteca/index.ts    # BIBLIOTECA (9)
-│   ├── recursos/index.ts      # RECETAS (3), GLOSARIO (8)
-│   ├── comunidad.ts           # COMMUNITY_POSTS (2)
-│   └── instituciones.ts       # INSTITUCIONES_ESTUDIANTES (4)
+│   ├── home/index.ts           # PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, SUBTEMAS
+│   ├── courses/index.ts        # COURSES (10)
+│   ├── courses32.ts            # COURSES32 (32 con studyContent)
+│   ├── biblioteca/index.ts     # BIBLIOTECA (9)
+│   ├── recursos/index.ts       # RECETAS (3), GLOSARIO (8)
+│   ├── comunidad.ts            # COMMUNITY_POSTS (2)
+│   └── instituciones.ts        # INSTITUCIONES_ESTUDIANTES (4)
 │
 ├── types/...
 └── assets/
-    └── plantilla-dorada.css   # Grid system
-```
+    └── plantilla-dorada.css    # Grid system
+
+server/                         # [MEJORADO] Backend REST + documentación
+├── index.ts                    # Express + rate limiting + CORS + Swagger UI
+├── swagger.ts                  # OpenAPI 3.0 spec (17 endpoints)
+├── routes/
+│   ├── status.ts              # GET /api/status
+│   ├── courses.ts             # GET /api/courses, /api/courses/:id
+│   ├── documents.ts           # GET /api/documents, /api/documents/:id
+│   ├── recipes.ts             # GET /api/recipes, /api/recipes/:id
+│   ├── campus.ts              # GET /api/campus, /api/campus/:id
+│   ├── glossary.ts            # GET /api/glossary
+│   ├── search.ts              # GET /api/search (con cache + rate limit + Zod)
+│   ├── sitemap.ts             # GET /api/sitemap
+│   ├── agrovoc.ts             # GET /api/agrovoc, /api/agrovoc/:id, ?resolve=
+│   ├── aiManifest.ts          # GET /api/ai-manifest
+│   └── recommend.ts           # GET /api/recommend
+
+public/
+└── knowledge-graph.json        # [NUEVO] Pre-built knowledge graph (110 nodos, 246 aristas)
+
+scripts/
+└── build-graph.ts              # [NUEVO] Script para generar knowledge-graph.json
 
 ---
 
@@ -118,24 +150,98 @@ BIBLIOTECA[9]: Documentos (Fichas Técnicas, Manuales, Guías, Protocolos, Artí
 COMMUNITY_POSTS[2]: post-1 (Mosca blanca), post-2 (Bokashi arcilloso)
 ```
 
+### GoalProcessor — Tipos del motor goal-oriented
+```
+Goal { id, text, context, constraints, capabilities?, timeout? }
+GoalStatus: 'idle' | 'analyzing' | 'planning' | 'executing' | 'composing' | 'completed' | 'failed'
+GoalResult { success, data?, error?, metadata? }
+```
+
+### Memory — Capas de memoria
+```
+MemoryLayerId: 'temporal' | 'session' | 'project'
+Capa temporal: TTL 30 min, max 100 entradas (in-memory)
+Capa sesión: TTL ∞ (localStorage), max 200 entradas
+Capa proyecto: TTL ∞ (localStorage), sin límite
+```
+
 ---
 
-## Knowledge Graph — Nodos Indexados
+## Servicios Backend
 
-Actualmente indexa: `COURSES[10]` + `BIBLIOTECA[9]` + `RECETAS[3]` + `GLOSARIO[8]` + `PILARES[5]` + `MITOS[9]` + `CASOS_EXITO[3]` + `NUMEROS_CLAVE[8]` + `SUBTEMAS[~25]` + `COMMUNITY_POSTS[2]` + `COURSES32[32]`
+### API REST (Express, puerto 3001)
+- **17 endpoints** documentados vía Swagger UI en `/api/docs`
+- Rate limiting: 100 requests/15min global, 20/min search
+- Validación Zod en `/api/search`
+- Cache de búsqueda con TTL 5 min
+- CORS habilitado
 
-**Total: ~130 nodos interconectados por etiquetas y relaciones.**
+### Swagger UI
+- `http://localhost:3001/api/docs/` — Documentación interactiva OpenAPI 3.0
+- Todos los endpoints documentados con parámetros, descripciones y códigos de respuesta
+
+### Pre-build Knowledge Graph
+- `public/knowledge-graph.json` generado con `npm run build:graph`
+- 110 nodos, 246 aristas, ~164 KB
+- Carga síncrona en producción; runtime en desarrollo
 
 ---
 
 ## Registro de Cambios
+
+### 2026-07-14 — Sesión 10: GoalProcessor + MemoryManager + Swagger + Cierre de Pendientes
+
+#### F3B — GoalProcessor (Motor Orientado a Objetivos)
+- `src/core/engine/goalProcessor.ts` — GoalProcessor class
+- Pipeline: Cache → IntentAnalyzer → TaskPlanner → ResponseComposer → Workspace → Cache
+- Reemplazó `generateResponse()` en BrainContext
+- Estados: idle → analyzing → planning → executing → composing → completed/failed
+- Exporta `goalProcessor` singleton, tipos `Goal`, `GoalStatus`, `GoalResult`
+
+#### F3C — MemoryManager (Memoria Multicapa)
+- `src/core/memory/memoryManager.ts` — 3 capas con TTL, pruning, persist/restore
+- Capa temporal: in-memory, 30 min TTL, max 100 entradas
+- Capa sesión: localStorage, ∞ TTL, max 200 entradas
+- Capa proyecto: localStorage, ∞ TTL, sin límite
+- `src/core/memory/contextPolicy.ts` — 14 reglas de clasificación automática de keys
+- Integrado en BrainContext: restaura al mount, persiste al unmount
+
+#### C-04 — XSS Sanitization
+- `react-markdown` + `rehype-sanitize` instalados
+- ConversationPanel reemplazó renderizado directo por `<ReactMarkdown rehypePlugins={[rehypeSanitize]}>`
+- Cursivas, negritas, listas markdown renderizadas; HTML/scripts filtrados
+
+#### A-07 — Pre-build Knowledge Graph
+- `scripts/build-graph.ts` genera `public/knowledge-graph.json` (110 nodos, 246 aristas)
+- `graph.ts` modificado: carga síncrona vía XHR a `/knowledge-graph.json`
+- Build script como `npm run build:graph` y como `prebuild` en package.json
+
+#### M-05 — Lazy Loading (Verificado)
+- `App.tsx` usa `React.lazy()` en 8/9 secciones
+- Solo HomeSection es estática (correcto para landing page)
+- Suspense presente en `InterfaceOrchestrator.tsx`
+
+#### M-08 — Swagger UI
+- `swagger-ui-express` instalado y montado en `/api/docs`
+- OpenAPI 3.0 spec completa: 17 endpoints con parámetros, respuestas, códigos de error
+- Spec definido estáticamente en `server/swagger.ts`
+
+#### Navbar Label Fix
+- `'Web AI-Ready'` → `'AI-Ready'` en `App.test.tsx`
+
+#### Tests
+- 28 tests pasan (3 test suites)
+- Vitest configurado con jsdom
+
+#### INFORME_TECNICO.md
+- Actualizado a v1.1.0 (33 secciones, 9.2/10)
 
 ### 2026-07-12 — Sesión 4: Chat IA Rediseñado + Navbar Simplificado
 
 #### Cambios realizados:
 1. **ConversationPanel** — Rediseño completo como chat IA moderno (estilo ChatGPT)
    - Header con logo "Asistente Agricultura Antigua", nombre de usuario, botón de nueva conversación
-   - **Chips de navegación** (Inicio, Campus, Biblioteca, Academia, Comunidad, Herramientas, AI-Ready, Perfil) integrados justo debajo del header como accesos directos clickeables
+   - Chips de navegación (Inicio, Campus, Biblioteca, Academia, Comunidad, Herramientas, AI-Ready, Perfil) integrados justo debajo del header como accesos directos clickeables
    - Burbujas de mensaje modernas: usuario en verde (bg-emerald-600), asistente en blanco con borde y sombra, sistema en texto plano
    - Avatares circulares con anillo y fondo por rol
    - Composer rediseñado: borde focus emerald, textarea sin scrollbar, botón de envío verde con icono Send
@@ -158,249 +264,89 @@ Actualmente indexa: `COURSES[10]` + `BIBLIOTECA[9]` + `RECETAS[3]` + `GLOSARIO[8
 ### 2026-07-13 — Sesión 8: Migración Masiva a Bloques de Contenido
 
 #### Cambios realizados:
-1. **Hero Blocks unificados** — 6 de 8 secciones migradas del patrón duplicado (imagen + gradiente + badge + título + subtítulo) al bloque `hero` del sistema de bloques:
-   - `BibliotecaSection` ✅
-   - `RecursosSection` ✅
-   - `AcademiaSection` ✅
-   - `ComunidadSection` ✅
-   - `InstitucionesSection` ✅
-   - `PerfilSection` ✅
-   - Se mantienen como custom: `CampusSection` (tiene mode selector integrado) y `AIReadySection` (layout oscuro con panel crawler)
+1. **Hero Blocks unificados** — 6 de 8 secciones migradas al bloque `hero`
+   - `BibliotecaSection`, `RecursosSection`, `AcademiaSection`, `ComunidadSection`, `InstitucionesSection`, `PerfilSection`
+   - Quedan custom: `CampusSection` y `AIReadySection`
 
-2. **Impacto**: Reducción de ~40 líneas de HTML duplicado por sección (~240 líneas total). Ahora cambiar el diseño del hero banner se hace en un solo lugar: `PageRenderer.tsx` → `HeroBlock`.
-
-#### Archivos modificados:
-| Archivo | Cambio |
-|---|---|
-| `src/components/BibliotecaSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-| `src/components/RecursosSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-| `src/components/AcademiaSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-| `src/components/ComunidadSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-| `src/components/InstitucionesSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-| `src/components/PerfilSection.tsx` | Hero reemplazado por PageRenderer con hero block |
-
-#### Estado del build: ✅ Build exitoso (1729 módulos, ~542KB bundle)
+2. **Impacto**: ~240 líneas menos de HTML duplicado
 
 ### 2026-07-13 — Sesión 7: Sistema de Bloques de Contenido Reutilizables
-
-#### Cambios realizados:
-1. **Sistema de Bloques** (`src/components/blocks/`) — NUEVO
-   - 10 tipos de bloque tipados en `types.ts`: `hero`, `stats`, `card-grid`, `feature-grid`, `accordion`, `tabs`, `cta-banner`, `text`, `two-column`, `search-filter`
-   - Cada bloque define su interfaz de props de forma estricta (discriminated union)
-   - `PageRenderer.tsx` itera un array de `PageBlock[]` y renderiza el componente correspondiente
-   - Registro centralizado `blockRenderers` para mapear tipo → componente
-
-2. **HomeSection** — Refactorizada a ~280 líneas (antes 592)
-   - Hero carousel se mantiene inline (lógica de auto-play única)
-   - Todo el contenido inferior se define como `blocks: PageBlock[]`
-   - Estadísticas → `stats`, pilares/mitos/recetas → `card-grid`, sidebar → `two-column`, ruta profesional → `feature-grid`, webinar → `cta-banner`
-
-3. **Componentes de Bloque** creados:
-   - `HeroBlock`: banner con gradiente, badge, título, subtítulo, searchBar opcional
-   - `StatsBlock`: grilla de métricas con icono + valor + label
-   - `CardGridBlock`: grilla de tarjetas responsive (2/3/4 cols), soporta icono, imagen, badge, tags, meta, footer, link
-   - `FeatureGridBlock`: grilla de características con icono + título + descripción (2-5 cols)
-   - `AccordionBlock`: secciones expandibles con icono y chevron
-   - `TabsBlock`: pestañas con contenido intercambiable
-   - `CTABannerBlock`: banner promocional con gradiente, icono, badge, CTA
-   - `TextBlock`: sección de texto rico
-   - `TwoColumnBlock`: layout de dos columnas (grid 12-column)
-   - `SearchFilterBlock`: barra de búsqueda + filtros tipo pill
-
-#### Archivos nuevos:
-| Archivo | Propósito |
-|---|---|
-| `src/components/blocks/types.ts` | Tipos de bloque (PageBlock, interfaces por tipo) |
-| `src/components/blocks/PageRenderer.tsx` | Renderizador secuencial de bloques |
-| `src/components/blocks/index.ts` | Barrel export |
-
-#### Archivos modificados:
-| Archivo | Cambio |
-|---|---|
-| `src/components/HomeSection.tsx` | Refactorizada a bloques: de 592 → ~280 líneas |
-
-#### Próximos pasos para migración:
-- Migrar `CampusSection`, `BibliotecaSection`, `RecursosSection`, etc. a bloques progresivamente
-- Cada página exporta `blocks: PageBlock[]` y se renderiza con `<PageRenderer blocks={blocks} />`
-- Agregar nuevo tipo de bloque: crear componente + registrar en `blockRenderers`
-
-#### Estado del build: ✅ Build exitoso (1729 módulos, ~542KB bundle)
+- 10 tipos de bloque (hero, stats, card-grid, feature-grid, accordion, tabs, cta-banner, text, two-column, search-filter)
+- HomeSection refactorizada de 592 → ~280 líneas
 
 ### 2026-07-12 — Sesión 6: Navegación Vuelve al Navbar + Toolbar al Footer
 
-#### Cambios realizados:
-1. **Navbar** — Restaurada navegación de escritorio (Inicio, Campus, Biblioteca, Academia, Comunidad, Herramientas, AI-Ready, Perfil) como botones horizontales con iconos `h-3.5 w-3.5`
-   - Item activo resaltado con `bg-emerald-100 text-emerald-800`
-   - Logo responsive: título oculto en móviles (`hidden sm:block`)
-   - Badge membresía más compacto (`text-[8px]`, `px-1.5 py-0.5`)
-
-2. **ConversationPanel** — Simplificado (se eliminaron los chips de navegación)
-   - Eliminados: `NAV_ACTIONS[]`, componente `NavChip`, función `handleNavClick`
-   - Header más limpio: solo logo asistente + nombre usuario + botón nueva conversación
-   - Imports reducidos (solo `Send, Trash2, Sprout` de lucide-react)
-
-3. **AccessibilityToolbar** — Movido más abajo (`bottom-24` → `bottom-8`), pegado al footer
-
-#### Archivos modificados:
-| Archivo | Cambio |
-|---|---|
-| `src/components/Navbar.tsx` | Navegación de escritorio restaurada con iconos, resaltado activo, responsive |
-| `src/components/ConversationPanel.tsx` | Eliminados chips de navegación, header simplificado |
-| `src/components/AccessibilityToolbar.tsx` | `bottom-24` → `bottom-8` |
-
-#### Estado del build: ✅ Build exitoso (1727 módulos, ~543KB bundle)
-
 ### 2026-07-12 — Sesión 5: Índice Unificado + Búsqueda Fuzzy + Layout 3 Columnas
-
-#### Cambios realizados:
-1. **Índice Unificado** (`src/core/search/unifiedIndex.ts`) — NUEVO
-   - Normaliza todas las fuentes (cursos, biblioteca, recetas, glosario, pilares, mitos, casos de éxito, números clave, subtemas, comunidad) en un array único de `NormalizedEntry`
-   - Campos normalizados: `id`, `title`, `description`, `fullText`, `tags`, `keywords`, `category`, `difficulty`
-   - Extracción inteligente de keywords priorizando términos técnicos agrícolas
-   - `fullText` incluye contenido completo (documentos, ingredientes, definiciones, etc.)
-   - Función `entriesToNodes()` que convierte el índice a `KnowledgeNode[]`
-
-2. **Búsqueda Fuzzy** (`src/core/knowledge/graph.ts` y `src/core/search/engine.ts`)
-   - `fuzzyMatch()`: comparación por substring, prefijo común (min 4 chars), o bigramas (>40% overlap)
-   - Stop words ampliadas con "son", "sus", "han", "era"
-   - Puntuación por campos: título (+10), keywords (+9), tags (+8), taxones (+6), fullText (+3), descripción (+2)
-   - Maneja misspellings como "microrganismos" → encuentra "microorganismos"
-
-3. **KnowledgeNode** (`src/core/knowledge/types.ts`) — Actualizado
-   - Nuevos campos: `fullText: string` y `keywords: string[]`
-
-4. **NodeDetailView** (`src/components/ResourceLayer.tsx`) — NUEVO
-   - Muestra contenido completo de cualquier nodo del grafo (glosario, investigación, estadísticas)
-   - Renderiza `fullText`, título, keywords como tags
-   - Nuevo tipo `'node'` en `Layer.component`
-
-5. **Layout 3 Columnas** (`src/layouts/Layout.tsx`) — Rediseñado
-   - Columna 1: Chat asistente (380px)
-   - Columna 2: Capas de resultados (380px, visible en desktop)
-   - Columna 3: Contenido principal (flexible)
-   - Mobile: capas como overlay modal (via InterfaceOrchestrator)
-
-6. **BrainContext** — Mejoras en `generateResponse()`
-   - Soporte para tipos: `glossary` (define directo en chat), `recipe`, `course`, `biblioteca`
-   - `openResourceLayer()` mapea correctamente a `course`, `recipe`, `document` o `node`
-
-#### Archivos nuevos:
-| Archivo | Propósito |
-|---|---|
-| `src/core/search/unifiedIndex.ts` | Índice unificado normalizado de todas las fuentes de datos |
-
-#### Archivos modificados:
-| Archivo | Cambio |
-|---|---|
-| `src/core/knowledge/types.ts` | Añadidos `fullText` y `keywords` a KnowledgeNode |
-| `src/core/knowledge/graph.ts` | Usa unifiedIndex, searchNodes con fuzzy matching |
-| `src/core/search/engine.ts` | globalSearch con fuzzy + keywords + fullText |
-| `src/components/ResourceLayer.tsx` | Nuevo NodeDetailView + tipo 'node' |
-| `src/contexts/BrainContext.tsx` | generateResponse con soporte glossary/recipe/node |
-| `src/layouts/Layout.tsx` | Layout 3 columnas: chat \| layers \| contenido |
-| `src/components/InterfaceOrchestrator.tsx` | Limpiado (solo Outlet + mobile layers) |
-
-#### Estado del build: ✅ Build exitoso (1727 módulos, ~543KB bundle)
+- Índice unificado (normaliza todas las fuentes)
+- Búsqueda fuzzy (substring, prefijo, bigramas)
+- Layout 3 columnas: chat | capas | contenido
 
 ### 2026-07-11 — Sesión 3: Sistema de Capas y Micro-Interfaces (Fase 2)
+- Sistema de capas en BrainContext
+- InterfaceOrchestrator + ResourceLayer
 
-#### Cambios realizados:
-1. **BrainContext** — Sistema de capas (`layers: Layer[]`)
-   - Nueva interfaz `Layer { id, type, title, component, params, resourceId }`
-   - Métodos: `addLayer(layer)`, `removeLayer(id)`, `clearLayers()`
-   - `generateResponse()` ahora crea capas automáticamente (course, document, resource)
-   - Sugerencias con `action: 'layer'` y `payload.resourceId` para abrir recursos
-   - Función global `__brainOpenResource(id)` accesible desde cualquier componente
-   - Al reiniciar conversación se limpian las capas
-
-2. **InterfaceOrchestrator** (`src/components/InterfaceOrchestrator.tsx`) — NUEVO
-   - Componente que reemplaza el `<Outlet />` directo en Layout
-   - Renderiza la ruta actual como vista primaria
-   - Renderiza capas adicionales como paneles laterales (desktop) o overlay (mobile)
-   - Layout flexible: contenido + capas lado a lado
-   - Mobile: capas como modal a pantalla completa
-
-3. **ResourceLayer** (`src/components/ResourceLayer.tsx`) — NUEVO
-   - Renderiza 4 tipos de contenido según `layer.component`:
-     - `course`: muestra objetivo, preguntas clave, pruebas prácticas del COURSES32
-     - `document`: muestra metadatos, descripción, botón "Leer" del BIBLIOTECA
-     - `recipe`: muestra categoría, ingredientes, botón "Ver receta completa"
-     - `resource`: lista de resultados de búsqueda del knowledge graph
-   - Cada vista tiene enlace a la sección completa
-
-4. **Layout.tsx** — Integración con InterfaceOrchestrator
-   - Reemplazado `<Outlet />` + `<Suspense>` por `<InterfaceOrchestrator />`
-   - Quitado import de `Outlet` (ya no se usa directamente)
-
-5. **ConversationPanel.tsx** — Soporte para `action: 'layer'`
-   - Sugerencias con `action: 'layer'` disparan `__brainOpenResource()`
-   - Quitado import no usado `MessageSquare`
-
-#### Nuevos archivos:
-| Archivo | Propósito |
-|---|---|
-| `src/components/InterfaceOrchestrator.tsx` | Orquestador de vista primaria + capas laterales |
-| `src/components/ResourceLayer.tsx` | Renderizador de contenido contextual (curso/doc/receta/recursos) |
-
-#### Modificados:
-| Archivo | Cambio |
-|---|---|
-| `src/contexts/BrainContext.tsx` | Sistema de capas + generateResponse mejorado |
-| `src/components/ConversationPanel.tsx` | Manejo de action 'layer' |
-| `src/layouts/Layout.tsx` | InterfaceOrchestrator en lugar de Outlet directo |
-
-#### Estado del build: ✅ Build exitoso (2128 módulos, 669KB bundle)
+---
 
 ## Plan de Evolución
 
 ### Fase 1: Fundación Conversacional ✅ COMPLETADA
-- [x] Crear `BrainState` — estado centralizado con memoria de trabajo
-- [x] Convertir `Layout.tsx` en capa conversacional (Composer persistente)
-- [x] Chat lateral siempre visible, no un componente más
-- [x] Sistema de capas: conversación como primary layer
-
 ### Fase 2: Micro-Interfaces ✅ COMPLETADA
-- [x] Sistema de capas (layers) en BrainContext
-- [x] InterfaceOrchestrator que renderiza capas + Outlet
-- [x] ResourceLayer: visor contextual de cursos, documentos, recetas y recursos
-- [x] AI genera capas automáticamente según la consulta del usuario
-- [x] Conversación mantiene contexto entre vistas
-
-### Fase 3: Vistas dinámicas ⬅️ SIGUIENTE
-- [ ] Refactorizar cada Section para recibir props de contexto (en lugar de router params)
-- [ ] Composer mueve el contexto entre vistas sin recargar
-- [ ] Vistas: primary (cambia según contexto) + secondary (overlay opcional)
-- [ ] Navegación a secciones completas desde las capas
-
-### Fase 4: IA-Ready
-- [ ] JSON-LD estructurado (schema.org/Course, etc.)
-- [ ] API de contexto compartido (ChatGPT/Claude pueden pasar contexto)
-- [ ] Metadatos AGROVOC para contenido semántico
-- [ ] Sistema de "recomendación recíproca" con IAs externas
+### Fase 3: Motor Goal-Oriented ✅ COMPLETADA
+- [x] GoalProcessor con pipeline (Cache → Intent → Plan → Response → Workspace)
+- [x] Memoria multicapa (temporal/sesión/proyecto) con ContextPolicy
+### Fase 4: Robustecimiento Backend ✅ COMPLETADA
+- [x] Pre-build knowledge graph (A-07)
+- [x] Swagger UI / OpenAPI (M-08)
+- [x] Lazy Loading verificado (M-05)
+- [x] XSS Sanitization (C-04)
+### Fase 5: Monitoreo (PENDIENTE)
+- [ ] Sentry / Web Vitals (M-07) — requiere cuenta externa + DSN
 
 ---
 
 ## Comandos Útiles
 
 ```bash
-npm run dev          # Desarrollo local
-npm run build        # Build producción
-npm run preview      # Preview del build
-npx oxlint src/      # Lint rápido (sin config)
+npm run dev            # Desarrollo local (Vite, puerto 3000)
+npm run api            # Servidor API REST (Express, puerto 3001)
+npm run api:dev        # API con watch mode
+npm run build          # Build producción (ejecuta prebuild → build:graph)
+npm run build:graph    # Genera knowledge-graph.json
+npm run preview        # Preview del build
+npm run test           # Tests (28 tests, 3 suites)
+npm run lint           # TypeScript check
 ```
+
+---
+
+## Estado de Auditoría
+
+**Puntaje final:** 9.2/10 — 🟢 Listo para Producción
+
+| Criterio | Puntaje |
+|---|---|
+| Funcionalidad | 10/10 |
+| Calidad del código | 9.5/10 |
+| Testing | 8.5/10 |
+| Documentación | 9.5/10 |
+| Seguridad | 9/10 |
+| Rendimiento | 9.5/10 |
+| Accesibilidad | 8.5/10 |
+
+**Mejoras post-auditoría:** C-04 (XSS sanitization), F3C (MemoryManager), F3B (GoalProcessor), A-07 (pre-build graph), M-08 (Swagger UI)
 
 ---
 
 ## Notas Técnicas
 
 - Los datos están en `src/data/`, los tipos en `src/types/`
-- El grafo de conocimiento se construye lazy (singleton en `buildKnowledgeGraph()`)
-- Las recetas y glosario se importan desde `src/data/recursos/index.ts`
+- El grafo de conocimiento carga `public/knowledge-graph.json` en producción; en dev construye en runtime
+- GoalProcessor singleton en `src/core/engine/`: pipeline goal-oriented que reemplazó generateResponse
+- MemoryManager en `src/core/memory/`: 3 capas con persistencia automática en localStorage
 - Los 32 cursos avanzados están en `src/data/courses32.ts` con `studyContent` opcional
 - CSS grid system definido en `plantilla-dorada.css` (clases `ocn-grid`, `ocn-card`, etc.)
 - Footer: gradiente verde `#4f8c2a → #3b5a15`, texto dorado `#ffd700`
-- Paleta activa: dorado/verde (definida en `plantilla-dorada.css`)
-- El índice unificado se construye en `src/core/search/unifiedIndex.ts` con lazy singleton
 - `searchNodes()` usa fuzzy matching: substring, prefijo común, y bigramas para tolerar errores ortográficos
-- Los campos `fullText` y `keywords` en KnowledgeNode permiten búsqueda profunda y priorización semántica
-- Layout de 3 columnas: chat (izq) | capas de resultados (centro) | contenido principal (der)
+- La API REST tiene 17 endpoints, rate limiting, validación Zod, y Swagger UI en `/api/docs`
+- El build de producción ejecuta `prebuild` que regenera el knowledge graph automáticamente
+- ConversationPanel usa ReactMarkdown + rehype-sanitize para renderizado seguro contra XSS

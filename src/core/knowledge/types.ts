@@ -1,6 +1,6 @@
 export type KnowledgeType =
   | 'course' | 'article' | 'manual' | 'protocol' | 'guide' | 'infographic'
-  | 'video' | 'recipe' | 'glossary' | 'tool' | 'news' | 'research';
+  | 'video' | 'recipe' | 'glossary' | 'tool' | 'news' | 'research' | 'statistic';
 
 export type DifficultyLevel = 'Bajo' | 'Medio' | 'Alto';
 export type CourseLevel = 'Principiante' | 'Intermedio' | 'Avanzado';

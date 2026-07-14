@@ -1,0 +1,31 @@
+# Agricultura Antigua — Campus Agroecológico
+> Campus digital y base de conocimientos de agricultura sostenible para pequeños productores y capacitadores.
+
+## Core
+- Inicio: https://agriculturaantigua.com/
+- Campus (32 cursos): https://agriculturaantigua.com/campus
+- Academia (9 cursos estructurados): https://agriculturaantigua.com/academia
+- Biblioteca (manuales y guías): https://agriculturaantigua.com/biblioteca
+- Recursos (recetas, glosario): https://agriculturaantigua.com/recursos
+- Comunidad: https://agriculturaantigua.com/comunidad
+- Instituciones: https://agriculturaantigua.com/instituciones
+- Perfil: https://agriculturaantigua.com/perfil
+- IA-Ready: https://agriculturaantigua.com/aiready
+
+## API (toda la información estructurada)
+- API Status: https://agriculturaantigua.com/api/status
+- API Courses: https://agriculturaantigua.com/api/courses
+- API Documents: https://agriculturaantigua.com/api/documents
+- API Recipes: https://agriculturaantigua.com/api/recipes
+- API Campus: https://agriculturaantigua.com/api/campus
+- API Glossary: https://agriculturaantigua.com/api/glossary
+- API Search: https://agriculturaantigua.com/api/search?q=
+- API Sitemap: https://agriculturaantigua.com/api/sitemap
+- API Agrovoc: https://agriculturaantigua.com/api/agrovoc
+- API AI Manifest (detallado): https://agriculturaantigua.com/api/ai-manifest
+- API Recommend: https://agriculturaantigua.com/api/recommend
+
+## Notes
+- Idioma principal: español
+- Todo el contenido es de acceso gratuito (algunos cursos requieren membresía Premium)
+- Licencia: Creative Commons BY-NC-SA 4.0

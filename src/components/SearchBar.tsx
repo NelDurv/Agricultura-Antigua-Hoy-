@@ -18,6 +18,7 @@ const typeConfig: Record<KnowledgeType, { icon: typeof Sprout; color: string; la
   tool: { icon: Sprout, color: 'text-stone-700 bg-stone-50', label: 'Herramienta' },
   news: { icon: Users, color: 'text-cyan-700 bg-cyan-50', label: 'Noticia' },
   research: { icon: Sprout, color: 'text-lime-700 bg-lime-50', label: 'Investigación' },
+  statistic: { icon: Sprout, color: 'text-sky-700 bg-sky-50', label: 'Estadística' },
 };
 
 interface SearchBarProps {

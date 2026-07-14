@@ -76,7 +76,7 @@ function extractKeywords(...texts: string[]): string[] {
 
 function normalizeCourses(entries: NormalizedEntry[]) {
   for (const c of COURSES) {
-    const fullText = [c.description, ...(c.modules?.map(m => m.title + ' ' + m.description) || [])].join('\n');
+    const fullText = [c.description, ...(c.modules?.map(m => m.title + ' ' + m.content) || [])].join('\n');
     entries.push({
       id: c.id,
       type: 'course',
@@ -84,7 +84,7 @@ function normalizeCourses(entries: NormalizedEntry[]) {
       description: c.description,
       fullText,
       tags: [c.category, c.level, ...c.title.toLowerCase().split(' ').slice(0, 5)],
-      keywords: extractKeywords(c.title, c.description, ...(c.modules?.map(m => m.title + ' ' + m.description) || [])),
+      keywords: extractKeywords(c.title, c.description, ...(c.modules?.map(m => m.title + ' ' + m.content) || [])),
       relatedTo: [],
       taxons: ['cursos', c.category],
       category: 'cursos',
@@ -95,7 +95,7 @@ function normalizeCourses(entries: NormalizedEntry[]) {
 
   for (const c32 of COURSES32) {
     const qTexts = c32.questions.map(q => q.q).join(' ');
-    const testTexts = c32.practicalTests?.map(t => t.t).join(' ') || '';
+    const testTexts = c32.practicalTests?.join(' ') || '';
     const studyText = c32.studyContent?.join(' ') || '';
     const fullText = [c32.objective, qTexts, testTexts, studyText].join('\n');
     entries.push({

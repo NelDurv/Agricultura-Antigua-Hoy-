@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useState, useCallback, useRef, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { searchNodes } from '../core/knowledge/graph';
 import type { KnowledgeNode } from '../core/knowledge/types';
+import { createWorkspace, closeWorkspace as closeWs, togglePanelState, goalProcessor } from '../core/engine';
+import type { Plan, Workspace, Panel, ClarificationQuestion, IntentType, IntentContext } from '../core/engine';
+import { storage, STORAGE_KEYS, getSessionId } from '../core/persistence';
+import { submitFeedback as saveFeedback, getFeedbackStats } from '../core/feedback';
+import { eventBus } from '../core/events';
+import { messageQueue } from '../core/messaging/messageQueue';
+import { memoryManager } from '../core/memory';
 
 export interface Message {
   id: string;
@@ -26,20 +33,39 @@ export interface Layer {
   resourceId?: string;
 }
 
+export type ViewAction = {
+  type: 'biblioteca-filter' | 'recursos-tab' | 'campus-mode' | 'scroll-to';
+  payload?: Record<string, string>;
+};
+
 export interface BrainState {
   messages: Message[];
   composerText: string;
   isChatOpen: boolean;
   unreadCount: number;
   layers: Layer[];
+  viewAction: ViewAction | null;
+  lastPlan: Plan | null;
+  workspace: Workspace | null;
+  submitFeedback: (messageId: string, rating: 'good' | 'bad') => void;
+  feedbackStats: { total: number; good: number; bad: number; ratio: number; topIntents: { intent: string; good: number; bad: number }[] };
+  pendingClarifications: ClarificationQuestion[] | null;
+  intentHistory: IntentType[];
   sendMessage: (text: string) => void;
+  sendClarification: (field: string, value: string) => void;
   setComposerText: (text: string) => void;
   toggleChat: () => void;
   clearConversation: () => void;
+  clearAllData: () => void;
   addLayer: (layer: Layer) => void;
   removeLayer: (id: string) => void;
   clearLayers: () => void;
   navigateToRoute: (route: string) => void;
+  dispatchViewAction: (action: ViewAction) => void;
+  clearViewAction: () => void;
+  createWorkspaceFromPlan: (plan: Plan) => void;
+  closeWorkspace: () => void;
+  togglePanel: (panelId: string) => void;
 }
 
 const INITIAL_SUGGESTIONS: Suggestion[] = [];
@@ -63,8 +89,56 @@ export function BrainProvider({ children }: { children: ReactNode }) {
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const [layers, setLayers] = useState<Layer[]>([]);
+  const [viewAction, setViewAction] = useState<ViewAction | null>(null);
+  const [lastPlan, setLastPlan] = useState<Plan | null>(null);
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [pendingClarifications, setPendingClarifications] = useState<ClarificationQuestion[] | null>(null);
+  const [collectedAnswers, setCollectedAnswers] = useState<Record<string, string>>({});
+  const [intentHistory, setIntentHistory] = useState<IntentType[]>([]);
   const navigateRef = useRef<((route: string) => void) | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const restored = useRef(false);
+
+  // ─── Persistencia: restaurar estado al montar ───
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+
+    const savedMessages = storage.get(STORAGE_KEYS.MESSAGES);
+    if (savedMessages && savedMessages.length > 1) {
+      setMessages(savedMessages);
+      const userCount = savedMessages.filter((m: any) => m.role === 'user').length;
+      msgCounter = userCount;
+    }
+
+    const savedWorkspace = storage.get(STORAGE_KEYS.WORKSPACE);
+    if (savedWorkspace) setWorkspace(savedWorkspace);
+
+    const savedHistory = storage.get(STORAGE_KEYS.INTENT_HISTORY);
+    if (savedHistory && savedHistory.length > 0) setIntentHistory(savedHistory);
+
+    // Restore memory from localStorage
+    memoryManager.restore();
+
+    const sid = getSessionId();
+    eventBus.emit('session:started', { sessionId: sid });
+  }, []);
+
+  // ─── Persistencia: guardar cambios ───
+  useEffect(() => { storage.setDebounced(STORAGE_KEYS.MESSAGES, messages); }, [messages]);
+  useEffect(() => { storage.setDebounced(STORAGE_KEYS.WORKSPACE, workspace); }, [workspace]);
+  useEffect(() => { storage.setDebounced(STORAGE_KEYS.INTENT_HISTORY, intentHistory); }, [intentHistory]);
+
+  // ─── Memory Manager: sync state to memory layers ───
+  useEffect(() => { memoryManager.set('messages', messages, { layer: 'session' }); }, [messages]);
+  useEffect(() => { memoryManager.set('workspace', workspace, { layer: 'session' }); }, [workspace]);
+  useEffect(() => { memoryManager.set('intent_history', intentHistory, { layer: 'session' }); }, [intentHistory]);
+  useEffect(() => { memoryManager.set('last_plan', lastPlan, { layer: 'session' }); }, [lastPlan]);
+
+  // Persist memory on unmount
+  useEffect(() => {
+    return () => { memoryManager.persist(); };
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -72,145 +146,243 @@ export function BrainProvider({ children }: { children: ReactNode }) {
     }, 50);
   }, []);
 
-  const generateResponse = useCallback((userText: string): { content: string; suggestions: Suggestion[]; newLayers?: Layer[] } => {
-    const query = userText.toLowerCase();
-    const results = searchNodes(query);
+  const syncGoalProcessorState = useCallback(() => {
+    goalProcessor.setRecentQueries(
+      messages.filter(m => m.role === 'user').slice(-3).map(m => m.content)
+    );
+    goalProcessor.setIntentHistory(intentHistory);
+  }, [messages, intentHistory]);
 
-    if (results.length > 0) {
-      const top = results.slice(0, 5);
-      const newLayers: Layer[] = [];
-      let content = '';
+  const processGoal = useCallback((userText: string): { content: string; suggestions: Suggestion[]; newLayers?: Layer[]; viewAction?: ViewAction } => {
+    syncGoalProcessorState();
 
-      const bestMatch = top[0];
-      const bestType = bestMatch.type;
-      const bestTaxon = bestMatch.taxons[0];
+    memoryManager.set('current_query', userText, { layer: 'temporal' });
 
-      const isCourse = bestType === 'course' || bestTaxon === 'cursos' || bestTaxon === 'cursos32';
-      const isGlossary = bestType === 'glossary';
-      const isRecipe = bestType === 'recipe' || bestTaxon === 'recetas';
+    const result = goalProcessor.processGoal(userText);
 
-      if (isCourse) {
-        newLayers.push({
-          id: `layer-${++layerCounter}`,
-          type: 'side',
-          title: bestMatch.title,
-          component: 'course',
-          params: {},
-          resourceId: bestMatch.id,
-        });
-        content = `Te muestro el curso **${bestMatch.title}** relacionado con tu consulta.\n\n${bestMatch.description.slice(0, 250)}...`;
-      } else if (isGlossary) {
-        content = `**${bestMatch.title}**\n\n${bestMatch.description}`;
-        newLayers.push({
-          id: `layer-${++layerCounter}`,
-          type: 'side',
-          title: bestMatch.title,
-          component: 'resource',
-          params: { query: bestMatch.title },
-          resourceId: bestMatch.id,
-        });
-      } else if (isRecipe) {
-        newLayers.push({
-          id: `layer-${++layerCounter}`,
-          type: 'side',
-          title: bestMatch.title,
-          component: 'recipe',
-          params: {},
-          resourceId: bestMatch.id,
-        });
-        content = `Aquí tienes la receta **${bestMatch.title}**.\n\n${bestMatch.description.slice(0, 250)}...`;
-      } else if (bestTaxon === 'biblioteca') {
-        newLayers.push({
-          id: `layer-${++layerCounter}`,
-          type: 'side',
-          title: bestMatch.title,
-          component: 'document',
-          params: {},
-          resourceId: bestMatch.id,
-        });
-        content = `Aquí tienes el documento **${bestMatch.title}**.\n\n${bestMatch.description.slice(0, 250)}...`;
-      } else {
-        content = `He encontrado información relevante sobre "${userText}":\n\n`;
-        top.slice(0, 4).forEach((r, i) => {
-          content += `${i + 1}. **${r.title}** — ${r.description.slice(0, 120).replace(/\n/g, ' ')}...\n`;
-        });
-        newLayers.push({
-          id: `layer-${++layerCounter}`,
-          type: 'side',
-          title: `Resultados: ${userText.slice(0, 30)}`,
-          component: 'resource',
-          params: { query: userText },
-          resourceId: top[0].id,
-        });
+    memoryManager.set('current_response', { content: result.response.content, suggestions: result.response.suggestions }, { layer: 'temporal' });
+    memoryManager.set('current_goal', { id: result.goal.id, status: result.goal.status, query: result.goal.originalQuery }, { layer: 'temporal' });
+
+    // Sync state from goal result
+    if (result.goal.intent.type !== 'unknown') {
+      setIntentHistory(goalProcessor.getCurrentHistory());
+    }
+
+    setLastPlan(result.plan);
+
+    // Set clarifications if pending
+    if (result.goal.status === 'pending_clarification') {
+      const questions = result.goal.intent.clarificationQuestions;
+      if (questions && questions.length > 0) {
+        setPendingClarifications(questions);
+        setCollectedAnswers({});
       }
+    }
 
-      const relatedSuggestions: Suggestion[] = top.slice(0, 4).map(r => ({
-        label: `Abrir "${r.title.slice(0, 28)}"`,
-        action: 'layer',
-        icon: r.type === 'course' ? '📚' : r.type === 'recipe' ? '🧪' : r.type === 'glossary' ? '📖' : '📄',
-        payload: { resourceId: r.id },
-      }));
-
-      return {
-        content,
-        suggestions: [
-          ...relatedSuggestions,
-          ...(top.length > 1 ? [{ label: '¿Nueva Pregunta?', action: 'preguntar', icon: '💬' }] : []),
-        ],
-        newLayers,
-      };
+    // Set workspace if created
+    if (result.workspace) {
+      setWorkspace(result.workspace);
     }
 
     return {
-      content: 'No encontré resultados exactos. ¿Quieres explorar alguno de estos temas?',
-      suggestions: [
-        { label: '🌍 Pilares del Saber', action: 'pilares', icon: '🌍' },
-        { label: '📚 Catálogo de Cursos', action: 'cursos', icon: '📚' },
-        { label: '📄 Biblioteca Técnica', action: 'biblioteca', icon: '📄' },
-        { label: '🧪 Recetas', action: 'recursos', icon: '🧪' },
-      ],
-      newLayers: [],
+      content: result.response.content,
+      suggestions: result.response.suggestions,
+      newLayers: result.response.layers as Layer[] | undefined,
+      viewAction: result.response.viewAction as ViewAction | undefined,
     };
-  }, []);
+  }, [syncGoalProcessorState]);
 
   const sendMessage = useCallback((text: string) => {
     if (!text.trim()) return;
 
+    messageQueue.cancelPending();
+    messageQueue.enqueue(() => {
+      const content = text.trim();
+      const userMsg: Message = {
+        id: `msg-${++msgCounter}`,
+        role: 'user',
+        content,
+        timestamp: Date.now(),
+      };
+
+      try {
+        // Check if we're in clarification mode
+        if (pendingClarifications && pendingClarifications.length > 0) {
+          const newAnswers = { ...collectedAnswers };
+          const unanswered = pendingClarifications.filter(q => !newAnswers[q.field]);
+
+          if (unanswered.length > 0) {
+            newAnswers[unanswered[0].field] = content;
+            setCollectedAnswers(newAnswers);
+
+            const total = pendingClarifications.length;
+            const answeredCount = Object.keys(newAnswers).length;
+            const remaining = pendingClarifications.filter(q => !newAnswers[q.field]);
+
+            if (remaining.length > 0) {
+              eventBus.emit('engine:clarification-asked', {
+                question: remaining[0].question,
+                remainingCount: remaining.length,
+                totalCount: total,
+              });
+              const nextQ = remaining[0];
+              const assistantMsg: Message = {
+                id: `msg-${++msgCounter}`,
+                role: 'assistant',
+                content: `_${nextQ.question}_\n\n*(Pregunta ${answeredCount + 1} de ${total})*`,
+                timestamp: Date.now(),
+                suggestions: nextQ.options?.map(o => ({
+                  label: o, action: 'clarify', icon: '💬',
+                  payload: { field: nextQ.field, value: o },
+                })) || [],
+              };
+              setMessages(prev => [...prev, userMsg, assistantMsg]);
+              setComposerText('');
+              if (!isChatOpen) setUnreadCount(prev => prev + 1);
+              setTimeout(scrollToBottom, 100);
+              return;
+            } else {
+              setPendingClarifications(null);
+              const contextStr = Object.entries(newAnswers).map(([f, v]) => `${f}:${v}`).join(', ');
+              const enrichedQuery = `diagnóstico: ${contextStr}`;
+
+              eventBus.emit('engine:clarification-completed', { answers: newAnswers, query: enrichedQuery });
+
+              syncGoalProcessorState();
+              const result = goalProcessor.processGoal(enrichedQuery);
+
+              const respViewAction = result.response.viewAction as ViewAction | undefined;
+              if (respViewAction) setViewAction(respViewAction);
+
+              const finalContent = result.response.content.includes('No encontré')
+                ? 'Con la información que me diste, no tengo suficientes datos para darte una respuesta precisa. Te sugiero consultar en la sección de Recursos o Biblioteca para más información.'
+                : result.response.content;
+
+              const finalMsg: Message = {
+                id: `msg-${++msgCounter}`,
+                role: 'assistant',
+                content: finalContent,
+                timestamp: Date.now(),
+                suggestions: result.response.suggestions,
+              };
+              setMessages(prev => [...prev, userMsg, finalMsg]);
+              setComposerText('');
+              if (!isChatOpen) setUnreadCount(prev => prev + 1);
+              const respLayers = result.response.layers as Layer[] | undefined;
+              if (respLayers) setLayers(prev => [...prev, ...respLayers]);
+              setTimeout(scrollToBottom, 100);
+              return;
+            }
+          }
+        }
+
+        // Normal flow
+        const response = processGoal(content);
+
+        if (response.viewAction) setViewAction(response.viewAction);
+
+        const assistantMsg: Message = {
+          id: `msg-${++msgCounter}`,
+          role: 'assistant',
+          content: response.content,
+          timestamp: Date.now(),
+          suggestions: response.suggestions,
+        };
+
+        setMessages(prev => [...prev, userMsg, assistantMsg]);
+        setComposerText('');
+        if (!isChatOpen) setUnreadCount(prev => prev + 1);
+        if (response.newLayers && response.newLayers.length > 0) {
+          setLayers(prev => [...prev, ...response.newLayers!]);
+        }
+        setTimeout(scrollToBottom, 100);
+      } catch (err) {
+        console.error('[sendMessage] Error:', err);
+        const errorMsg: Message = {
+          id: `msg-${++msgCounter}`,
+          role: 'assistant',
+          content: 'Lo siento, ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.',
+          timestamp: Date.now(),
+        };
+        setMessages(prev => [...prev, userMsg, errorMsg]);
+        setComposerText('');
+        setTimeout(scrollToBottom, 100);
+      }
+    });
+  }, [processGoal, syncGoalProcessorState, scrollToBottom, isChatOpen, pendingClarifications, collectedAnswers]);
+
+  const sendClarification = useCallback((field: string, value: string) => {
+    if (!pendingClarifications || pendingClarifications.length === 0) return;
+
+    const content = value;
     const userMsg: Message = {
       id: `msg-${++msgCounter}`,
       role: 'user',
-      content: text.trim(),
+      content,
       timestamp: Date.now(),
     };
 
-    const response = generateResponse(text.trim());
+    const newAnswers = { ...collectedAnswers, [field]: value };
+    setCollectedAnswers(newAnswers);
 
-    const assistantMsg: Message = {
-      id: `msg-${++msgCounter}`,
-      role: 'assistant',
-      content: response.content,
-      timestamp: Date.now(),
-      suggestions: response.suggestions,
-    };
+    const total = pendingClarifications.length;
+    const answeredCount = Object.keys(newAnswers).length;
+    const remaining = pendingClarifications.filter(q => !newAnswers[q.field]);
 
-    setMessages(prev => [...prev, userMsg, assistantMsg]);
+    if (remaining.length > 0) {
+      const nextQ = remaining[0];
+      const assistantMsg: Message = {
+        id: `msg-${++msgCounter}`,
+        role: 'assistant',
+        content: `_${nextQ.question}_\n\n*(Pregunta ${answeredCount + 1} de ${total})*`,
+        timestamp: Date.now(),
+        suggestions: nextQ.options?.map(o => ({
+          label: o, action: 'clarify', icon: '💬',
+          payload: { field: nextQ.field, value: o },
+        })) || [],
+      };
+      setMessages(prev => [...prev, userMsg, assistantMsg]);
+    } else {
+      // All answered — generate final response
+      setPendingClarifications(null);
+      const contextStr = Object.entries(newAnswers).map(([f, v]) => `${f}:${v}`).join(', ');
+      const enrichedQuery = `diagnóstico: ${contextStr}`;
+      syncGoalProcessorState();
+      const result2 = goalProcessor.processGoal(enrichedQuery);
+
+      const respViewAction2 = result2.response.viewAction as ViewAction | undefined;
+      if (respViewAction2) setViewAction(respViewAction2);
+
+      const finalContent = result2.response.content.includes('No encontré')
+        ? 'Con la información que me diste, no tengo suficientes datos para darte una respuesta precisa. Te sugiero consultar en la sección de Recursos o Biblioteca para más información.'
+        : result2.response.content;
+
+      const finalMsg: Message = {
+        id: `msg-${++msgCounter}`,
+        role: 'assistant',
+        content: finalContent,
+        timestamp: Date.now(),
+        suggestions: result2.response.suggestions,
+      };
+      setMessages(prev => [...prev, userMsg, finalMsg]);
+      const respLayers2 = result2.response.layers as Layer[] | undefined;
+      if (respLayers2) setLayers(prev => [...prev, ...respLayers2]);
+    }
+
     setComposerText('');
-
-    if (!isChatOpen) {
-      setUnreadCount(prev => prev + 1);
-    }
-
-    // Add layers from AI response
-    if (response.newLayers && response.newLayers.length > 0) {
-      setLayers(prev => [...prev, ...response.newLayers!]);
-    }
-
+    if (!isChatOpen) setUnreadCount(prev => prev + 1);
     setTimeout(scrollToBottom, 100);
-  }, [generateResponse, scrollToBottom, isChatOpen]);
+  }, [pendingClarifications, collectedAnswers, processGoal, syncGoalProcessorState, scrollToBottom, isChatOpen]);
 
   const toggleChat = useCallback(() => {
     setIsChatOpen(prev => !prev);
     setUnreadCount(0);
+  }, []);
+
+  const clearAllData = useCallback(() => {
+    storage.clearAll();
+    restored.current = false;
+    window.location.reload();
   }, []);
 
   const clearConversation = useCallback(() => {
@@ -224,6 +396,16 @@ export function BrainProvider({ children }: { children: ReactNode }) {
       },
     ]);
     setLayers([]);
+    setPendingClarifications(null);
+    setCollectedAnswers({});
+    setIntentHistory([]);
+    storage.remove(STORAGE_KEYS.MESSAGES);
+    storage.remove(STORAGE_KEYS.WORKSPACE);
+    storage.remove(STORAGE_KEYS.INTENT_HISTORY);
+    storage.remove(STORAGE_KEYS.COLLECTED_ANSWERS);
+    storage.remove(STORAGE_KEYS.LAST_PLAN);
+    storage.remove(STORAGE_KEYS.LAYERS);
+    memoryManager.clear('temporal');
   }, []);
 
   const addLayer = useCallback((layer: Layer) => {
@@ -242,10 +424,55 @@ export function BrainProvider({ children }: { children: ReactNode }) {
     setLayers([]);
   }, []);
 
+  const dispatchViewAction = useCallback((action: ViewAction) => {
+    setViewAction(action);
+  }, []);
+
+  const clearViewAction = useCallback(() => {
+    setViewAction(null);
+  }, []);
+
   const navigateToRoute = useCallback((route: string) => {
     if (navigateRef.current) {
       navigateRef.current(route);
     }
+  }, []);
+
+  const createWorkspaceFromPlan = useCallback((plan: Plan) => {
+    const convId = messages.length > 0 ? messages[0].id : 'conv-new';
+    const ws = createWorkspace(plan, convId);
+    setWorkspace(ws);
+    eventBus.emit('workspace:created', { workspace: ws });
+  }, [messages]);
+
+  const closeWorkspaceCb = useCallback(() => {
+    setWorkspace(null);
+    eventBus.emit('workspace:closed', { workspaceId: 'current' });
+  }, []);
+
+  const submitFeedbackCb = useCallback((messageId: string, rating: 'good' | 'bad') => {
+    const msg = messages.find((m) => m.id === messageId);
+    if (!msg) return;
+    const intent = lastPlan?.intent.type || 'unknown';
+    saveFeedback({ messageId, query: msg.content, intentType: intent, rating, timestamp: Date.now() });
+    eventBus.emit('feedback:submitted', { messageId, rating, intentType: intent });
+  }, [messages, lastPlan]);
+
+  const feedbackStats = getFeedbackStats();
+
+  const togglePanel = useCallback((panelId: string) => {
+    setWorkspace(prev => {
+      if (!prev) return prev;
+      const panel = prev.panels.find(p => p.id === panelId);
+      if (panel) {
+        if (panel.state === 'open' || panel.state === 'focused') {
+          eventBus.emit('panel:closed', { panelId });
+        } else {
+          eventBus.emit('panel:opened', { panel });
+        }
+      }
+      return togglePanelState(prev, panelId);
+    });
   }, []);
 
   const openResourceLayer = useCallback((resourceId: string) => {
@@ -280,14 +507,28 @@ export function BrainProvider({ children }: { children: ReactNode }) {
     isChatOpen,
     unreadCount,
     layers,
+    viewAction,
+    lastPlan,
+    workspace,
+    pendingClarifications,
+    intentHistory,
     sendMessage,
+    sendClarification,
     setComposerText,
     toggleChat,
     clearConversation,
+    clearAllData,
     addLayer,
     removeLayer,
     clearLayers,
     navigateToRoute,
+    dispatchViewAction,
+    clearViewAction,
+    createWorkspaceFromPlan,
+    closeWorkspace: closeWorkspaceCb,
+    togglePanel,
+    submitFeedback: submitFeedbackCb,
+    feedbackStats,
   };
 
   (window as any).__brainNavigate = navigateRef;

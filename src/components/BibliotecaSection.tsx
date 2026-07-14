@@ -22,6 +22,7 @@ import { getRelatedNodes } from "../core/knowledge/graph";
 import GlossaryTooltip from "./GlossaryTooltip";
 import { PageRenderer } from "./blocks";
 import type { PageBlock } from "./blocks";
+import { useViewAction } from "../hooks/useViewAction";
 
 export default function BibliotecaSection() {
   const { docId } = useParams();
@@ -53,6 +54,16 @@ export default function BibliotecaSection() {
       }
     }
   }, [docId]);
+
+  // Listen for view actions from chat
+  useViewAction('biblioteca-filter', (action) => {
+    const search = action.payload?.search || '';
+    setSearchQuery(search);
+    // Navigate to biblioteca if not already there
+    if (!window.location.pathname.startsWith('/biblioteca')) {
+      navigate('/biblioteca');
+    }
+  });
 
   const categories = ["Todos", "Fichas Técnicas", "Protocolos", "Guías", "Manuales", "Artículos"];
   const difficulties = ["Todos", "Bajo", "Medio", "Alto"];

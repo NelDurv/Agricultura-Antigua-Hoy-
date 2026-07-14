@@ -129,7 +129,7 @@ export default function HomeSection() {
       id: 'featured',
       props: {
         left: {
-          width: 8,
+          width: 5,
           content: (
             <div className="space-y-6">
               <PageRenderer blocks={[
@@ -185,7 +185,7 @@ export default function HomeSection() {
           ),
         },
         right: {
-          width: 4,
+          width: 7,
           content: (
             <div className="space-y-4">
               <div>

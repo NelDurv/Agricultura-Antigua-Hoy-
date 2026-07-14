@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageSquare, X } from "lucide-react";
 import Navbar from '../components/Navbar';
 import AccessibilityToolbar from '../components/AccessibilityToolbar';
+import { ErrorBoundary } from '../components/errors/ErrorBoundary';
 import ConversationPanel from '../components/ConversationPanel';
 import InterfaceOrchestrator from '../components/InterfaceOrchestrator';
 import ResourceLayer from '../components/ResourceLayer';
+import StructuredData from '../components/StructuredData';
 import { useUI } from '../contexts';
 import { useBrain, type Layer } from '../contexts/BrainContext';
 
@@ -53,6 +55,7 @@ export default function Layout() {
       id="app-root"
       data-data-saver={dataSaver ? 'true' : 'false'}
     >
+      <StructuredData />
       <Navbar />
 
       <AccessibilityToolbar />
@@ -79,7 +82,9 @@ export default function Layout() {
           </div>
 
           <div className="h-full rounded-none md:rounded-2xl overflow-hidden border-0 md:border border-stone-200 shadow-xs bg-white">
-            <ConversationPanel />
+            <ErrorBoundary>
+              <ConversationPanel />
+            </ErrorBoundary>
           </div>
         </div>
 

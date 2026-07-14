@@ -41,6 +41,23 @@ function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
 
 let _graph: KnowledgeGraph | null = null;
 
+function tryLoadPrebuilt(): KnowledgeGraph | null {
+  try {
+    if (typeof window === 'undefined') return null;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/knowledge-graph.json', false);
+    xhr.send();
+    if (xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
+      if (data?.nodes?.length > 0) return data;
+    }
+  } catch {}
+  return null;
+}
+
+const prebuilt = tryLoadPrebuilt();
+if (prebuilt) _graph = prebuilt;
+
 export function buildKnowledgeGraph(): KnowledgeGraph {
   if (_graph) return _graph;
   const entries = buildUnifiedIndex();
