@@ -142,7 +142,7 @@ export const COURSES32: Course32[] = [
       { q: "¿Por qué se usa melaza pura en la Estación 1?", a: "Para dar energía rápida y evitar que la mezcla se seque; si se añade agua, los microbios de bosque mueren." },
       { q: "¿Qué indica un buen olor (como a vino o pan) en el fermento?", a: "Indica una fermentación exitosa y la presencia de levaduras y bacterias benéficas." },
       { q: "¿Qué es la Estación 2?", a: "La activación de los MM sólidos en forma líquida (Biol inicial) para aplicarlo al suelo o follaje." },
-      { q: "¿Cuál es el pH ideal de un Biol de Estación 2 estable?", a: "Debe estar entre 4.0 y 5.0; un pH muy bajo indica mucha fuerza ácida pero menos vida microbiana." },
+      { q: "¿Cuál es el pH ideal de un Biol de Estación 2 estable?", a: "Debe estar entre 3.5 y 5.0; un pH por debajo de 3.5 indica mucha fuerza ácida pero menos vida microbiana." },
       { q: "¿Qué son los microorganismos 'de vida libre'?", a: "Son aquellos que fabrican nitrógeno y minerales gratis en el suelo si hay humedad y materia orgánica." },
       { q: "¿Qué es la Estación 3?", a: "La creación de 'estiércol artificial' o pasto fermentado para fortalecer las cepas microbianas." },
       { q: "¿Por qué es better usar MM locales que productos comprados?", a: "Porque los locales ya están adaptados al clima y suelo de la zona ('distancia ecológica')." },
@@ -188,7 +188,7 @@ export const COURSES32: Course32[] = [
       {
         topic: "Parámetros de pH y su significado",
         subtitle: "El ácido que protege y alimenta",
-        body: "Un biofertilizante de la Estación 2 bien elaborado debe alcanzar un pH ácido de entre 4.0 y 5.5. Este descenso en el pH es la \"prueba de vida\", pues indica que los microbios han consumido los azúcares y han excretado ácidos orgánicos benéficos. El ambiente ácido actúa como un conservador natural que impide que bacterias dañinas o de putrefacción invadan el tambo. Si el pH no baja de 6 o 7, significa que la actividad microbiana es baja o inexistente. Por el contrario, un pH estable y ácido asegura que el producto es rico en metabolitos y minerales solubles, listo para ser asimilado por el suelo y la planta sin causar enfermedades."
+        body: "Un biofertilizante de la Estación 2 bien elaborado debe alcanzar un pH ácido de entre 3.5 y 5.0. Este descenso en el pH es la \"prueba de vida\", pues indica que los microbios han consumido los azúcares y han excretado ácidos orgánicos benéficos. El ambiente ácido actúa como un conservador natural que impide que bacterias dañinas o de putrefacción invadan el tambo. Si el pH no baja de 6 o 7, significa que la actividad microbiana es baja o inexistente. Por el contrario, un pH estable y ácido asegura que el producto es rico en metabolitos y minerales solubles, listo para ser asimilado por el suelo y la planta sin causar enfermedades."
       },
       {
         topic: "Reutilización de la \"Bolsa de Té\"",
@@ -934,7 +934,7 @@ export const COURSES32: Course32[] = [
       { q: "¿Cuáles son las características visuales y aromáticas del éxito?", a: "El Biol debe tener un color ámbar, un olor ácido-suave agradable y ningún rastro de sulfuro." },
       { q: "¿Cuál es el rango de pH ideal para la Estación 4?", a: "El pH tiende a bajar por los ácidos orgánicos, situándose idealmente entre 3.5 y 3.8." },
       { q: "¿Por qué es vital la acidez de este Biol para la nutrición mineral?", a: "Porque esos ácidos orgánicos son los encargados de realizar la quelatación biológica de los minerales." },
-      { q: "¿Qué indica una carga de energía (ORP) menor a 100 mV?", a: "Indica que el Biol tiene una excelente carga de energía negativa lista para entregar a la planta." }
+      { q: "¿Qué indica una carga de energía (ORP) menor a -100 mV?", a: "Indica que el Biol tiene una excelente carga de energía negativa lista para entregar a la planta." }
     ],
     practicalTests: [
       "Montaje del Sistema Potenciado: Llenar tambor de 200L, disolver el azúcar y suspender el saco con 5 kg de Estación 3 sólida.",
@@ -962,7 +962,7 @@ export const COURSES32: Course32[] = [
       { q: "¿Cuál es el tiempo de curado o maduración?", a: "Aproximadamente 15 días de agitación diaria para que los quelatos se estabilicen completamente." },
       { q: "¿Cuál es la dosis estándar para aplicación foliar?", a: "Se usan 100 ml de Estación 5 por mochila de 20 litros (0.5% a 1%) al atardecer." },
       { q: "¿Cuál es la dosis para aplicación directa al suelo (drench)?", a: "Se recomienda 1 litro por mochila de 20 litros, mojando la zona radicular." },
-      { q: "¿Cuál es el parámetro de control de energía para este insumo?", a: "ORP (Potencial REDOX) menor a 100 mV, que indica carga de energía negativa lista para entregar." },
+      { q: "¿Cuál es el parámetro de control de energía para este insumo?", a: "ORP (Potencial REDOX) menor a -100 mV, que indica carga de energía negativa lista para entregar." },
       { q: "¿Con qué frecuencia se debe aplicar la Estación 5?", a: "En hortalizas cada 8 días y en frutales mensualmente a partir de la floración." }
     ],
     practicalTests: [
