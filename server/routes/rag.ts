@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { searchChunks, getCollectionStats } from '../rag/chroma';
+import { searchChunks, getCollectionStats, generateAnswer } from '../rag';
 import { runIndexer } from '../rag/indexer';
 
 export const ragRouter = Router();
@@ -68,5 +68,25 @@ ragRouter.post('/reindex', async (_req, res) => {
   } catch (err) {
     console.error('[RAG] Reindex error:', err);
     res.status(500).json({ error: 'Error al reindexar' });
+  }
+});
+
+ragRouter.get('/answer', async (req, res) => {
+  const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';
+  if (!q) {
+    res.status(400).json({ error: 'Parámetro "q" requerido' });
+    return;
+  }
+
+  try {
+    const result = await generateAnswer(q);
+    res.json(result);
+  } catch (err: any) {
+    if (err.message?.includes('GEMINI_API_KEY')) {
+      res.status(503).json({ error: 'API key de Gemini no configurada', hint: 'Define GEMINI_API_KEY en .env' });
+    } else {
+      console.error('[RAG] Answer error:', err);
+      res.status(500).json({ error: 'Error generando respuesta' });
+    }
   }
 });

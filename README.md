@@ -107,11 +107,20 @@ server/                         # Backend REST + documentación
 │   ├── recipes.ts             # GET /api/recipes, /api/recipes/:id
 │   ├── campus.ts              # GET /api/campus, /api/campus/:id
 │   ├── glossary.ts            # GET /api/glossary
-│   ├── search.ts              # GET /api/search (con cache + rate limit + Zod)
+│   ├── search.ts              # GET /api/search, GET /api/search/unified
 │   ├── sitemap.ts             # GET /api/sitemap
 │   ├── agrovoc.ts             # GET /api/agrovoc, /api/agrovoc/:id, ?resolve=
 │   ├── aiManifest.ts          # GET /api/ai-manifest
 │   └── recommend.ts           # GET /api/recommend
+├── rag/                        # Pipeline RAG vectorial
+│   ├── index.ts               # Barrel
+│   ├── types.ts               # RagChunk, RagSearchResult, RagQuery
+│   ├── chunker.ts             # Chunking de todo el contenido (1521 chunks)
+│   ├── embeddings.ts          # Embeddings all-MiniLM-L6-v2 (384 dims)
+│   ├── chroma.ts              # Vector store + búsqueda coseno + filtros
+│   ├── indexer.ts             # Indexador (CLI vía npm run build:rag)
+│   ├── sfc.ts                 # Compresión semántica SFC (simbolos-sfc.json)
+│   └── answer.ts              # Respuesta con Gemini + contexto SFC
 
 public/
 └── knowledge-graph.json        # Pre-built knowledge graph (1274 nodos, 53471 aristas)
@@ -189,11 +198,14 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 ## Servicios Backend
 
 ### API REST (Express, puerto 3001)
-- **17 endpoints** documentados vía Swagger UI en `/api/docs`
+- **19+ endpoints** documentados vía Swagger UI en `/api/docs`
 - Rate limiting: 100 requests/15min global, 20/min search
-- Validación Zod en `/api/search`
-- Cache de búsqueda con TTL 5 min
+- Validación Zod en `/api/search` y `/api/search/unified`
+- Cache de búsqueda con TTL 5 min (keyword) + vector store persistente (RAG)
 - CORS habilitado
+- **Pipeline RAG**: chunking (1521 chunks) → embeddings all-MiniLM-L6-v2 → vector store → búsqueda coseno
+- **RAG Answer**: contexto comprimido con SFC → Gemini 2.0 Flash → respuesta narrativa
+- **Unified Search**: keyword + vector con score normalizado
 
 ### Swagger UI
 - `http://localhost:3001/api/docs/` — Documentación interactiva OpenAPI 3.0
@@ -223,11 +235,47 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 #### Archivos modificados:
 | Archivo | Cambio |
-|---|---|
+|---|---|---|
 | `src/data/herramientas.ts` | GLOSARIO ~750 → ~876 términos (6 nuevos ciclos de micronutrientes) |
 | `public/knowledge-graph.json` | Regenerado: 1147 → 1274 nodos, 45566 → 53471 aristas |
 
 #### Estado: Build exitoso (0 errores, 1931 módulos)
+
+### 2026-07-15 — Sesión 15: RAG Answer + SFC Compression + Unified Search
+
+#### Cambios realizados:
+
+1. **RAG Answer con Gemini** — `server/rag/answer.ts` + endpoint `GET /api/rag/answer?q=...`:
+   - Usa `@google/genai` (SDK ya instalado como devDependency) para generar respuestas narrativas desde los chunks del RAG
+   - Integra SFC para comprimir el contexto antes de enviarlo a Gemini
+   - Requiere `GEMINI_API_KEY` en `.env`
+   - Retorna: `{ answer, sources: [{ title, source, sourceType, score }], chunksUsed }`
+
+2. **SFC (Semantic Frame Compression)** — `simbolos-sfc.json` + `server/rag/sfc.ts`:
+   - Diccionario simbólico con 88 términos agrícolas en 7 categorías (cultivos, variables, unidades, relaciones, suelos, prácticas, plagas)
+   - Algoritmo single-pass con regex combinado (evita reemplazos en cascada)
+   - Word boundaries para evitar falsos positivos en plurales y palabras compuestas
+   - Funciones: `compress(text)`, `expand(text)`, `getLegend()`, `getCompressionRatio(text)`
+   - Compresión real: 15-34% en texto técnico agrícola, 343/1521 chunks (22.6%) con compresión
+
+3. **Unified Hybrid Search** — `GET /api/search/unified?q=...`:
+   - Combina resultados de búsqueda por keyword (cursos, docs, recetas, glosario, campus) + vectorial (RAG)
+   - Normalización de scores con max-scaling por fuente
+   - Retorna: `{ query, total, limit, items: [{ searchType, id, title, description, score, sourceType }] }`
+
+4. **Refactor rutas**: `server/routes/rag.ts` actualizado para exportar desde barrel `../rag`, nuevo endpoint `/api/rag/answer`
+
+#### Archivos modificados/creados:
+| Archivo | Cambio |
+|---|---|
+| `simbolos-sfc.json` | **NUEVO** — Diccionario SFC (88 términos, 7 categorías) |
+| `server/rag/sfc.ts` | **NUEVO** — Compresor/expansor SFC single-pass |
+| `server/rag/answer.ts` | **NUEVO** — Generación de respuesta con Gemini + SFC |
+| `server/rag/index.ts` | Exporta SFC + answer |
+| `server/routes/rag.ts` | + endpoint `/api/rag/answer` |
+| `server/routes/search.ts` | + endpoint `/api/search/unified` |
+
+#### Estado: Build exitoso (0 errores server-side)
 
 ### 2026-07-15 — Sesión 13: Actualización Masiva del Glosario Científico
 
@@ -461,6 +509,10 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 - [x] Swagger UI / OpenAPI (M-08)
 - [x] Lazy Loading verificado (M-05)
 - [x] XSS Sanitization (C-04)
+- [x] RAG vectorial (1521 chunks, embeddings locales)
+- [x] SFC compression (88 términos, 7 categorías)
+- [x] RAG Answer con Gemini (SDK @google/genai)
+- [x] Unified hybrid search (keyword + vector)
 ### Fase 5: Monitoreo (PENDIENTE)
 - [ ] Sentry / Web Vitals (M-07) — requiere cuenta externa + DSN
 

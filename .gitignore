@@ -9,3 +9,7 @@ coverage/
 
 # RAG vector store
 rag_data/
+
+# Logs
+api_out.txt
+api_err.txt
