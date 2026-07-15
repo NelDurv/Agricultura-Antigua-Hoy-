@@ -226,3 +226,9 @@ export const BIBLIOTECA: BibliotecaDoc[] = [
 export function getDocById(id: string): BibliotecaDoc | undefined {
   return BIBLIOTECA.find(d => d.id === id);
 }
+
+export const CATEGORIAS_BIBLIOTECA = ["Fichas Técnicas", "Protocolos", "Guías", "Manuales", "Artículos", "Textos", "Audios", "Videos"];
+
+export const AUDIOS: any[] = [];
+
+export const VIDEOS: any[] = [];

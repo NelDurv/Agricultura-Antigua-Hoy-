@@ -60,7 +60,7 @@ export default function AccessibilityToolbar() {
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex flex-col items-center gap-0.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2 py-2.5 shadow-md hover:bg-emerald-50 transition-all text-stone-700 hover:text-emerald-700"
+        className="flex flex-col items-center gap-0.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2 py-2.5 shadow-md hover:bg-wheat-light/20 transition-all text-stone-700 hover:text-[#2C2420]"
         aria-label="Accesibilidad"
         title="Herramientas de accesibilidad"
       >

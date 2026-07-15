@@ -2,9 +2,7 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, FlaskConical, GraduationCap, FileText, Clock, User, Sparkles, Tag } from 'lucide-react';
 import { searchNodes, getNode } from '../../core/knowledge/graph';
-import { COURSES32 } from '../../data/courses32';
-import { BIBLIOTECA } from '../../data/biblioteca';
-import { RECETAS } from '../../data';
+import { COURSES32, BIBLIOTECA, RECETAS } from '../../data';
 import type { Panel } from '../../core/engine';
 
 function CoursePanelView({ panel }: { panel: Panel }) {

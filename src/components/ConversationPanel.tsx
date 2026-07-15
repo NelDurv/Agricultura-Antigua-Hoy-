@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, type SetStateAction, type Dispatch } from "react";
 import { useNavigate } from "react-router-dom";
-import { Send, Trash2, Sprout, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Send, Trash2, Atom, ThumbsUp, ThumbsDown, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import { useBrain } from "../contexts/BrainContext";
@@ -9,7 +9,7 @@ import { useAuth } from "../contexts";
 
 const AVATARS: Record<string, string> = {
   user: "\uD83D\uDC64",
-  assistant: "\uD83E\uDD16",
+  assistant: "\uD83E\uDDEC",
   system: "\uD83C\uDF31",
 };
 
@@ -25,16 +25,16 @@ const MessageItem = React.memo(function MessageItem({ msg, feedbackGiven, onFeed
   return (
     <div className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
       <div className={`h-7 w-7 rounded-full flex items-center justify-center text-sm shrink-0 ring-1 ring-stone-200/50 ${
-        msg.role === "user" ? "bg-emerald-100" : msg.role === "system" ? "bg-amber-50" : "bg-stone-100"
+        msg.role === "user" ? "bg-wheat-light/30" : msg.role === "system" ? "bg-amber-50" : "bg-stone-100"
       }`}>
-        {AVATARS[msg.role] || "🤖"}
+        {AVATARS[msg.role] || "\uD83D\uDD2C"}
       </div>
       <div className={`max-w-[95%] ${msg.role === "user" ? "items-end" : "items-start"} space-y-2`}>
         <div className={`text-xs leading-relaxed ${
           msg.role === "user"
-            ? "bg-emerald-600 text-white rounded-2xl rounded-tr-md px-5 py-4 text-sm leading-relaxed"
+            ? "bg-forest text-white rounded-xl rounded-tr-md px-5 py-4 text-sm leading-relaxed"
             : msg.role === "system"
-            ? "bg-white text-stone-700 rounded-2xl rounded-tl-md px-4 py-3 border border-stone-200 shadow-xs"
+            ? "bg-white text-stone-700 rounded-xl rounded-tl-md px-4 py-3 border border-stone-200 shadow-xs"
             : "text-stone-800 px-1 py-0.5"
         }`}>
           <div className="[&_em]:italic [&_strong]:font-bold [&_p]:my-0.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:list-decimal [&_ol]:pl-4 [&_code]:text-xs [&_code]:bg-stone-100 [&_code]:px-1 [&_code]:rounded">
@@ -49,8 +49,8 @@ const MessageItem = React.memo(function MessageItem({ msg, feedbackGiven, onFeed
               disabled={feedbackGiven.has(msg.id + '_good')}
               className={`h-6 w-6 rounded-lg flex items-center justify-center transition-all ${
                 feedbackGiven.has(msg.id + '_good')
-                  ? 'bg-emerald-100 text-emerald-600'
-                  : 'text-stone-400 hover:text-emerald-600 hover:bg-emerald-50'
+                  ? 'bg-wheat-light/30 text-wheat'
+                  : 'text-stone-400 hover:text-wheat hover:bg-wheat-light/20'
               }`}
               title="Respuesta útil"
             >
@@ -77,7 +77,7 @@ const MessageItem = React.memo(function MessageItem({ msg, feedbackGiven, onFeed
               <button
                 key={i}
                 onClick={() => onSuggestion(s)}
-                className="w-[90%] inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-white border border-stone-200 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 text-sm font-semibold text-stone-700 transition-all shadow-sm"
+                className="w-[90%] inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-white border border-stone-200 hover:border-wheat hover:bg-wheat-light/20 hover:text-[#2C2420] text-sm font-semibold text-stone-700 transition-all shadow-sm"
               >
                 <span className="text-lg shrink-0">{s.icon || "→"}</span>
                 <span className="truncate">{s.label}</span>
@@ -102,7 +102,7 @@ interface ComposerProps {
 const Composer = React.memo(function Composer({ composerText, setComposerText, onSend, onKeyDown, inputRef }: ComposerProps) {
   return (
     <div className="shrink-0 border-t border-stone-100 bg-white px-4 pt-3 pb-4">
-      <div className="flex items-end gap-2 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-400/15 transition-all shadow-xs">
+      <div className="flex items-end gap-2 bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus-within:border-wheat focus-within:ring-2 focus-within:ring-wheat/15 transition-all shadow-xs">
         <textarea
           ref={inputRef}
           value={composerText}
@@ -116,7 +116,7 @@ const Composer = React.memo(function Composer({ composerText, setComposerText, o
         <button
           onClick={onSend}
           disabled={!composerText.trim()}
-          className="h-8 w-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-stone-300 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0 shadow-xs"
+          className="h-8 w-8 rounded-xl bg-forest hover:bg-[#1A3A18] disabled:bg-stone-300 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0 shadow-xs"
         >
           <Send className="h-4 w-4 text-white" />
         </button>
@@ -132,6 +132,7 @@ const Composer = React.memo(function Composer({ composerText, setComposerText, o
 export default function ConversationPanel() {
   const { messages, composerText, sendMessage, sendClarification, setComposerText, clearConversation, submitFeedback } = useBrain();
   const [feedbackGiven, setFeedbackGiven] = useState<Set<string>>(new Set());
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const { userName } = useAuth();
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -185,12 +186,12 @@ export default function ConversationPanel() {
     <div className="flex flex-col h-full bg-white" id="conversation-panel">
       <div className="shrink-0 border-b border-stone-100 px-4 pt-3 pb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center shadow-xs">
-            <Sprout className="h-4 w-4 text-white" />
+          <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-forest to-[#1A3A18] flex items-center justify-center shadow-xs">
+            <Atom className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h3 className="text-xs font-bold font-serif text-stone-900">Asistente</h3>
-            <p className="text-[9px] text-emerald-600 font-mono font-medium">Agricultura Antigua</p>
+            <h3 className="text-xs font-bold font-serif text-stone-900">Biblioteca Viva</h3>
+            <p className="text-[9px] text-forest font-mono font-medium">Agricultura Antigua</p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -198,8 +199,8 @@ export default function ConversationPanel() {
             {userName || "Invitado"}
           </span>
           <button
-            onClick={clearConversation}
-            className="h-7 w-7 rounded-lg hover:bg-stone-100 flex items-center justify-center transition-colors text-stone-400 hover:text-stone-600"
+            onClick={() => setShowClearConfirm(true)}
+            className="h-7 w-7 rounded-lg hover:bg-stone-100 flex items-center justify-center transition-colors text-stone-400 hover:text-red-500"
             title="Nueva conversación"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -207,8 +208,20 @@ export default function ConversationPanel() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "thin" }} id="conversation-messages">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden relative" id="conversation-messages">
         <div className="px-4 py-4 space-y-4">
+          {messages.length > 1 && (
+            <div className="text-center pb-2">
+              <button
+                onClick={() => setShowClearConfirm(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-forest/10 text-forest hover:bg-forest/20 text-[10px] font-semibold font-mono transition-colors"
+              >
+                <Trash2 className="h-3 w-3" />
+                Limpiar historial
+              </button>
+            </div>
+          )}
+
           {messages.map((msg) => (
             <MessageItem
               key={msg.id}
@@ -220,6 +233,37 @@ export default function ConversationPanel() {
           ))}
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Clear confirmation dialog */}
+        {showClearConfirm && (
+          <div className="absolute inset-0 bg-white/95 z-10 flex items-center justify-center px-4">
+            <div className="bg-white rounded-xl shadow-xl border border-stone-200 p-5 max-w-xs w-full">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold font-serif text-stone-900">Nueva conversación</h4>
+                  <p className="text-[10px] text-stone-500 font-mono">Se borrará todo el historial</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { clearConversation(); setShowClearConfirm(false); }}
+                  className="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors"
+                >
+                  Borrar todo
+                </button>
+                <button
+                  onClick={() => setShowClearConfirm(false)}
+                  className="flex-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition-colors"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <Composer

@@ -1,5 +1,7 @@
 import type { CommunityPost } from '../types';
 
+export const CATEGORIAS_COMUNIDAD = ["Plagas", "Suelos", "Bioinsumos", "Casos de Éxito", "Intercambio de Semillas"];
+
 export const COMMUNITY_POSTS: CommunityPost[] = [
   {
     id: "post-1",

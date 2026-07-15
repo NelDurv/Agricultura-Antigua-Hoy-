@@ -194,7 +194,7 @@ export default function HomeSection() {
                     <h3 className="font-serif text-lg font-bold text-stone-900">Biblioteca Técnica</h3>
                     <p className="text-[10px] text-stone-500">Hojas y fichas listas para campo.</p>
                   </div>
-                  <button onClick={() => navigate('/biblioteca')} className="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                  <button onClick={() => navigate('/biblioteca')} className="text-[10px] font-bold text-forest hover:text-[#1A3A18] flex items-center gap-1">
                     Explorar <ArrowRight className="h-2.5 w-2.5" />
                   </button>
                 </div>
@@ -207,7 +207,7 @@ export default function HomeSection() {
                         <span className="text-[8px] font-mono font-semibold text-stone-500 uppercase">{doc.category}</span>
                         <span className="text-[8px] text-stone-400">{doc.version}</span>
                       </div>
-                      <h4 className="text-[11px] font-bold text-stone-900 group-hover:text-emerald-700 transition-colors leading-tight">{doc.title}</h4>
+                      <h4 className="text-[11px] font-bold text-stone-900 group-hover:text-forest transition-colors leading-tight">{doc.title}</h4>
                       <p className="text-[10px] text-stone-500 line-clamp-1">{doc.description}</p>
                     </div>
                   ))}
@@ -219,7 +219,7 @@ export default function HomeSection() {
                     <h3 className="font-serif text-base font-bold text-stone-900">Glosario Técnico</h3>
                     <p className="text-[9px] text-stone-500">Términos clave de agroecología.</p>
                   </div>
-                  <button onClick={() => navigate('/recursos')} className="text-[9px] font-bold text-emerald-700 flex items-center gap-1">
+                  <button onClick={() => navigate('/recursos')} className="text-[9px] font-bold text-forest flex items-center gap-1">
                     Glosario <ArrowRight className="h-2 w-2" />
                   </button>
                 </div>
@@ -227,7 +227,7 @@ export default function HomeSection() {
                   {GLOSARIO.slice(0, 5).map((g) => (
                     <div key={g.termino} className="p-2 bg-stone-50 border border-stone-200 rounded-lg hover:border-stone-400 transition-colors">
                       <div className="flex items-start gap-1.5">
-                        <BookOpen className="h-3 w-3 text-emerald-700 shrink-0 mt-0.5" />
+                        <BookOpen className="h-3 w-3 text-forest shrink-0 mt-0.5" />
                         <div>
                           <h4 className="text-[10px] font-bold text-stone-900">{g.termino}</h4>
                           <p className="text-[9px] text-stone-600 leading-relaxed line-clamp-2">{g.definicion}</p>

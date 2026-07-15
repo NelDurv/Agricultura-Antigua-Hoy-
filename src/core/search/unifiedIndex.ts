@@ -1,10 +1,5 @@
 import type { KnowledgeType, KnowledgeNode } from '../knowledge/types';
-import { COURSES } from '../../data/courses/index';
-import { BIBLIOTECA } from '../../data/biblioteca/index';
-import { RECETAS, GLOSARIO } from '../../data/recursos/index';
-import { PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, SUBTEMAS } from '../../data/home/index';
-import { COMMUNITY_POSTS } from '../../data/comunidad';
-import { COURSES32 } from '../../data/courses32';
+import { COURSES, BIBLIOTECA, RECETAS, GLOSARIO, PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, SUBTEMAS, COMMUNITY_POSTS, COURSES32 } from '../../data';
 import type { Pilar, Mito, SubtemaDetalle } from '../../types';
 
 // ───────────────────────────────────────

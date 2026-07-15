@@ -50,7 +50,7 @@ export default function Layout() {
 
   return (
     <div
-      className="h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white"
+      className="h-screen flex flex-col font-sans selection:bg-wheat selection:text-[#2C2420]"
       style={{ backgroundColor: 'var(--color-bg-body)', color: 'var(--color-text-primary)' }}
       id="app-root"
       data-data-saver={dataSaver ? 'true' : 'false'}
@@ -60,15 +60,15 @@ export default function Layout() {
 
       <AccessibilityToolbar />
 
-      {/* Three-column layout: chat | layers | content */}
-      <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 flex gap-4 overflow-hidden">
-        {/* Chat Panel — left column */}
+      {/* 12-column grid: chat (4) | content (8) */}
+      <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-12 gap-4 overflow-hidden">
+        {/* Chat Panel — col-span-4 */}
         <div
           id="conversation-column"
           className={`
-            fixed inset-0 z-40 md:static md:z-auto
-            ${isChatOpen ? 'block' : 'hidden md:block'}
-            md:w-[340px] lg:w-[380px] xl:w-[400px] md:h-full
+            fixed inset-0 z-40 overflow-y-auto md:overflow-visible md:static md:z-auto
+            ${isChatOpen ? 'block' : 'hidden'}
+            md:col-span-4 md:h-full md:min-h-0
             bg-white/95 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none
           `}
         >
@@ -81,41 +81,40 @@ export default function Layout() {
             </button>
           </div>
 
-          <div className="h-full rounded-none md:rounded-2xl overflow-hidden border-0 md:border border-stone-200 shadow-xs bg-white">
+          <div className="h-full md:min-h-0 rounded-none md:rounded-xl overflow-hidden border-0 md:border border-stone-200 shadow-xs bg-white">
             <ErrorBoundary>
               <ConversationPanel />
             </ErrorBoundary>
           </div>
         </div>
 
-        {/* Layers column — between chat and content, desktop only */}
-        {layers.length > 0 && (
-          <div className="hidden lg:flex flex-col gap-3 overflow-y-auto shrink-0" style={{ scrollbarWidth: 'thin', width: '380px' }}>
-            {layers.map((layer) => (
-              <LayerPanel key={layer.id} layer={layer} />
-            ))}
-          </div>
-        )}
+        {/* Main Content — col-span-8 o col-span-12 según chat */}
+        <div className={`col-span-full min-w-0 flex flex-col gap-4 overflow-y-auto ${isChatOpen ? 'md:col-span-8' : 'md:col-span-12'}`}>
+          {layers.length > 0 && (
+            <div className="hidden lg:flex flex-col gap-3 overflow-y-auto shrink-0">
+              {layers.map((layer) => (
+                <LayerPanel key={layer.id} layer={layer} />
+              ))}
+            </div>
+          )}
 
-        {/* Main Content — right column */}
-        <div className="flex-1 min-w-0 flex flex-col gap-4 overflow-y-auto">
-          <div className={`hidden md:flex items-center justify-between shrink-0 ${isChatOpen ? '' : ''}`}>
+          <div className="flex items-center justify-between shrink-0">
             <button
               onClick={toggleChat}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-stone-200 hover:border-emerald-400 text-[10px] font-medium text-stone-600 hover:text-emerald-700 transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-stone-200 hover:border-wheat text-[10px] font-medium text-stone-600 hover:text-[#2C2420] transition-all shadow-xs"
               title={isChatOpen ? 'Ocultar chat' : 'Abrir chat'}
             >
               <MessageSquare className="h-3.5 w-3.5" />
               <span>{isChatOpen ? 'Ocultar asistente' : 'Mostrar asistente'}</span>
               {unreadCount > 0 && (
-                <span className="h-4 min-w-[16px] px-1 rounded-full bg-emerald-600 text-white text-[8px] font-bold flex items-center justify-center">
+                <span className="h-4 min-w-[16px] px-1 rounded-full bg-forest text-white text-[8px] font-bold flex items-center justify-center">
                   {unreadCount}
                 </span>
               )}
             </button>
           </div>
 
-          <div className="bg-stone-50 border border-stone-200 shadow-xs rounded-3xl p-4 sm:p-6" id="stage-card">
+          <div className="bg-stone-50 border border-stone-200 shadow-xs rounded-xl p-4 sm:p-6" id="stage-card">
             <InterfaceOrchestrator />
           </div>
         </div>
@@ -124,7 +123,7 @@ export default function Layout() {
       {/* Mobile chat toggle button */}
       <button
         onClick={toggleChat}
-        className={`md:hidden fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 transition-all flex items-center justify-center ${isChatOpen ? 'hidden' : 'flex'}`}
+        className={`md:hidden fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-forest text-white shadow-lg hover:bg-forest-light transition-all flex items-center justify-center ${isChatOpen ? 'hidden' : 'flex'}`}
       >
         <MessageSquare className="h-5 w-5" />
         {unreadCount > 0 && (
@@ -134,10 +133,10 @@ export default function Layout() {
         )}
       </button>
 
-      <footer className="bg-gradient-to-r from-[#4f8c2a] to-[#3b5a15] py-3" id="app-footer">
+      <footer className="bg-gradient-to-r from-[#2D5A27] to-[#1A3A18] py-3" id="app-footer">
         <div className="mx-auto w-[100%] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
-            <p className="font-serif text-xs font-bold text-[#ffd700] tracking-wide">
+            <p className="font-serif text-xs font-bold text-wheat tracking-wide">
               Agricultura Antigua
             </p>
             <span className="h-3 w-px bg-white/20 hidden sm:block" />

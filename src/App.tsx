@@ -10,7 +10,6 @@ const AcademiaSection = lazy(() => import('./components/AcademiaSection'));
 const ComunidadSection = lazy(() => import('./components/ComunidadSection'));
 const RecursosSection = lazy(() => import('./components/RecursosSection'));
 const InstitucionesSection = lazy(() => import('./components/InstitucionesSection'));
-const PerfilSection = lazy(() => import('./components/PerfilSection'));
 const AIReadySection = lazy(() => import('./components/AIReadySection'));
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -44,7 +43,6 @@ export default function App() {
             <Route path="aiready" element={<AIReadySection />} />
             <Route path="recursos" element={<RecursosSection />} />
             <Route path="instituciones" element={<InstitucionesSection />} />
-            <Route path="perfil" element={<PerfilSection />} />
           </Route>
         </Routes>
       </BrowserRouter>

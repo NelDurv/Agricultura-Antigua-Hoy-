@@ -54,7 +54,7 @@ function WorkspacePanels() {
             onClick={() => togglePanel(panel.id)}
             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all border ${
               panel.state === 'focused'
-                ? 'bg-emerald-100 text-emerald-800 border-emerald-300 shadow-xs'
+                ? 'bg-wheat-light/30 text-wheat border-wheat-light/50 shadow-xs'
                 : 'bg-white text-stone-600 border-stone-200 hover:border-stone-400'
             }`}
           >

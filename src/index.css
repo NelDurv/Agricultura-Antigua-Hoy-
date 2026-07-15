@@ -1,38 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-mono: "Fira Code", ui-monospace, monospace;
-  
-  --color-primary: #4f8c2a;
-  --color-secondary: #3b5a15;
-  --color-accent: #ffd700;
-  --color-accent-alt: #ffeb7a;
-  --color-gold: #ffd700;
-  --color-text-dark: #1a1a2e;
-  --color-text-light: #5a5a5a;
 
-  /* Semantic theme tokens */
-  --color-bg-body: #faf8f0;
-  --color-bg-surface: #fffdf5;
-  --color-bg-card: #ffffff;
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #5a5a5a;
-  --color-border-light: #e5e0d0;
-  --color-border-medium: #d0cbb0;
+  --color-forest: #2D5A27;
+  --color-forest-light: #5C7A4A;
+  --color-earth: #8B6F47;
+  --color-earth-light: #B8A186;
+  --color-water: #3A7D8C;
+  --color-water-light: #7BB4C4;
+  --color-wheat: #C9A227;
+  --color-wheat-light: #DFC08A;
+
+  --color-primary: #2D5A27;
+  --color-secondary: #5C7A4A;
+  --color-accent: #C9A227;
+  --color-accent-alt: #DFC08A;
+  --color-gold: #C9A227;
+  --color-text-dark: #2C2420;
+  --color-text-light: #6B5C4F;
+
+  --color-bg-body: #F5F0E8;
+  --color-bg-surface: #FAF6EF;
+  --color-bg-card: #FFFFFF;
+  --color-text-primary: #2C2420;
+  --color-text-secondary: #6B5C4F;
+  --color-border-light: #E5D9C5;
+  --color-border-medium: #D4C5AC;
 }
 
-/* ===== DARK MODE (class-based toggle) ===== */
+/* ===== DARK MODE ===== */
 html.dark-mode {
-  --color-bg-body: #1C1917;
-  --color-bg-surface: #292524;
-  --color-bg-card: #292524;
-  --color-text-primary: #F5F5F4;
-  --color-text-secondary: #A8A29E;
-  --color-border-light: #44403C;
-  --color-border-medium: #57534E;
+  --color-bg-body: #1A1614;
+  --color-bg-surface: #2A2420;
+  --color-bg-card: #2A2420;
+  --color-text-primary: #EDE8E0;
+  --color-text-secondary: #B0A090;
+  --color-border-light: #3D352E;
+  --color-border-medium: #4D443C;
 }
 
 html.dark-mode body {
@@ -40,46 +48,40 @@ html.dark-mode body {
   color: var(--color-text-primary);
 }
 
-/* Custom scrollbar and aesthetics to avoid clutter */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* Scrollbar */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
 body {
   background-color: var(--color-bg-body);
   color: var(--color-text-primary);
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Plantilla Machu Picchu: Cards e Interacciones */
 .machu-card {
   background: var(--color-bg-card);
   padding: 2.5rem 2rem;
-  border-radius: 16px;
-  box-shadow: 0 0 2px rgba(0,0,0,0.1);
-  border-bottom: 3.5px solid #ffcc05;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(44, 36, 32, 0.06);
+  border-bottom: 3px solid var(--color-wheat);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .machu-card:hover {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(44, 36, 32, 0.08);
   transform: translateY(-2px);
 }
 
 .machu-btn {
   display: inline-block;
   padding: 10px 22px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 1.5px;
-  background: #ffcc05;
-  color: #000000;
+  background: var(--color-wheat);
+  color: #2C2420;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -88,37 +90,33 @@ body {
 }
 
 .machu-btn:hover {
-  background: #003459;
-  color: #ffffff;
+  background: var(--color-forest);
+  color: #FFFFFF;
 }
 
-input[type="range"] {
-  cursor: pointer;
-}
+input[type="range"] { cursor: pointer; }
 
-/* Accessibility toolbar classes (toggled on <html>) */
 html.a11y-underline-links a {
   text-decoration: underline !important;
   text-underline-offset: 2px;
 }
 
-/* Dark mode utility overrides for common Tailwind classes */
+/* Dark mode overrides for Tailwind utility classes */
 html.dark-mode .bg-white { background-color: var(--color-bg-card) !important; }
-html.dark-mode .bg-stone-50 { background-color: #3A3532 !important; }
-html.dark-mode .bg-stone-100 { background-color: #403B38 !important; }
-html.dark-mode .bg-stone-200 { background-color: #4A4542 !important; }
+html.dark-mode .bg-stone-50 { background-color: #2A2420 !important; }
+html.dark-mode .bg-stone-100 { background-color: #322C28 !important; }
+html.dark-mode .bg-stone-200 { background-color: #3D352E !important; }
 html.dark-mode .text-stone-900 { color: var(--color-text-primary) !important; }
-html.dark-mode .text-stone-800 { color: #E7E5E4 !important; }
-html.dark-mode .text-stone-700 { color: #D6D3D1 !important; }
-html.dark-mode .text-stone-600 { color: #A8A29E !important; }
-html.dark-mode .text-stone-500 { color: #A8A29E !important; }
-html.dark-mode .text-stone-400 { color: #78716C !important; }
+html.dark-mode .text-stone-800 { color: #E0D8CC !important; }
+html.dark-mode .text-stone-700 { color: #CDC4B8 !important; }
+html.dark-mode .text-stone-600 { color: #B0A090 !important; }
+html.dark-mode .text-stone-500 { color: #B0A090 !important; }
+html.dark-mode .text-stone-400 { color: #756858 !important; }
 html.dark-mode .border-stone-200 { border-color: var(--color-border-light) !important; }
-html.dark-mode .border-stone-100 { border-color: #3A3532 !important; }
+html.dark-mode .border-stone-100 { border-color: #3D352E !important; }
 html.dark-mode .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; }
 html.dark-mode .shadow-md { box-shadow: 0 4px 6px rgba(0,0,0,0.4) !important; }
 
-/* Modo de ahorro de datos: deshabilita animaciones y transiciones pesadas */
 div[data-data-saver="true"] *,
 div[data-data-saver="true"] *::before,
 div[data-data-saver="true"] *::after {
@@ -130,5 +128,3 @@ div[data-data-saver="true"] *::after {
   transition-property: none !important;
   scroll-behavior: auto !important;
 }
-
-

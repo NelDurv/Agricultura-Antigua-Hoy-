@@ -6,7 +6,7 @@ import type { SearchResult } from '../core/search/engine';
 import type { KnowledgeType } from '../core/knowledge/types';
 
 const typeConfig: Record<KnowledgeType, { icon: typeof Sprout; color: string; label: string }> = {
-  course: { icon: GraduationCap, color: 'text-emerald-700 bg-emerald-50', label: 'Curso' },
+  course: { icon: GraduationCap, color: 'text-forest bg-forest/10', label: 'Curso' },
   article: { icon: BookOpen, color: 'text-amber-700 bg-amber-50', label: 'Artículo' },
   manual: { icon: BookMarked, color: 'text-blue-700 bg-blue-50', label: 'Manual' },
   protocol: { icon: FlaskConical, color: 'text-purple-700 bg-purple-50', label: 'Protocolo' },
@@ -119,7 +119,7 @@ export default function SearchBar({ placeholder = 'Buscar cursos, documentos, re
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => handleSelect(result)}
-                    className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors ${i === selectedIndex ? 'bg-emerald-50' : 'hover:bg-stone-50'}`}
+                    className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors ${i === selectedIndex ? 'bg-wheat-light/20' : 'hover:bg-stone-50'}`}
                   >
                     <div className={`p-1.5 rounded-lg ${config.color} shrink-0`}>
                       <Icon className="h-3.5 w-3.5" />
@@ -143,7 +143,7 @@ export default function SearchBar({ placeholder = 'Buscar cursos, documentos, re
                 <button
                   key={s}
                   onClick={() => setQuery(s)}
-                  className={`w-full flex items-center gap-3 px-4 py-2 text-left text-xs text-stone-700 transition-colors ${i === selectedIndex ? 'bg-emerald-50' : 'hover:bg-stone-50'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-2 text-left text-xs text-stone-700 transition-colors ${i === selectedIndex ? 'bg-wheat-light/20' : 'hover:bg-stone-50'}`}
                 >
                   <Search className="h-3.5 w-3.5 text-stone-400 shrink-0" />
                   {s}

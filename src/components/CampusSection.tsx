@@ -30,8 +30,7 @@ import {
   Minimize2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { COURSES, BIBLIOTECA } from "../data";
-import { COURSES32 } from "../data/courses32";
+import { COURSES, COURSES32, BIBLIOTECA } from "../data";
 import { useProgress } from "../contexts";
 import GlossaryTooltip from "./GlossaryTooltip";
 
@@ -1117,6 +1116,6 @@ export default function CampusSection() {
 
   // Generate a custom master certificate for 32 courses
   function triggerUtopiaCertificate() {
-    alert("¡Felicidades! Se ha generado tu Certificado Oficial de Especialización en el Modelo Utopía. El registro ha quedado guardado y ya puedes presentarlo como aval de tus capacidades en la pestaña de 'Mi Perfil'.");
+    alert("¡Felicidades! Se ha generado tu Certificado Oficial de Especialización en el Modelo Utopía. El registro ha quedado guardado y puedes consultarlo en la sección 'Mis Certificados' dentro de Academia.");
   }
 }
