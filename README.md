@@ -114,7 +114,7 @@ server/                         # Backend REST + documentación
 │   └── recommend.ts           # GET /api/recommend
 
 public/
-└── knowledge-graph.json        # Pre-built knowledge graph (1147 nodos, 45566 aristas)
+└── knowledge-graph.json        # Pre-built knowledge graph (1274 nodos, 53471 aristas)
 
 scripts/
 └── build-graph.ts              # Script para generar knowledge-graph.json
@@ -146,9 +146,10 @@ estadisticas:       totalEstudiantes, cursosActivos, indiceSatisfaccion
 ### `herramientas.ts`
 ```
 RECETAS[3]:         Caldo Sulfocálcico, Biol Potenciado, Ácidos Húmicos
-GLOSARIO[~750]:     Cobertura completa: física/química/biología del suelo, bioquímica vegetal,
+GLOSARIO[~876]:     Cobertura completa: física/química/biología del suelo, bioquímica vegetal,
                     fisiología vegetal, climatología, bacteriología, micología, micorrizas,
-                    Trichoderma, ciclos biogeoquímicos (C, N, P, S, K, Ca, Mg, Si, Fe, Mn)
+                    Trichoderma, ciclos biogeoquímicos (C, N, P, S, K, Ca, Mg, Si, Fe, Mn,
+                    Zn, Cu, B, Mo, Cl, Ni)
 instrumentos[4]:    pH-metro, conductivímetro, ORP, higrómetro
 ciclosLunares[4]:   luna nueva, creciente, llena, menguante
 casosExito[3]:      uabcs, sumant-kumar, valle-cauca
@@ -200,12 +201,33 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 ### Pre-build Knowledge Graph
 - `public/knowledge-graph.json` generado con `npm run build:graph`
-- 1147 nodos, 45566 aristas, ~5.5 MB
+- 1274 nodos, 53471 aristas, ~6.5 MB
 - Carga síncrona en producción; runtime en desarrollo
 
 ---
 
 ## Registro de Cambios
+
+### 2026-07-15 — Sesión 14: Expansión del Glosario — Ciclos de Micronutrientes (Zn, Cu, B, Mo, Cl, Ni)
+
+#### Cambios realizados:
+1. **Glosario expandido de ~750 a ~876 términos** en `src/data/herramientas.ts`:
+   - **Manganeso (Mn)**: 6 nuevas entradas (absorción, factores de disponibilidad, movilidad, metabolismo del N, defensa vegetal, visión sistémica)
+   - **Zinc (Zn)**: 21 entradas completas (origen, formas, absorción, transportadores ZIP, auxinas, anhidrasa carbónica, Zn-SOD, zinc finger, deficiencia, toxicidad, microbioma)
+   - **Cobre (Cu)**: 20 entradas completas (origen, formas, plastocianina, lignificación, citocromo c oxidasa, fungicida natural, microbioma)
+   - **Boro (B)**: 22 entradas completas (origen, ácido bórico, pared celular, complejo borato-RG-II, reproducción, transporte de azúcares)
+   - **Molibdeno (Mo)**: 21 entradas completas (origen, molibdato, nitrato reductasa, nitrogenasa, cofactor MoCo, Rhizobium)
+   - **Cloro (Cl)**: 17 entradas completas (origen, cloruro, fotosíntesis, apertura estomática, balance osmótico, salinidad)
+   - **Níquel (Ni)**: 19 entradas completas (origen, ureasa, hidrógenasa, fijación de N₂, germinación)
+   - Cada ciclo incluye: origen, formas en el suelo, absorción, metabolismo, deficiencia, toxicidad, interacciones microbianas y visión sistémica
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/herramientas.ts` | GLOSARIO ~750 → ~876 términos (6 nuevos ciclos de micronutrientes) |
+| `public/knowledge-graph.json` | Regenerado: 1147 → 1274 nodos, 45566 → 53471 aristas |
+
+#### Estado: Build exitoso (0 errores, 1931 módulos)
 
 ### 2026-07-15 — Sesión 13: Actualización Masiva del Glosario Científico
 
