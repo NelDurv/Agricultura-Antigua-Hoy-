@@ -114,7 +114,7 @@ server/                         # Backend REST + documentación
 │   └── recommend.ts           # GET /api/recommend
 
 public/
-└── knowledge-graph.json        # Pre-built knowledge graph (110 nodos, 246 aristas)
+└── knowledge-graph.json        # Pre-built knowledge graph (1147 nodos, 45566 aristas)
 
 scripts/
 └── build-graph.ts              # Script para generar knowledge-graph.json
@@ -146,7 +146,9 @@ estadisticas:       totalEstudiantes, cursosActivos, indiceSatisfaccion
 ### `herramientas.ts`
 ```
 RECETAS[3]:         Caldo Sulfocálcico, Biol Potenciado, Ácidos Húmicos
-GLOSARIO[8]:        Aerobio, Anaerobio, Bokashi, Compost, etc.
+GLOSARIO[~750]:     Cobertura completa: física/química/biología del suelo, bioquímica vegetal,
+                    fisiología vegetal, climatología, bacteriología, micología, micorrizas,
+                    Trichoderma, ciclos biogeoquímicos (C, N, P, S, K, Ca, Mg, Si, Fe, Mn)
 instrumentos[4]:    pH-metro, conductivímetro, ORP, higrómetro
 ciclosLunares[4]:   luna nueva, creciente, llena, menguante
 casosExito[3]:      uabcs, sumant-kumar, valle-cauca
@@ -198,12 +200,40 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 ### Pre-build Knowledge Graph
 - `public/knowledge-graph.json` generado con `npm run build:graph`
-- 110 nodos, 246 aristas, ~164 KB
+- 1147 nodos, 45566 aristas, ~5.5 MB
 - Carga síncrona en producción; runtime en desarrollo
 
 ---
 
 ## Registro de Cambios
+
+### 2026-07-15 — Sesión 13: Actualización Masiva del Glosario Científico
+
+#### Cambios realizados:
+1. **Glosario expandido de ~8 a ~750 términos** en `src/data/herramientas.ts`:
+   - **Bioquímica Vegetal**: metabolismo, fotosíntesis, enzimas, ATP, respiración celular
+   - **Fisiología Vegetal**: xilema, floema, estomas, hormonas, germinación, floración
+   - **Climatología**: atmósfera, fotoperiodo, evapotranspiración, DPV, heladas
+   - **Biología del Suelo**: microbiota, red trófica, biopelícula, salud del suelo
+   - **Bacteriología**: PGPR, quorum sensing, rizósfera, Rhizobium, Bacillus, Pseudomonas
+   - **Micología**: hongos saprófitos, HMA, ectomicorrizas, Trichoderma, micoparasitismo
+   - **Ciclos biogeoquímicos completos**: C, N, P, S, K, Ca, Mg, Si, Fe, Mn
+   - Cada ciclo incluye: origen, formas, absorción, metabolismo, deficiencia, microbioma asociado
+
+2. **Pilares del Saber** movido de RecursosSection → BibliotecaSection como toggle de vista
+3. **Seguridad**: Permissions-Policy, COEP `credentialless`, COOP `same-origin`, HSTS preload
+4. **Mobile UX**: `col-span-full` en contenido, hamburger cierra chat, confirmación limpiar historial
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/herramientas.ts` | GLOSARIO expandido ~8 → ~750 términos (secciones científico-técnicas completas) |
+| `server/index.ts` | Security headers: Permissions-Policy, COEP, COOP, HSTS |
+| `src/components/BibliotecaSection.tsx` | Toggle Documentos/Pilares del Saber |
+| `src/components/RecursosSection.tsx` | Pilares removidos, imports limpios |
+| `public/knowledge-graph.json` | Regenerado: 110 → 1147 nodos, 246 → 45566 aristas |
+
+#### Estado: Build exitoso (0 errores, 1931 módulos)
 
 ### 2026-07-14 — Sesión 12: Natural Intelligence + Data Restructure + Mobile Responsiveness
 
