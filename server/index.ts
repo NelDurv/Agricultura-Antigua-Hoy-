@@ -15,6 +15,7 @@ import { sitemapRouter } from './routes/sitemap';
 import { agrovocRouter } from './routes/agrovoc';
 import { aiManifestRouter } from './routes/aiManifest';
 import { recommendRouter } from './routes/recommend';
+import { ragRouter } from './routes/rag';
 
 const app = express();
 const PORT = parseInt(process.env.API_PORT || '3001', 10);
@@ -92,6 +93,7 @@ app.use('/api/sitemap', sitemapRouter);
 app.use('/api/agrovoc', agrovocRouter);
 app.use('/api/ai-manifest', aiManifestRouter);
 app.use('/api/recommend', recommendRouter);
+app.use('/api/rag', ragRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not Found', message: 'Endpoint no encontrado. Consulta /api/status para ver los endpoints disponibles.' });
