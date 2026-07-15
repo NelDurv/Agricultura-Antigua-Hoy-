@@ -40,8 +40,20 @@ app.use(helmet({
       frameAncestors: ["'none'"],
     },
   },
-  crossOriginEmbedderPolicy: false,
+  crossOriginEmbedderPolicy: { policy: 'credentialless' },
+  crossOriginOpenerPolicy: { policy: 'same-origin' },
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+  hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
 }));
+
+// Permissions-Policy (Helmet no lo incluye por defecto)
+app.use((_req, res, next) => {
+  res.setHeader(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=(), screen-wake-lock=(), autoplay=(), fullscreen=(self)'
+  );
+  next();
+});
 
 // Rate limiting global: 100 requests / 15 min por IP
 const globalLimiter = rateLimit({

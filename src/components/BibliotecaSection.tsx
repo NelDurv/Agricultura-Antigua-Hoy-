@@ -13,9 +13,14 @@ import {
   X, 
   Info, 
   BookmarkCheck,
-  Sprout
+  Sprout,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle,
+  Sparkles
 } from "lucide-react";
-import { BIBLIOTECA } from "../data";
+import { BIBLIOTECA, PILARES, SUBTEMAS } from "../data";
+import type { Pilar } from "../types";
 import { BibliotecaDoc } from "../types";
 import { useProgress } from "../contexts";
 import { getRelatedNodes } from "../core/knowledge/graph";
@@ -36,6 +41,9 @@ export default function BibliotecaSection() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("Todos");
   const [selectedDoc, setSelectedDoc] = useState<BibliotecaDoc | null>(null);
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"documentos" | "pilares">("documentos");
+  const [selectedPilar, setSelectedPilar] = useState<Pilar | null>(PILARES[0]);
+  const [activePilarTema, setActivePilarTema] = useState<string | null>(PILARES[0].temas[0]);
 
   // Sync initialSearch if it changes from navigation
   useEffect(() => {
@@ -103,8 +111,169 @@ export default function BibliotecaSection() {
     <div className="space-y-8 py-4" id="biblioteca-section">
       <PageRenderer blocks={[heroBlock]} />
 
-      {/* Download Alert Toast */}
-      {downloadSuccess && (
+      {/* View mode toggle */}
+      <div className="flex gap-2 border-b border-stone-200/80 pb-1">
+        {[
+          { id: "documentos", label: "Documentos", icon: Search },
+          { id: "pilares", label: "Pilares del Saber", icon: Sprout },
+        ].map(tab => {
+          const Icon = tab.icon;
+          const isActive = viewMode === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setViewMode(tab.id as any);
+                if (tab.id === "pilares" && !selectedPilar) {
+                  setSelectedPilar(PILARES[0]);
+                  setActivePilarTema(PILARES[0].temas[0]);
+                }
+              }}
+              className={`flex items-center gap-1.5 px-4 py-3 text-xs font-semibold rounded-t-xl transition-all border-b-2 -mb-[2px] ${
+                isActive 
+                  ? "border-emerald-600 text-emerald-800 bg-emerald-50/50" 
+                  : "border-transparent text-stone-800 hover:text-stone-900 hover:bg-stone-100"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* PILARES DEL SABER */}
+      {viewMode === "pilares" && selectedPilar && (
+        <div className="space-y-6" id="section-pilares">
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+              <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">
+                Pilares de Transición Agrícola
+              </h3>
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full font-bold self-start sm:self-auto">
+                Selecciona un Pilar para ver sus temas
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" id="pilares-inline-selector">
+              {PILARES.map(pilar => {
+                const isSel = selectedPilar.id === pilar.id;
+                return (
+                  <button
+                    key={pilar.id}
+                    onClick={() => {
+                      setSelectedPilar(pilar);
+                      setActivePilarTema(pilar.temas[0]);
+                    }}
+                    className={`text-left p-3 sm:p-4 rounded-2xl border transition-all flex items-center gap-3 group relative overflow-hidden h-full ${
+                      isSel 
+                        ? "bg-white border-emerald-500 shadow-md ring-1 ring-emerald-500/10" 
+                        : "bg-stone-50 hover:bg-stone-100/80 hover:border-stone-300 border-stone-200"
+                    }`}
+                  >
+                    {isSel && (
+                      <span className="absolute top-0 left-0 right-0 h-[3px]" style={{ backgroundColor: pilar.color }} />
+                    )}
+                    <span className="text-2xl shrink-0" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.05))" }}>
+                      {pilar.icono}
+                    </span>
+                    <div className="space-y-0.5 min-w-0">
+                      <h4 className={`text-[9px] font-mono font-semibold uppercase tracking-widest truncate ${isSel ? "text-emerald-700" : "text-stone-400"}`}>
+                        {pilar.subtitulo}
+                      </h4>
+                      <p className="font-serif text-xs font-bold text-stone-950 leading-tight group-hover:text-emerald-700 transition-colors line-clamp-2 sm:line-clamp-1">
+                        {pilar.titulo}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs w-full">
+            <div className="p-6 rounded-2xl space-y-3 relative overflow-hidden" style={{ backgroundColor: selectedPilar.bgColor }}>
+              <span className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ backgroundColor: selectedPilar.color }} />
+              <div className="flex items-center gap-3 pl-2">
+                <span className="text-4xl">{selectedPilar.icono}</span>
+                <div>
+                  <span className="text-[10px] font-mono font-black uppercase tracking-widest text-black">
+                    {selectedPilar.subtitulo}
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-black mt-0.5">
+                    {selectedPilar.titulo}
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs text-black leading-relaxed font-sans max-w-4xl pt-2 border-t border-black/10 pl-2">
+                {selectedPilar.descripcion}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">
+                Temas Clave de Aprendizaje
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedPilar.temas.map((tema) => {
+                  const detail = SUBTEMAS[tema];
+                  const isAct = activePilarTema === tema;
+                  return (
+                    <div key={tema} className="space-y-2">
+                      <button
+                        onClick={() => setActivePilarTema(isAct ? null : tema)}
+                        className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center justify-between text-xs font-semibold ${
+                          isAct 
+                            ? "bg-stone-50 border-emerald-500 text-emerald-800" 
+                            : "bg-stone-50 hover:bg-stone-100 border-stone-200/80 text-stone-800"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2 line-clamp-1">
+                          <span>{detail?.icono || "📍"}</span>
+                          <span>{tema}</span>
+                        </span>
+                        {isAct ? (
+                          <ChevronUp className="h-4 w-4 text-emerald-700 shrink-0" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-stone-400 shrink-0" />
+                        )}
+                      </button>
+                      {isAct && detail && (
+                        <div className="p-4 bg-stone-50/50 border border-stone-200/60 rounded-xl space-y-3 text-xs leading-relaxed">
+                          <p className="font-medium text-stone-800 border-b border-stone-200 pb-2">
+                            {detail.descripcion}
+                          </p>
+                          <div className="space-y-1.5">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 block font-bold">
+                              Contenido técnico detallado:
+                            </span>
+                            <ul className="space-y-1.5">
+                              {detail.subtemas.map((st, sidx) => (
+                                <li key={sidx} className="flex items-start gap-2 text-stone-800">
+                                  <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                                  <span>{st}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="p-4 bg-stone-100 rounded-2xl flex items-center gap-2 text-[11px] text-stone-800 font-serif italic">
+              <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Todos los pilares están vinculados a módulos prácticos evaluables en nuestra Academia de Campo.</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Documentos */}
+      {viewMode === "documentos" ? (<div>
+        {downloadSuccess && (
         <div className="fixed bottom-4 right-4 z-50 max-w-sm rounded-xl bg-stone-900 text-stone-50 p-4 shadow-xl border border-emerald-500/30 flex items-center gap-3 animate-bounce">
           <div className="h-8 w-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
             <Download className="h-4 w-4" />
@@ -424,6 +593,7 @@ export default function BibliotecaSection() {
           </div>
         </div>
       )}
+      </div>) : null}
 
     </div>
   );

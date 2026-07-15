@@ -27,15 +27,14 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { PILARES, MITOS, CASOS_EXITO, NUMEROS_CLAVE, RECETAS, GLOSARIO, SUBTEMAS } from "../data";
-import type { Pilar } from "../types";
+import { MITOS, CASOS_EXITO, NUMEROS_CLAVE, RECETAS, GLOSARIO } from "../data";
 import { getRelatedNodes } from "../core/knowledge/graph";
 import { PageRenderer } from "./blocks";
 import type { PageBlock } from "./blocks";
 
 export default function RecursosSection() {
   const navigate = useNavigate();
-  const [subTab, setSubTab] = useState<"calculadoras" | "pilares" | "mitos" | "recetario" | "casos" | "glosario">("pilares");
+  const [subTab, setSubTab] = useState<"calculadoras" | "mitos" | "recetario" | "casos" | "glosario">("mitos");
   
   // Calculators sub-switcher
   const [activeCalc, setActiveCalc] = useState<"humedad" | "cn">("humedad");
@@ -50,10 +49,6 @@ export default function RecursosSection() {
   const [gallinaWeight, setGallinaWeight] = useState<number>(10); // kg (C:N ~ 10)
   const [pajaWeight, setPajaWeight] = useState<number>(30);   // kg (C:N ~ 80)
   const [aserrinWeight, setAserrinWeight] = useState<number>(10); // kg (C:N ~ 150)
-
-  // Interactive state for Pilares
-  const [selectedPilar, setSelectedPilar] = useState<Pilar | null>(PILARES[0]);
-  const [activePilarTema, setActivePilarTema] = useState<string | null>(PILARES[0].temas[0]);
 
   // Interactive state for Mitos
   const [flippedMitoId, setFlippedMitoId] = useState<string | null>(null);
@@ -175,7 +170,7 @@ export default function RecursosSection() {
         props: {
           badge: 'Sabiduría y Ciencia de la Tierra',
           title: 'Centro de Recursos Interactivos',
-          subtitle: 'Explora la base de datos completa de Agricultura Antigua. Accede de forma interactiva a los pilares fundamentales, desmiente mitos agrícolas con datos científicos, calcula formulaciones rústicas en tiempo real y aprende recetas biológicas probadas para tu finca.',
+          subtitle: 'Explora la base de datos completa de Agricultura Antigua. Desmiente mitos agrícolas con datos científicos, calcula formulaciones rústicas en tiempo real y aprende recetas biológicas probadas para tu finca.',
           backgroundImage: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&q=100&w=2400',
         },
       }]} />
@@ -183,7 +178,6 @@ export default function RecursosSection() {
       {/* Main Hub Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-stone-200/80 pb-1" id="hub-navigation">
         {[
-          { id: "pilares", label: "Pilares del Saber", icon: Sprout },
           { id: "mitos", label: "Mitos vs. Realidad", icon: HelpCircle },
           { id: "recetario", label: "Recetario de Bioinsumos", icon: FlaskConical },
           { id: "calculadoras", label: "Calculadoras de Campo", icon: Calculator },
@@ -197,11 +191,6 @@ export default function RecursosSection() {
               key={tab.id}
               onClick={() => {
                 setSubTab(tab.id as any);
-                // Sync first elements
-                if (tab.id === "pilares" && !selectedPilar) {
-                  setSelectedPilar(PILARES[0]);
-                  setActivePilarTema(PILARES[0].temas[0]);
-                }
               }}
               className={`flex items-center gap-1.5 px-4 py-3 text-xs font-semibold rounded-t-xl transition-all border-b-2 -mb-[2px] ${
                 isActive 
@@ -218,193 +207,6 @@ export default function RecursosSection() {
 
       {/* Tab Contents */}
       <div className="pt-2">
-
-        {/* 1. PILARES DEL SABER */}
-        {subTab === "pilares" && selectedPilar && (
-          <div className="space-y-6" id="hub-pilares">
-            {/* Pilares de Transición: Inline Menu */}
-            <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">
-                  Pilares de Transición Agrícola
-                </h3>
-                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full font-bold self-start sm:self-auto">
-                  Selecciona un Pilar para ver sus temas
-                </span>
-              </div>
-              
-              {/* Responsive 5-column Inline Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" id="pilares-inline-selector">
-                {PILARES.map(pilar => {
-                  const isSel = selectedPilar.id === pilar.id;
-                  return (
-                    <button
-                      key={pilar.id}
-                      id={`btn-pilar-${pilar.id}`}
-                      onClick={() => {
-                        setSelectedPilar(pilar);
-                        setActivePilarTema(pilar.temas[0]);
-                      }}
-                      className={`text-left p-3 sm:p-4 rounded-2xl border transition-all flex items-center gap-3 group relative overflow-hidden h-full ${
-                        isSel 
-                          ? "bg-white border-emerald-500 shadow-md ring-1 ring-emerald-500/10" 
-                          : "bg-stone-50 hover:bg-stone-100/80 hover:border-stone-300 border-stone-200"
-                      }`}
-                    >
-                      {/* Active indicator top line */}
-                      {isSel && (
-                        <span 
-                          className="absolute top-0 left-0 right-0 h-[3px]" 
-                          style={{ backgroundColor: pilar.color }}
-                        />
-                      )}
-                      
-                      <span className="text-2xl shrink-0" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.05))" }}>
-                        {pilar.icono}
-                      </span>
-                      <div className="space-y-0.5 min-w-0">
-                        <h4 className={`text-[9px] font-mono font-semibold uppercase tracking-widest truncate ${isSel ? "text-emerald-700" : "text-stone-400"}`}>
-                          {pilar.subtitulo}
-                        </h4>
-                        <p className="font-serif text-xs font-bold text-stone-950 leading-tight group-hover:text-emerald-700 transition-colors line-clamp-2 sm:line-clamp-1">
-                          {pilar.titulo}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Pillar Detail View (Spans Full Width 100%) */}
-            <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs w-full">
-              {/* Header card with background */}
-              <div className="p-6 rounded-2xl space-y-3 relative overflow-hidden" style={{ backgroundColor: selectedPilar.bgColor }}>
-                <span className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ backgroundColor: selectedPilar.color }} />
-                <div className="flex items-center gap-3 pl-2">
-                  <span className="text-4xl">{selectedPilar.icono}</span>
-                  <div>
-                    <span className="text-[10px] font-mono font-black uppercase tracking-widest text-black">
-                      {selectedPilar.subtitulo}
-                    </span>
-                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-black mt-0.5">
-                      {selectedPilar.titulo}
-                    </h3>
-                  </div>
-                </div>
-                <p className="text-xs text-black leading-relaxed font-sans max-w-4xl pt-2 border-t border-black/10 pl-2">
-                  {selectedPilar.descripcion}
-                </p>
-              </div>
-
-              {/* Subtopic Navigator */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">
-                  Temas Clave de Aprendizaje
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {selectedPilar.temas.map((tema) => {
-                    const detail = SUBTEMAS[tema];
-                    const isAct = activePilarTema === tema;
-                    return (
-                      <div key={tema} className="space-y-2">
-                        <button
-                          onClick={() => setActivePilarTema(isAct ? null : tema)}
-                          className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center justify-between text-xs font-semibold ${
-                            isAct 
-                              ? "bg-stone-50 border-emerald-500 text-emerald-800" 
-                              : "bg-stone-50 hover:bg-stone-100 border-stone-200/80 text-stone-800"
-                          }`}
-                        >
-                          <span className="flex items-center gap-2 line-clamp-1">
-                            <span>{detail?.icono || "📍"}</span>
-                            <span>{tema}</span>
-                          </span>
-                          {isAct ? (
-                            <ChevronUp className="h-4 w-4 text-emerald-700 shrink-0" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4 text-stone-400 shrink-0" />
-                          )}
-                        </button>
-
-                        {isAct && detail && (
-                          <div className="p-4 bg-stone-50/50 border border-stone-200/60 rounded-xl space-y-3 text-xs leading-relaxed animate-fade-in">
-                            <p className="font-medium text-stone-800 border-b border-stone-200 pb-2">
-                              {detail.descripcion}
-                            </p>
-                            <div className="space-y-1.5">
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 block font-bold">
-                                Contenido técnico detallado:
-                              </span>
-                              <ul className="space-y-1.5">
-                                {detail.subtemas.map((st, sidx) => (
-                                  <li key={sidx} className="flex items-start gap-2 text-stone-800">
-                                    <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                                    <span>{st}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Footnote */}
-              <div className="p-4 bg-stone-100 rounded-2xl flex items-center gap-2 text-[11px] text-stone-800 font-serif italic">
-                <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Todos los pilares están vinculados a módulos prácticos evaluables en nuestra Academia de Campo.</span>
-              </div>
-
-              {/* Knowledge Graph: Related Content */}
-              {(() => {
-                const related = getRelatedNodes(`pilar-${selectedPilar.id}`);
-                if (related.length === 0) return null;
-                return (
-                  <div className="p-4 bg-purple-50 border border-purple-100 rounded-xl space-y-2">
-                    <h5 className="font-serif text-xs font-bold text-purple-900 flex items-center gap-1">
-                      <Sprout className="h-4 w-4" />
-                      <span>Contenido Relacionado a este Pilar</span>
-                    </h5>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {related.slice(0, 6).map((node) => {
-                        const badgeStyle = {
-                          course: 'bg-emerald-100 text-emerald-800',
-                          recipe: 'bg-orange-100 text-orange-800',
-                          glossary: 'bg-indigo-100 text-indigo-800',
-                          article: 'bg-amber-100 text-amber-800',
-                          guide: 'bg-teal-100 text-teal-800',
-                          research: 'bg-purple-100 text-purple-800',
-                        }[node.type] || 'bg-stone-100 text-stone-800';
-                        return (
-                          <button
-                            key={node.id}
-                            onClick={() => {
-                              const urlMap: Record<string, string> = {
-                                course: `/academia/${node.id}`,
-                                recipe: '/recursos',
-                                glossary: '/recursos',
-                              };
-                              navigate(urlMap[node.type] || '/biblioteca');
-                            }}
-                            className="px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 border border-transparent hover:border-purple-300"
-                            style={{ backgroundColor: badgeStyle.split(' ')[0], color: badgeStyle.split(' ')[1] }}
-                          >
-                            <ArrowRight className="h-3 w-3" />
-                            <span>{node.title}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        )}
 
         {/* 2. MITOS VS REALIDAD */}
         {subTab === "mitos" && (
