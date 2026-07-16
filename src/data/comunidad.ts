@@ -1,4 +1,15 @@
 import type { CommunityPost } from '../types';
+import { COMMUNITY_QA } from './comunidad-qa';
+import { COMMUNITY_QA_2 } from './comunidad-qa2';
+import { COMMUNITY_QA_3 } from './comunidad-qa3';
+import { COMMUNITY_QA_4 } from './comunidad-qa4';
+import { COMMUNITY_QA_5 } from './comunidad-qa5';
+import { COMMUNITY_QA_6 } from './comunidad-qa6';
+import { COMMUNITY_QA_7 } from './comunidad-qa7';
+import { COMMUNITY_QA_8 } from './comunidad-qa8';
+import { COMMUNITY_QA_9 } from './comunidad-qa9';
+import { COMMUNITY_QA_10 } from './comunidad-qa10';
+import { COMMUNITY_QA_11 } from './comunidad-qa11';
 
 export const CATEGORIAS_COMUNIDAD = ["Plagas", "Suelos", "Bioinsumos", "Casos de Éxito", "Intercambio de Semillas"];
 
@@ -42,5 +53,16 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
         date: "Hace 2 días"
       }
     ]
-  }
+  },
+  ...COMMUNITY_QA,
+  ...COMMUNITY_QA_2,
+  ...COMMUNITY_QA_3,
+  ...COMMUNITY_QA_4,
+  ...COMMUNITY_QA_5,
+  ...COMMUNITY_QA_6,
+  ...COMMUNITY_QA_7,
+  ...COMMUNITY_QA_8,
+  ...COMMUNITY_QA_9,
+  ...COMMUNITY_QA_10,
+  ...COMMUNITY_QA_11
 ];

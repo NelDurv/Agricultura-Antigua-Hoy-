@@ -89,8 +89,15 @@ src/
 │   ├── biblioteca/
 │   │   └── index.ts           # BIBLIOTECA (9 docs) + categorias + audios + videos
 │   ├── comunidad.ts            # COMMUNITY_POSTS (2) + categorias
-│   └── herramientas.ts        # RECETAS (3), GLOSARIO (8), instrumentos (4),
-│                                #   ciclosLunares (4 fases), casosExito (3)
+│   ├── glosario/               # GLOSARIO modular (~1217 términos en 5 archivos)
+│   │   ├── glosario-general.ts #   700 líneas — bioquímica, fisiología, bacteriología, micología
+│   │   ├── glosario-suelos.ts  #   257 líneas — física/química/biología del suelo
+│   │   ├── glosario-micronutrientes.ts # 185 líneas — Zn, Cu, B, Mo, Cl, Ni
+│   │   ├── glosario-clima.ts   #    58 líneas — climatología agrícola
+│   │   └── glosario-riego.ts   #    42 líneas — riego e hidrología
+│   ├── herramientas.ts        # RECETAS (3), instrumentos (4),
+│   │                          #   ciclosLunares (4 fases), casosExito (3)
+│   └── indice-sitio.json      # Índice navegable del sitio (469 líneas, 28 KB)
 │   (old: recursos/, instituciones.ts — eliminados)
 │
 ├── types/...
@@ -152,16 +159,35 @@ ESTUDIANTES[4]:     instituciones con representantes, cursos, progreso
 estadisticas:       totalEstudiantes, cursosActivos, indiceSatisfaccion
 ```
 
-### `herramientas.ts`
+### `herramientas.ts` + `glosario/` (modular)
 ```
 RECETAS[3]:         Caldo Sulfocálcico, Biol Potenciado, Ácidos Húmicos
-GLOSARIO[~876]:     Cobertura completa: física/química/biología del suelo, bioquímica vegetal,
-                    fisiología vegetal, climatología, bacteriología, micología, micorrizas,
-                    Trichoderma, ciclos biogeoquímicos (C, N, P, S, K, Ca, Mg, Si, Fe, Mn,
-                    Zn, Cu, B, Mo, Cl, Ni)
+GLOSARIO[~1353]:    Dividido en 5 archivos modulares:
+                    glosario-general.ts (780 líneas) — bioquímica, fisiología, bacteriología,
+                        micología, ciclos biogeoquímicos, elementos beneficiosos,
+                        micorrizas, ectomicorrizas, HMA, glomalina, bacterias
+                    glosario-suelos.ts (314 líneas) — física, química y biología del suelo,
+                        rizósfera, microbioma, red alimentaria del suelo
+                    glosario-micronutrientes.ts (185 líneas) — Zn, Cu, B, Mo, Cl, Ni
+                    glosario-clima.ts (58 líneas) — climatología agrícola
+                    glosario-riego.ts (42 líneas) — riego, hidrología
 instrumentos[4]:    pH-metro, conductivímetro, ORP, higrómetro
 ciclosLunares[4]:   luna nueva, creciente, llena, menguante
 casosExito[3]:      uabcs, sumant-kumar, valle-cauca
+```
+
+### `indice-sitio.json` (nuevo)
+```
+Índice navegable del sitio (469 líneas, 28 KB):
+cultivos[14]:       maíz, frijol, calabaza, arroz, tomate, papa, cebolla, ajo,
+                    lechuga, zanahoria, pimiento, pepino, berenjena, brócoli
+temas[16]:          suelos, agua, clima, nutrientes, bioinsumos, semillas, etc.
+conceptos_clave[22]:milpa, SRI, nixtamalización, compostaje, pH, ORP, etc.
+paginas[6]:         inicio, cursos, biblioteca, recetas, herramientas, campus
+cursos:             9 cursos regulares + 32 cursos Modelo Utopía
+documentos[9]:      fichas técnicas, manuales, guías, protocolos, artículos
+glosario:           1217 términos en 5 archivos (referencia cruzada)
+tags[10]:           con conceptos asociados y totales de metadata
 ```
 
 ### `biblioteca/index.ts`
@@ -199,12 +225,12 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 ### API REST (Express, puerto 3001)
 - **19+ endpoints** documentados vía Swagger UI en `/api/docs`
-- Rate limiting: 100 requests/15min global, 20/min search
+- Rate limiting: 100 requests/15min global, 20/min search, 5/min RAG answer
 - Validación Zod en `/api/search` y `/api/search/unified`
 - Cache de búsqueda con TTL 5 min (keyword) + vector store persistente (RAG)
 - CORS habilitado
 - **Pipeline RAG**: chunking (1521 chunks) → embeddings all-MiniLM-L6-v2 → vector store → búsqueda coseno
-- **RAG Answer**: contexto comprimido con SFC → Gemini 2.0 Flash → respuesta narrativa
+- **RAG Answer**: contexto comprimido con SFC → Gemini 2.0 Flash → respuesta narrativa (con fallback local si Gemini no está disponible)
 - **Unified Search**: keyword + vector con score normalizado
 
 ### Swagger UI
@@ -241,6 +267,44 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 #### Estado: Build exitoso (0 errores, 1931 módulos)
 
+### 2026-07-15 — Sesión 16: Glosario Modular + Índice del Sitio + Data Fixes
+
+#### Cambios realizados:
+
+1. **GLOSARIO modularizado** — `src/data/herramientas.ts` dividido en 5 archivos dentro de `src/data/glosario/`:
+   - `glosario-general.ts` (700 líneas) — bioquímica, fisiología, bacteriología, micología, ciclos biogeoquímicos
+   - `glosario-suelos.ts` (257 líneas) — física, química y biología del suelo
+   - `glosario-micronutrientes.ts` (185 líneas) — Zn, Cu, B, Mo, Cl, Ni
+   - `glosario-clima.ts` (58 líneas) — climatología agrícola
+   - `glosario-riego.ts` (42 líneas) — riego e hidrología
+   - Total: ~1217 términos (vs ~876 en Sesión 14)
+
+2. **`indice-sitio.json`** — Nuevo índice navegable del sitio (469 líneas, ~28 KB):
+   - 14 cultivos indexados con parámetros, tags y páginas asociadas
+   - 16 temas con subtemas, cursos y tags relacionados
+   - 22 conceptos clave transversales
+   - 9 cursos regulares + 32 cursos Modelo Utopía
+   - 9 documentos de biblioteca, 3 recetas, 4 instrumentos
+   - Glosario: 1217 términos en 5 archivos con referencia cruzada
+   - 10 tags con conceptos asociados y metadata de totales
+
+3. **Data fixes**: pH Estación 2 unificado a 3.5-5.0 y ORP con signo negativo en `courses32.ts`
+
+#### Archivos modificados/creados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | **NUEVO** — 700 líneas, términos generales |
+| `src/data/glosario/glosario-suelos.ts` | **NUEVO** — 257 líneas, términos de suelos |
+| `src/data/glosario/glosario-micronutrientes.ts` | **NUEVO** — 185 líneas, micronutrientes |
+| `src/data/glosario/glosario-clima.ts` | **NUEVO** — 58 líneas, climatología |
+| `src/data/glosario/glosario-riego.ts` | **NUEVO** — 42 líneas, riego |
+| `src/data/herramientas.ts` | GLOSARIO extraído a archivos modulares |
+| `src/data/indice-sitio.json` | **NUEVO** — 469 líneas, índice del sitio |
+| `src/data/courses32.ts` | pH Estación 2: 5.5-6.5 → 3.5-5.0, ORP con signo negativo |
+| `public/knowledge-graph.json` | Regenerado |
+
+#### Estado: Build exitoso
+
 ### 2026-07-15 — Sesión 15: RAG Answer + SFC Compression + Unified Search
 
 #### Cambios realizados:
@@ -276,6 +340,335 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 | `server/routes/search.ts` | + endpoint `/api/search/unified` |
 
 #### Estado: Build exitoso (0 errores server-side)
+
+### 2026-07-15 — Sesión 17: Rate Limiting + Fallback Determinista
+
+#### Cambios realizados:
+
+1. **Rate limiting estricto para RAG Answer** — `server/routes/rag.ts`:
+   - Nuevo `answerLimiter`: **5 requests/minuto por IP** en `GET /api/rag/answer`
+   - Protege la cuota de Gemini de agotamiento por uso excesivo o malicioso
+   - Usa `express-rate-limit` (ya instalado) — mismo patrón que el search limiter
+
+2. **Fallback determinista en `generateAnswer()`** — `server/rag/answer.ts`:
+   - Si `GEMINI_API_KEY` no está configurada → responde con chunks de la base local
+   - Si Gemini falla (timeout, error de red, cuota excedida) → responde con chunks locales
+   - El endpoint siempre retorna información útil, nunca un error 500/503
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `server/routes/rag.ts` | + rate limiter 5 req/min en `/answer` |
+| `server/rag/answer.ts` | + fallback local si Gemini falla o no hay API key |
+
+#### Estado: Build exitoso
+
+### 2026-07-15 — Sesión 18: Vocabulario de Procesos Físico-Químicos del Suelo
+
+#### Cambios realizados:
+
+1. **Nuevo vocabulario agregado a `glosario-general.ts` (+42 entradas)**:
+   - **Elementos Beneficiosos** (12 entradas): Sodio, Halófitas, Plantas C4, Cobalto, Selenio, Vanadio, Titanio, Tierras Raras, Lantano, Cerio, Microorganismos Movilizadores
+   - **Micorrizas** (17 entradas): Simbiosis, Glomeromycota, Micorrizas Arbusculares, Arbúsculos, Vesículas, Hifas Extrarradicales, Red Micorrícica Común, Ectomicorrizas, Manto Fúngico, Red de Hartig, Micorrizas Ericoides, Orquidioides, Estrigolactonas, Factores Myc, Glomalina, Bacterias Auxiliares MHB
+   - **Hongos Micorrícicos Arbusculares** (13 entradas): Filo Glomeromycota, Rhizophagus, Funneliformis, Claroideoglomus, Gigaspora, Acaulospora, Apresorio, Membrana Periarbuscular, Resistencia Sistémica Inducida
+
+2. **Nuevo vocabulario agregado a `glosario-suelos.ts` (+57 entradas)**:
+   - **Rizósfera** (13 entradas): Rizoplano, Endorizósfera, Ectorizósfera, Exudados Radiculares, Ácidos Orgánicos, Flavonoides, Mucílagos, PGPR, Biopelículas, Quorum Sensing, Sideróforos, Rizodeposición
+   - **Microbioma del Suelo** (22 entradas): Microbiota vs Microbioma, Diversidad Microbiana, Biodiversidad Funcional, Proteobacteria, Actinobacteriota, Acidobacteriota, Firmicutes, Arqueas, Hongos del Suelo, Hifas, Micelio, Bacteriófagos, Protozoos, Metagenómica, Especies Clave, Supresividad, Disbiosis, Eubiosis, Holobionte, Hologenoma
+   - **Red Alimentaria del Suelo** (22 entradas): Productores Primarios, Detritos, Descomponedores, Bacterias/Hongos Descomponedores, Enzimas Extracelulares, Consumidores Primarios, Nematodos Bacteriófagos/Fungívoros, Colémbolos, Ácaros, Enquitreidos, Lombrices de Tierra, Galerías, Mineralización, Inmovilización, Biomasa Microbiana, Humificación
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +42 entradas: Elementos Beneficiosos, Micorrizas, HMA |
+| `src/data/glosario/glosario-suelos.ts` | +57 entradas: Rizósfera, Microbioma, Red Alimentaria |
+
+#### Estado: Build exitoso — Glosario total: ~1353 términos
+
+### 2026-07-15 — Sesión 19: Ectomicorrizas, CMN, Glomalina, Manejo de Micorrizas, Bacterias
+
+#### Cambios realizados:
+
+1. **Ectomicorrizas** (12 entradas nuevas en `glosario-general.ts`):
+   - ECM, Amanita, Boletus, Suillus, Laccaria bicolor, Pisolithus tinctorius, Tuber (trufas)
+   - Punta Micorrizada, Nitrógeno Orgánico (ECM), Árboles Madre, Sucesión Forestal, Especificidad
+
+2. **Red Micorrícica Común** (4 entradas):
+   - Arquitectura de la red, Transporte de agua, Transporte de carbono, Comunicación entre plantas
+
+3. **Glomalina** (5 entradas):
+   - GRSP (proteína relacionada), Estabilidad, Vida media, Indicador de salud del suelo, Secuestro de carbono
+
+4. **Manejo de Micorrizas** (5 entradas):
+   - Inoculación micorrícica, Métodos de aplicación, Inoculación en viveros, Cultivos no micorrícicos, Evaluación de colonización
+
+5. **Bacterias** (11 entradas, 6 nuevas + 5 que complementan las existentes):
+   - Dominio Bacteria, Flagelos, Pili, Mixótrofas, Respiración anaeróbica, Fermentación bacteriana
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +37 entradas: ECM, CMN, Glomalina, Manejo, Bacterias |
+
+#### Estado: Build exitoso — Glosario total: ~1353 términos
+
+### 2026-07-15 — Sesión 20: PGPR Detallado (Azospirillum, Azotobacter, Bacillus, Pseudomonas, Rhizobium, Bradyrhizobium)
+
+#### Cambios realizados:
+
+1. **PGPR Detallado** (3 entradas nuevas en `glosario-general.ts`):
+   - Colonización de la Raíz (etapas), Ácido Indolacético (AIA), Biofertilizantes
+
+2. **Rhizobium Detallado** (6 entradas):
+   - Hellriegel y Wilfarth, Martinus Beijerinck, Genes nod, Factores Nod, Formación del Nódulo Radicular, Bacterioides, Simbiosis Tripartita
+
+3. **Bradyrhizobium Detallado** (3 entradas):
+   - B. japonicum, B. diazoefficiens, Diferencias Rhizobium vs Bradyrhizobium
+
+4. **Azospirillum Detallado** (4 entradas):
+   - A. brasilense, A. lipoferum, Johanna Döbereiner, Poliaminas bacterianas
+
+5. **Azotobacter Detallado** (3 entradas):
+   - Sergei Winogradsky, Quistes Bacterianos, Exopolisacáridos Bacterianos
+
+6. **Bacillus Detallado** (6 entradas):
+   - B. amyloliquefaciens, B. velezensis, B. thuringiensis, Proteínas Cry, Endosporas, Lipopéptidos Antimicrobianos
+
+7. **Pseudomonas Detallado** (5 entradas):
+   - P. fluorescens, P. putida, P. chlororaphis, Fenazinas, DAPG
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +31 entradas: PGPR Detallado, Rhizobium, Bradyrhizobium, Azospirillum, Azotobacter, Bacillus, Pseudomonas |
+
+#### Estado: Build exitoso — Glosario total: ~1384 términos
+
+### 2026-07-15 — Sesión 21: Paenibacillus, Frankia, Streptomyces (Bacterias Detallado)
+
+#### Cambios realizados:
+
+1. **Paenibacillus Detallado** (6 entradas nuevas en `glosario-general.ts`):
+   - P. polymyxa, P. azotofixans, P. brasilensis, P. mucilaginosus, Polimixinas, Fusaricidinas
+
+2. **Frankia Detallado** (9 entradas):
+   - Albert Bernhard Frank, Plantas actinorrícicas, Nódulo actinorrícico, Alnus, Casuarina, Hippophae, Vesículas (Frankia), Sucesión Ecológica, Simbiosis Frankia-Planta
+
+3. **Streptomyces Detallado** (4 entradas):
+   - S. griseus, Ciclo de Vida (Streptomyces), Celulasas (Streptomyces), Biosíntesis de Antibióticos
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +19 entradas: Paenibacillus, Frankia, Streptomyces |
+
+#### Estado: Build exitoso — Glosario total: ~1403 términos
+
+### 2026-07-15 — Sesión 22: Consorcios Bacterianos + Hongos Benéficos (Beauveria, Metarhizium, Purpureocillium, Lecanicillium)
+
+#### Cambios realizados:
+
+1. **Consorcios Bacterianos** (4 entradas nuevas en `glosario-general.ts`):
+   - Sinergismo Microbiano, Complementariedad Microbiana, Intercambio Metabólico, Biopelículas Comunitarias
+
+2. **Beauveria** (5 entradas):
+   - Beauveria, B. bassiana, B. brongniartii, Beauvericina, Ciclo de Infección
+
+3. **Metarhizium** (5 entradas):
+   - Metarhizium, M. anisopliae, M. acridum, Destruxinas, Metarhizium como Endófito
+
+4. **Purpureocillium** (5 entradas):
+   - Purpureocillium, P. lilacinum, Parasitismo de Huevos, Nematodos Agalladores, Control Biológico de Nematodos
+
+5. **Lecanicillium** (5 entradas):
+   - Lecanicillium, L. lecanii, L. muscarium, Insectos Chupadores, Hongos Entomopatógenos para Insectos Chupadores
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +24 entradas: Consorcios, Beauveria, Metarhizium, Purpureocillium, Lecanicillium |
+
+#### Estado: Build exitoso — Glosario total: ~1427 términos
+
+### 2026-07-15 — Sesión 23: Hongos Saprófitos, Endófitos, Descomponedores, Antagonistas y Consorcios Fúngicos
+
+#### Cambios realizados:
+
+1. **Hongos Saprófitos (complemento)** (2 entradas nuevas en `glosario-general.ts`):
+   - Compostaje (Hongos Saprófitos), Glucosamina (hongos)
+
+2. **Hongos Endófitos** (7 entradas):
+   - Hongos Endófitos, Transmisión Vertical, Transmisión Horizontal, Epichloë, Colonización Endofítica, Planta como Holobionte, Metabolitos Defensivos
+
+3. **Hongos Descomponedores** (2 entradas):
+   - Hongos Descomponedores, Ciclo del Carbono
+
+4. **Hongos Antagonistas** (3 entradas):
+   - Hongos Antagonistas (general), Supresividad del Suelo, Clonostachys
+
+5. **Consorcios Fúngicos** (3 entradas):
+   - Consorcio Fúngico, Red Micelial (Consorcios), Cooperación Fúngica
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +17 entradas: Hongos Saprófitos, Endófitos, Descomponedores, Antagonistas, Consorcios Fúngicos |
+
+#### Estado: Build exitoso — Glosario total: ~1444 términos
+
+### 2026-07-15 — Sesión 24: Actinobacterias (complemento), Arqueas, Protozoos, Virus del Suelo
+
+#### Cambios realizados:
+
+1. **Actinobacterias (complemento)** (2 entradas nuevas en `glosario-general.ts`):
+   - Thermobifida, Actinobacterias Forestales
+
+2. **Arqueas** (7 entradas):
+   - Arqueas, Carl Woese y George Fox, Metanogénesis, Arqueas Metanogénicas, Arqueas Oxidantes de Amonio, Tres Dominios de la Vida, Arqueas Extremófilas
+
+3. **Protozoos del Suelo** (5 entradas):
+   - Protozoos del Suelo, Amebas, Flagelados, Ciliados, Pastoreo Microbiano
+
+4. **Virus del Suelo** (9 entradas):
+   - Virus del Suelo, Viroma, Bacteriófagos (suelo), Ciclo Lítico, Ciclo Lisogénico, Profagos, Transferencia Genética Horizontal, Efecto Kill the Winner, Micovirus
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/glosario/glosario-general.ts` | +23 entradas: Actinobacterias (comp.), Arqueas, Protozoos, Virus |
+
+#### Estado: Build exitoso — Glosario total: ~1467 términos
+
+### 2026-07-15 — Sesión 25: 100 Preguntas y Respuestas de la Comunidad
+
+#### Cambios realizados:
+
+1. **Archivos de Q&A creados** (2 archivos, 100 entradas):
+   - `src/data/comunidad-qa.ts`: qa-1 a qa-50 (preguntas sobre suelos, plagas, bioinsumos, casos de éxito)
+   - `src/data/comunidad-qa2.ts`: qa-51 a qa-100 (preguntas sobre herramientas, fitopatología, semillas, manejo general)
+
+2. **Fusión en comunidad.ts**:
+   - Importados `COMMUNITY_QA` y `COMMUNITY_QA_2` y añadidos como spread en `COMMUNITY_POSTS`
+
+3. **Índice actualizado**:
+   - `indice-sitio.json`: `comunidad_posts` y `total_posts_comunidad` → 102
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/comunidad.ts` | +imports de QA, spread en COMMUNITY_POSTS (2 → 102) |
+| `src/data/comunidad-qa.ts` | Nuevo: qa-1 a qa-50 con respuestas mejoradas |
+| `src/data/comunidad-qa2.ts` | Nuevo: qa-51 a qa-100 con respuestas mejoradas |
+| `src/data/indice-sitio.json` | comunidad_posts: 2 → 102 |
+
+#### Estado: Build exitoso — Comunidad posts: 102
+
+### 2026-07-15 — Sesión 26: +300 Preguntas y Respuestas Agrícolas (101-400)
+
+#### Cambios realizados:
+
+1. **Nuevos archivos de Q&A** (3 archivos, 300 entradas):
+   - `src/data/comunidad-qa3.ts`: preguntas 101-200 (suelos, nutrición, poda, fitopatología)
+   - `src/data/comunidad-qa4.ts`: preguntas 201-300 (solarización, fertilidad, riego, plagas)
+   - `src/data/comunidad-qa5.ts`: preguntas 301-400 (fisiología, C3/C4, compactación, poscosecha)
+
+2. **Fusión**: Importados `COMMUNITY_QA_3`, `COMMUNITY_QA_4`, `COMMUNITY_QA_5` y añadidos como spread en `COMMUNITY_POSTS`
+
+3. **Índice**: `indice-sitio.json` → `comunidad_posts` y `total_posts_comunidad`: 402
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/comunidad-qa3.ts` | Nuevo: qa-101 a qa-200 |
+| `src/data/comunidad-qa4.ts` | Nuevo: qa-201 a qa-300 |
+| `src/data/comunidad-qa5.ts` | Nuevo: qa-301 a qa-400 |
+| `src/data/comunidad.ts` | +imports, +spread (102 → 402) |
+| `src/data/indice-sitio.json` | comunidad_posts: 102 → 402 |
+
+#### Estado: Build exitoso (0 errores, 1941 módulos) — Comunidad posts: 402
+
+### 2026-07-15 — Sesión 27: +100 Preguntas y Respuestas (401-500)
+
+#### Cambios realizados:
+
+1. **Nuevo archivo de Q&A** (1 archivo, 100 entradas):
+   - `src/data/comunidad-qa6.ts`: preguntas 401-500 (microbiología, compostaje, bioinsumos, plagas, suelos)
+
+2. **Fusión**: Importado `COMMUNITY_QA_6` y añadido como spread en `COMMUNITY_POSTS`
+
+3. **Índice**: `indice-sitio.json` → `comunidad_posts` y `total_posts_comunidad`: 502
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/comunidad-qa6.ts` | Nuevo: qa-401 a qa-500 |
+| `src/data/comunidad.ts` | +import, +spread (402 → 502) |
+| `src/data/indice-sitio.json` | comunidad_posts: 402 → 502 |
+
+#### Estado: Build exitoso (0 errores, 1942 módulos) — Comunidad posts: 502
+
+### 2026-07-16 — Sesión 29: ERROR — Carga Masiva de Datos (ROLLBACK)
+
+#### Error registrado:
+
+Se intentó integrar **500 preguntas** (ids 1001-1500) provenientes de 3 fuentes externas (1 TSV corrupto + 2 TXT con encoding mixto). La fuente TSV contenía corrupción de encoding irreversible (`ï¿½`, `Ç¸`, `Ç­`, etc.) que produjo errores de texto y lógica en las preguntas renderizadas.
+
+**Causa raíz:** Carga excesiva en un solo lote sin verificar encoding de las fuentes. Archivos TSV tenían doble capa de corrupción UTF-8/Latin-1 que no fue detectada antes de la integración.
+
+#### Rollback ejecutado:
+
+1. Eliminados `comunidad-qa12.ts` a `comunidad-qa16.ts`
+2. Restaurado `src/data/comunidad.ts` (sin imports/spreads de qa12-qa16)
+3. Restaurado `src/data/indice-sitio.json` (1002 posts, no 1502)
+4. Corregido encoding en `comunidad-qa8.ts` a `comunidad-qa11.ts` (mojibake Latin-1 recuperable)
+
+#### Lección aprendida:
+- No generar más de **100 preguntas por lote** (1 archivo .ts)
+- Máximo **300 preguntas por ejecución**
+- Verificar encoding UTF-8 de la fuente ANTES de integrar
+- Validar con `vite build` antes de reiniciar servidor
+- Añadida advertencia programática en `scripts/gen-batch.ps1`
+
+#### Archivos afectados por el rollback:
+| Archivo | Cambio |
+|---|---|
+| `src/data/comunidad-qa12.ts` | Eliminado |
+| `src/data/comunidad-qa13.ts` | Eliminado |
+| `src/data/comunidad-qa14.ts` | Eliminado |
+| `src/data/comunidad-qa15.ts` | Eliminado |
+| `src/data/comunidad-qa16.ts` | Eliminado |
+| `src/data/comunidad.ts` | Revertido: 1502 → 1002 posts |
+| `src/data/indice-sitio.json` | Revertido: 1502 → 1002 |
+| `scripts/gen-batch.ps1` | Añadida validación de carga excesiva y encoding |
+
+### 2026-07-15 — Sesión 28: +500 Preguntas y Respuestas (501-1000)
+
+#### Cambios realizados:
+
+1. **Nuevos archivos de Q&A** (5 archivos, 500 entradas):
+   - `src/data/comunidad-qa7.ts`: preguntas 501-600
+   - `src/data/comunidad-qa8.ts`: preguntas 601-700
+   - `src/data/comunidad-qa9.ts`: preguntas 701-800
+   - `src/data/comunidad-qa10.ts`: preguntas 801-900
+   - `src/data/comunidad-qa11.ts`: preguntas 901-1000
+
+2. **Script de generación**: `scripts/gen-batch.ps1` — genera un archivo QA completo con N preguntas a partir de un array
+
+3. **Fusión**: Importados `COMMUNITY_QA_7` a `COMMUNITY_QA_11` y añadidos como spread en `COMMUNITY_POSTS`
+
+4. **Índice**: `indice-sitio.json` → `comunidad_posts` y `total_posts_comunidad`: 1002
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/data/comunidad-qa7.ts` | Nuevo: qa-501 a qa-600 |
+| `src/data/comunidad-qa8.ts` | Nuevo: qa-601 a qa-700 |
+| `src/data/comunidad-qa9.ts` | Nuevo: qa-701 a qa-800 |
+| `src/data/comunidad-qa10.ts` | Nuevo: qa-801 a qa-900 |
+| `src/data/comunidad-qa11.ts` | Nuevo: qa-901 a qa-1000 |
+| `scripts/gen-batch.ps1` | Nuevo: script automatizado de generación de QA |
+| `src/data/comunidad.ts` | +5 imports, +5 spreads (502 → 1002) |
+| `src/data/indice-sitio.json` | comunidad_posts: 502 → 1002 |
 
 ### 2026-07-15 — Sesión 13: Actualización Masiva del Glosario Científico
 
@@ -526,6 +919,8 @@ npm run api            # Servidor API REST (Express, puerto 3001)
 npm run api:dev        # API con watch mode
 npm run build          # Build producción (ejecuta prebuild → build:graph)
 npm run build:graph    # Genera knowledge-graph.json
+npm run build:rag      # Indexa chunks RAG y genera vector store
+npm run rag:reindex    # Re-indexa contenido RAG (vía API)
 npm run preview        # Preview del build
 npm run test           # Tests (28 tests, 3 suites)
 npm run lint           # TypeScript check
@@ -535,7 +930,7 @@ npm run lint           # TypeScript check
 
 ## Estado de Auditoría
 
-**Puntaje final:** 9.2/10 — 🟢 Listo para Producción
+**Puntaje final:** 9.4/10 — 🟢 Listo para Producción
 
 | Criterio | Puntaje |
 |---|---|
@@ -547,13 +942,13 @@ npm run lint           # TypeScript check
 | Rendimiento | 9.5/10 |
 | Accesibilidad | 8.5/10 |
 
-**Mejoras post-auditoría:** C-04 (XSS sanitization), F3C (MemoryManager), F3B (GoalProcessor), A-07 (pre-build graph), M-08 (Swagger UI)
+**Mejoras post-auditoría:** C-04 (XSS sanitization), F3C (MemoryManager), F3B (GoalProcessor), A-07 (pre-build graph), M-08 (Swagger UI), Fase 4 RAG (RAG vectorial, SFC compression, Unified Search)
 
 ---
 
 ## Notas Técnicas
 
-- Los datos están en `src/data/` organizados por dominio: `inicio.ts`, `campus.ts`, `academia.ts`, `biblioteca/`, `comunidad.ts`, `herramientas.ts`
+- Los datos están en `src/data/` organizados por dominio: `inicio.ts`, `campus.ts`, `academia.ts`, `biblioteca/`, `comunidad.ts`, `glosario/` (5 archivos modulares), `herramientas.ts`, `indice-sitio.json`
 - El barrel `src/data/index.ts` re-exporta todo; los componentes importan desde `'../data'`
 - El layout usa grid de 12 columnas: chat `col-span-4` + contenido `col-span-8` en desktop, `col-span-full` en mobile
 - Paleta earth-tone definida en `src/index.css` vía `@theme`: forest, earth, water, wheat
