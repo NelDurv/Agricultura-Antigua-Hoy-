@@ -150,10 +150,36 @@ export default function RecursosSection() {
     );
   };
 
-  const filteredGlosario = GLOSARIO.filter(item => 
-    item.termino.toLowerCase().includes(glosarioQuery.toLowerCase()) ||
-    item.definicion.toLowerCase().includes(glosarioQuery.toLowerCase())
-  );
+  const filteredGlosario = React.useMemo(() => {
+    if (!glosarioQuery.trim()) return GLOSARIO;
+    const q = glosarioQuery.toLowerCase();
+    const exact = GLOSARIO.filter(item =>
+      item.termino.toLowerCase().includes(q) ||
+      item.definicion.toLowerCase().includes(q)
+    );
+    if (exact.length > 0) return exact;
+
+    const tokens = q.split(/\s+/).filter(w => w.length > 2);
+    if (tokens.length === 0) return GLOSARIO;
+
+    const scored = GLOSARIO.map(item => {
+      let score = 0;
+      const term = item.termino.toLowerCase();
+      const def = item.definicion.toLowerCase();
+      for (const t of tokens) {
+        if (term.includes(t)) score += 10;
+        else if (def.includes(t)) score += 3;
+      }
+      return { item, score };
+    })
+    .filter(e => e.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(e => e.item);
+
+    return scored.length > 0 ? scored.slice(0, 50) : GLOSARIO.filter(item =>
+      tokens.some(t => item.termino.toLowerCase().includes(t))
+    );
+  }, [glosarioQuery]);
 
   const filteredRecipes = selectedCategory === "Todos"
     ? RECETAS

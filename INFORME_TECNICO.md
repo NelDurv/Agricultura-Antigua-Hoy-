@@ -1,9 +1,9 @@
 # INFORME TÉCNICO — Agricultura Antigua
 
-**Versión:** 1.2.0
-**Fecha:** 15 de julio de 2026
+**Versión:** 1.3.0
+**Fecha:** 17 de julio de 2026
 **Paradigma:** Sistema Operativo Conversacional con Workspace gobernado por Motor de Decisiones
-**Auditoría arquitectónica:** 9.2/10 → 9.4/10 (post-Fase 4 RAG)
+**Auditoría arquitectónica:** 9.2/10 → 9.4/10 → 9.5/10 (post-Fase 4 RAG + Fixes Asistente)
 
 ---
 
@@ -173,12 +173,14 @@ simbolos-sfc.json   # Diccionario SFC (88 términos, 7 categorías)
 
 ---
 
-## 5–33. (sin cambios respecto a v1.1.0)
+## 5–33. (sin cambios respecto a v1.2.0)
 
-Ver secciones 5–33 del informe previo. El contenido de las secciones 5 a 33 se mantiene idéntico a la versión 1.1.0, con las siguientes excepciones:
+Ver secciones 5–33 del informe previo. El contenido de las secciones 5 a 33 se mantiene idéntico a la versión 1.2.0, con las siguientes excepciones:
 
+- **Sección 4 (Estructura)**: se añade `glosario-cientifico.ts` (6º archivo de glosario, 15 entradas científicas).
+- **Sección 6 (Glosario)**: actualizado a 1512 términos en 6 archivos.
 - **Sección 15 (API REST)**: se actualiza a continuación.
-- **Sección 32 (Historial)**: se añade la Sesión 15 al final.
+- **Sección 32 (Historial)**: se añade la Sesión 16 al final.
 
 ---
 
@@ -235,8 +237,9 @@ const UnifiedSearchSchema = z.object({
 ## 32. Historial de Implementación por Sesiones (actualizado)
 
 | Fase | Sesión | Archivos | Logro |
-|---|---|---|---|
+|---|---|---|---|---|
 | **4-RAG** | 31 | `rag/*`, `simbolos-sfc.json`, `routes/rag.ts`, `routes/search.ts` | RAG vectorial (1521 chunks), SFC compression, RAG Answer (Gemini), Unified Search |
+| **4-FIX** | 32 | `responseComposer.ts`, `graph.ts`, `RecursosSection.tsx`, `BrainContext.tsx`, `glosario-cientifico.ts` | Fix tarjeta vacía (glossary → node), bigram 55%, tokenización búsqueda, buildEdges optimizado, msgCounter síncrono |
 
 ---
 
@@ -427,5 +430,5 @@ GET /api/search/unified?q=<query>&limit=<1-30>
 
 ---
 
-*Documento generado el 15 de julio de 2026.*
+*Documento generado el 17 de julio de 2026.*
 *Próxima revisión: al completar Fase 5 (Monitoreo).*

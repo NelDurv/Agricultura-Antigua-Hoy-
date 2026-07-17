@@ -72,8 +72,20 @@ const INITIAL_SUGGESTIONS: Suggestion[] = [];
 
 const BrainContext = createContext<BrainState | null>(null);
 
-let msgCounter = 0;
 let layerCounter = 0;
+let msgCounter: number = (() => {
+  try {
+    const saved = storage.get(STORAGE_KEYS.MESSAGES);
+    if (Array.isArray(saved) && saved.length > 1) {
+      const maxId = saved.reduce((max: number, m: any) => {
+        const match = m.id?.match(/^msg-(\d+)$/);
+        return match ? Math.max(max, parseInt(match[1], 10)) : max;
+      }, 0);
+      return maxId;
+    }
+  } catch {}
+  return 0;
+})();
 
 export function BrainProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<Message[]>([
@@ -106,9 +118,13 @@ export function BrainProvider({ children }: { children: ReactNode }) {
 
     const savedMessages = storage.get(STORAGE_KEYS.MESSAGES);
     if (savedMessages && savedMessages.length > 1) {
-      setMessages(savedMessages);
-      const userCount = savedMessages.filter((m: any) => m.role === 'user').length;
-      msgCounter = userCount;
+      const seen = new Set<string>();
+      const unique = savedMessages.filter((m: any) => {
+        if (seen.has(m.id)) return false;
+        seen.add(m.id);
+        return true;
+      });
+      setMessages(unique);
     }
 
     const savedWorkspace = storage.get(STORAGE_KEYS.WORKSPACE);

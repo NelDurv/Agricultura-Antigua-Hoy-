@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import rateLimit from 'express-rate-limit';
 import { searchChunks, getCollectionStats, generateAnswer } from '../rag';
 import { runIndexer } from '../rag/indexer';
 
@@ -71,7 +72,16 @@ ragRouter.post('/reindex', async (_req, res) => {
   }
 });
 
-ragRouter.get('/answer', async (req, res) => {
+// Rate limiting estricto para Gemini (evita agotar cuota de API)
+const answerLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiadas consultas al asistente. Espera un minuto antes de preguntar de nuevo.' },
+});
+
+ragRouter.get('/answer', answerLimiter, async (req, res) => {
   const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';
   if (!q) {
     res.status(400).json({ error: 'Parámetro "q" requerido' });
@@ -81,12 +91,8 @@ ragRouter.get('/answer', async (req, res) => {
   try {
     const result = await generateAnswer(q);
     res.json(result);
-  } catch (err: any) {
-    if (err.message?.includes('GEMINI_API_KEY')) {
-      res.status(503).json({ error: 'API key de Gemini no configurada', hint: 'Define GEMINI_API_KEY en .env' });
-    } else {
-      console.error('[RAG] Answer error:', err);
-      res.status(500).json({ error: 'Error generando respuesta' });
-    }
+  } catch (err) {
+    console.error('[RAG] Answer error:', err);
+    res.status(500).json({ error: 'Error generando respuesta' });
   }
 });

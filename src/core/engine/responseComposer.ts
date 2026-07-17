@@ -2,6 +2,7 @@ import type { Plan, Task } from './types';
 import type { KnowledgeNode } from '../knowledge/types';
 import { searchNodes } from '../knowledge/graph';
 import { capabilityRegistry } from './capabilities';
+import { COURSES32 } from '../../data';
 
 export interface ComposedResponse {
   content: string;
@@ -11,6 +12,27 @@ export interface ComposedResponse {
 }
 
 let layerCounter = 0;
+
+function extractAnswer(text: string, tokens: string[]): string {
+  const lower = text.toLowerCase();
+  const sentences = text.split(/(?<=\.)\s+/);
+  const wantsCount = tokens.some(t => t.startsWith('cuant'));
+  let bestSentence = '';
+  let bestScore = 0;
+  for (const s of sentences) {
+    const sLow = s.toLowerCase();
+    let score = 0;
+    for (const t of tokens) {
+      if (sLow.includes(t)) score += t.length;
+    }
+    if (wantsCount && /\b\d+\b/.test(s)) score += 20;
+    if (score > bestScore && s.length < 300) {
+      bestScore = score;
+      bestSentence = s.trim();
+    }
+  }
+  return bestSentence || sentences.slice(0, 3).join(' ').slice(0, 300);
+}
 
 function buildContentFromPlan(plan: Plan, results: KnowledgeNode[], query: string): string {
   const top = results.slice(0, 5);
@@ -22,6 +44,7 @@ function buildContentFromPlan(plan: Plan, results: KnowledgeNode[], query: strin
   }
 
   const best = top[0];
+  const queryTokens = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
   const parts: string[] = [];
 
   // Intent-based intro
@@ -37,14 +60,22 @@ function buildContentFromPlan(plan: Plan, results: KnowledgeNode[], query: strin
   const intro = INTRO_MAP[plan.intent.type] || `Aquí tienes **${best.title}**:`;
   parts.push(intro);
 
-  // Description
-  const desc = best.description.replace(/\*\*/g, '').slice(0, 250);
-  parts.push(desc.length < best.description.length ? `${desc}...` : desc);
+  // Extract the most relevant sentence(s) from full text
+  const fullText = best.fullText || best.description;
+  const answer = extractAnswer(fullText, queryTokens);
+  parts.push(answer);
+
+  // Add related terms if available
+  const relatedTerms = top.slice(1, 4).map(r => r.title).join(', ');
+  if (top.length > 1 && top[1].title !== best.title) {
+    parts.push(`También relacionado: ${relatedTerms}.`);
+  }
 
   // Add plan reasoning if there are multiple tasks
   const panelTasks = plan.tasks.filter(t => t.type === 'open-panel');
   if (panelTasks.length > 0) {
-    parts.push(`\nHe preparado ${panelTasks.length} panel(es) en tu espacio de trabajo.`);
+    const label = panelTasks.length === 1 ? 'panel' : 'paneles';
+    parts.push(`\nHe preparado ${panelTasks.length} ${label} en tu espacio de trabajo.`);
   }
 
   return parts.join('\n\n');
@@ -113,16 +144,14 @@ function buildLayers(plan: Plan, results: KnowledgeNode[]): { id: string; type: 
 
   // Map node to layer component
   let component: string;
-  if (bestType === 'course' || bestTaxon.includes('curso')) {
+  if ((bestType === 'course' || bestTaxon.includes('curso')) && COURSES32.some(c => c.id === best.id)) {
     component = 'course';
   } else if (bestType === 'recipe' || bestTaxon.includes('receta')) {
     component = 'recipe';
   } else if (bestTaxon.includes('biblioteca') || bestType === 'article' || bestType === 'manual' || bestType === 'guide') {
     component = 'document';
-  } else if (bestType === 'glossary') {
-    component = 'resource';
   } else {
-    component = 'resource';
+    component = 'node';
   }
 
   layers.push({

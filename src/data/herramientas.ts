@@ -4,6 +4,7 @@ import { GLOSARIO_RIEGO } from './glosario/glosario-riego';
 import { GLOSARIO_CLIMA } from './glosario/glosario-clima';
 import { GLOSARIO_MICRONUTRIENTES } from './glosario/glosario-micronutrientes';
 import { GLOSARIO_GENERAL } from './glosario/glosario-general';
+import { GLOSARIO_CIENTIFICO } from './glosario/glosario-cientifico';
 
 /* ─── RECETAS ─── */
 export const RECETAS: Receta[] = [
@@ -37,6 +38,7 @@ export const GLOSARIO: GlosarioItem[] = [
   ...GLOSARIO_CLIMA,
   ...GLOSARIO_MICRONUTRIENTES,
   ...GLOSARIO_GENERAL,
+  ...GLOSARIO_CIENTIFICO,
 ];
 
 /* ─── INSTRUMENTOS ─── */

@@ -89,12 +89,13 @@ src/
 │   ├── biblioteca/
 │   │   └── index.ts           # BIBLIOTECA (9 docs) + categorias + audios + videos
 │   ├── comunidad.ts            # COMMUNITY_POSTS (2) + categorias
-│   ├── glosario/               # GLOSARIO modular (~1217 términos en 5 archivos)
-│   │   ├── glosario-general.ts #   700 líneas — bioquímica, fisiología, bacteriología, micología
-│   │   ├── glosario-suelos.ts  #   257 líneas — física/química/biología del suelo
+│   ├── glosario/               # GLOSARIO modular (~1512 términos en 6 archivos)
+│   │   ├── glosario-general.ts #   780 líneas — bioquímica, fisiología, bacteriología, micología
+│   │   ├── glosario-suelos.ts  #   314 líneas — física/química/biología del suelo
 │   │   ├── glosario-micronutrientes.ts # 185 líneas — Zn, Cu, B, Mo, Cl, Ni
 │   │   ├── glosario-clima.ts   #    58 líneas — climatología agrícola
-│   │   └── glosario-riego.ts   #    42 líneas — riego e hidrología
+│   │   ├── glosario-riego.ts   #    42 líneas — riego e hidrología
+│   │   └── glosario-cientifico.ts #  15 líneas — biotecnología, fisiología molecular, estrés
 │   ├── herramientas.ts        # RECETAS (3), instrumentos (4),
 │   │                          #   ciclosLunares (4 fases), casosExito (3)
 │   └── indice-sitio.json      # Índice navegable del sitio (469 líneas, 28 KB)
@@ -130,7 +131,7 @@ server/                         # Backend REST + documentación
 │   └── answer.ts              # Respuesta con Gemini + contexto SFC
 
 public/
-└── knowledge-graph.json        # Pre-built knowledge graph (1274 nodos, 53471 aristas)
+└── knowledge-graph.json        # (eliminado — se construye en runtime desde índices)
 
 scripts/
 └── build-graph.ts              # Script para generar knowledge-graph.json
@@ -162,7 +163,7 @@ estadisticas:       totalEstudiantes, cursosActivos, indiceSatisfaccion
 ### `herramientas.ts` + `glosario/` (modular)
 ```
 RECETAS[3]:         Caldo Sulfocálcico, Biol Potenciado, Ácidos Húmicos
-GLOSARIO[~1353]:    Dividido en 5 archivos modulares:
+GLOSARIO[~1512]:    Dividido en 6 archivos modulares:
                     glosario-general.ts (780 líneas) — bioquímica, fisiología, bacteriología,
                         micología, ciclos biogeoquímicos, elementos beneficiosos,
                         micorrizas, ectomicorrizas, HMA, glomalina, bacterias
@@ -171,6 +172,8 @@ GLOSARIO[~1353]:    Dividido en 5 archivos modulares:
                     glosario-micronutrientes.ts (185 líneas) — Zn, Cu, B, Mo, Cl, Ni
                     glosario-clima.ts (58 líneas) — climatología agrícola
                     glosario-riego.ts (42 líneas) — riego, hidrología
+                    glosario-cientifico.ts (15 líneas) — biotecnología, fisiología molecular,
+                        estrés abiótico/biótico, holobionte
 instrumentos[4]:    pH-metro, conductivímetro, ORP, higrómetro
 ciclosLunares[4]:   luna nueva, creciente, llena, menguante
 casosExito[3]:      uabcs, sumant-kumar, valle-cauca
@@ -238,13 +241,58 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 - Todos los endpoints documentados con parámetros, descripciones y códigos de respuesta
 
 ### Pre-build Knowledge Graph
-- `public/knowledge-graph.json` generado con `npm run build:graph`
-- 1274 nodos, 53471 aristas, ~6.5 MB
-- Carga síncrona en producción; runtime en desarrollo
+- `public/knowledge-graph.json` generado con `npm run build:graph` (archivo eliminado, se construye en runtime)
+- ~1500+ nodos (construido en runtime desde índices)
+- Carga en runtime únicamente; se eliminó la carga síncrona prebuild
 
 ---
 
 ## Registro de Cambios
+
+### 2026-07-17 — Sesión 33: Fallos de Asistente en Respuesta a Preguntas de Usuario
+
+#### Cambios realizados:
+
+1. **Fix tarjeta vacía del asistente** (`responseComposer.ts:153-154`):
+   - `buildLayers` asignaba `component: 'resource'` para entradas `glossary` → renderizaba `ResourceListView` que requiere `params.query` (enviado vacío)
+   - Cambiado a `component: 'node'` → renderiza `NodeDetailView(resourceId)` que muestra el contenido real del nodo
+
+2. **Fix falsos positivos en fuzzy matching** (`graph.ts:128`):
+   - Bigram threshold subido de 0.4 a 0.55 — eliminó falso positivo `tipos`↔`poros` (2/4=0.5)
+
+3. **Fix búsqueda de glosario sin resultados** (`RecursosSection.tsx:153-182`):
+   - Tokeniza la consulta y puntúa cada entrada (10pts término, 3pts definición) en vez de `String.includes()` sobre toda la pregunta
+
+4. **Fix respuesta irrelevante del asistente** (`responseComposer.ts:16-34`):
+   - `extractAnswer()` puntúa oraciones por solapamiento con tokens de la consulta
+   - +20 bonus si la oración contiene números y la consulta pregunta "cuántos/as"
+
+5. **Optimización buildEdges** (`graph.ts:4-44`):
+   - `Set` para deduplicación O(1) de aristas
+   - Tags con >50 nodos se saltan (evita timeout con 1500+ nodos)
+
+6. **Fix duplicados de React keys** (`BrainContext.tsx`):
+   - `msgCounter` inicializado síncronamente desde localStorage en vez de `useEffect` asíncrono
+
+7. **Fix `useMemo is not defined`** (`BrainContext.tsx`):
+   - Cambiado a `React.useMemo()` para evitar errores de HMR
+
+8. **Nuevo archivo de glosario científico** (`src/data/glosario/glosario-cientifico.ts`):
+   - 15 entradas: Inoculantes, Consorcios, Ingeniería Genética, CRISPR, Agricultura Biotecnológica,
+     Fotosíntesis, Respiración, Transpiración, Hormonas Vegetales (Fitohormonas), Desarrollo Radicular,
+     Floración, Fructificación, Estrés Abiótico, Estrés Biótico, Holobionte
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/core/engine/responseComposer.ts` | glossary → `component: 'node'`; `extractAnswer()` con scoring por token |
+| `src/core/knowledge/graph.ts` | bigram 0.4→0.55; Set dedup aristas; skip tags >50 nodos |
+| `src/components/RecursosSection.tsx` | Búsqueda de glosario tokenizada con puntuación |
+| `src/contexts/BrainContext.tsx` | `msgCounter` síncrono; `React.useMemo` |
+| `src/data/glosario/glosario-cientifico.ts` | **NUEVO** — 15 entradas científicas |
+| `public/knowledge-graph.json` | Eliminado (carga síncrona reemplazada por runtime) |
+
+#### Estado: Build exitoso (0 errores) — Glosario total: ~1512 términos
 
 ### 2026-07-15 — Sesión 14: Expansión del Glosario — Ciclos de Micronutrientes (Zn, Cu, B, Mo, Cl, Ni)
 
@@ -953,7 +1001,7 @@ npm run lint           # TypeScript check
 - El layout usa grid de 12 columnas: chat `col-span-4` + contenido `col-span-8` en desktop, `col-span-full` en mobile
 - Paleta earth-tone definida en `src/index.css` vía `@theme`: forest, earth, water, wheat
 - Fuentes: Cormorant Garamond (serif, headings) + Inter (sans, body) + Fira Code (mono)
-- El grafo de conocimiento carga `public/knowledge-graph.json` en producción; en dev construye en runtime
+- El grafo de conocimiento se construye en runtime desde los índices unificados (se eliminó la carga síncrona prebuild)
 - GoalProcessor singleton en `src/core/engine/`: pipeline goal-oriented que reemplazó generateResponse
 - MemoryManager en `src/core/memory/`: 3 capas con persistencia automática en localStorage
 - Los 32 cursos avanzados están en `src/data/campus.ts` con `COURSES32`

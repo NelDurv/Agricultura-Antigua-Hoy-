@@ -168,9 +168,14 @@ export default function ComunidadSection() {
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono tracking-wider font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded">
-                    {selectedPost.category}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-mono tracking-wider font-semibold text-emerald-800 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded">
+                      {selectedPost.category}
+                    </span>
+                    <span className="text-[9px] font-mono font-bold text-stone-400 bg-white border border-stone-200 rounded px-1.5 py-0.5">
+                      {selectedPost.id.replace('qa-', '#')}
+                    </span>
+                  </div>
                   <span className="text-[10px] text-stone-400 font-mono flex items-center gap-1">
                     <Calendar className="h-3 w-3" /> {selectedPost.date}
                   </span>
@@ -265,9 +270,14 @@ export default function ComunidadSection() {
                     </div>
 
                     <div className="space-y-1">
-                      <h4 className="font-serif text-base font-bold text-stone-900 group-hover:text-emerald-700 transition-colors leading-snug">
-                        {post.title}
-                      </h4>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[10px] font-mono font-bold text-stone-400 bg-white border border-stone-200 rounded-md px-1.5 py-0.5 mt-0.5 shrink-0">
+                          {post.id.replace('qa-', '#')}
+                        </span>
+                        <h4 className="font-serif text-base font-bold text-stone-900 group-hover:text-emerald-700 transition-colors leading-snug">
+                          {post.title}
+                        </h4>
+                      </div>
                       <p className="text-[11px] text-stone-500 font-mono">Por: {post.author}</p>
                     </div>
 

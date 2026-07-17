@@ -1,5 +1,7 @@
 import { searchNodes } from '../knowledge/graph';
+import type { KnowledgeType } from '../knowledge/types';
 import type { Intent, Plan, Task } from './types';
+import { COURSES32 } from '../../data';
 
 let taskCounter = 0;
 
@@ -34,7 +36,8 @@ function buildKnowledgeTasks(intent: Intent): Task[] {
   if (results.length > 0) {
     const top = results.slice(0, 5);
     const best = top[0];
-    const isCourseType = best.type === 'course' || best.taxons.some(t => t.includes('curso'));
+    const inCourses32 = COURSES32.some(c => c.id === best.id);
+    const isCourseType = (best.type === 'course' || best.taxons.some(t => t.includes('curso'))) && inCourses32;
     const isDocType = best.taxons.includes('biblioteca');
     const isRecipeType = best.type === 'recipe';
 
@@ -64,6 +67,14 @@ function buildKnowledgeTasks(intent: Intent): Task[] {
         target: best.id,
         params: { panelType: 'recipe', resourceId: best.id },
       });
+    } else if (best.type === 'glossary' || best.taxons.some(t => t === 'glosario')) {
+      tasks.push({
+        id: `task-${++taskCounter}`,
+        type: 'open-panel',
+        label: `Abrir glosario: ${best.title}`,
+        target: best.id,
+        params: { panelType: 'glossary', resourceId: best.id },
+      });
     } else if (isDocType) {
       tasks.push({
         id: `task-${++taskCounter}`,
@@ -80,12 +91,14 @@ function buildKnowledgeTasks(intent: Intent): Task[] {
         params: { panelType: 'document', resourceId: best.id },
       });
     } else {
+      const docTypes: KnowledgeType[] = ['article', 'manual', 'guide', 'protocol', 'infographic'];
+      const panelType = docTypes.includes(best.type) ? 'document' : 'glossary';
       tasks.push({
         id: `task-${++taskCounter}`,
         type: 'open-panel',
         label: `Abrir: ${best.title}`,
         target: best.id,
-        params: { panelType: 'document', resourceId: best.id },
+        params: { panelType, resourceId: best.id },
       });
     }
 

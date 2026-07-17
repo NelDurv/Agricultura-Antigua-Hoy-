@@ -10,13 +10,18 @@ export interface RagAnswerResult {
 
 export async function generateAnswer(query: string, topK = 5): Promise<RagAnswerResult> {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey === '') {
-    throw new Error('GEMINI_API_KEY no configurada');
-  }
+  const noApiKey = !apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey === '';
 
   const results = await searchChunks(query, topK);
   if (results.length === 0) {
     return { answer: 'No encontré información relevante para tu consulta en la base de conocimiento.', sources: [], chunksUsed: 0 };
+  }
+
+  if (noApiKey) {
+    console.warn('[RAG] GEMINI_API_KEY no configurada, usando fallback local');
+    const answer = `*Modo sin conexión — usando base de conocimiento local:*\n\n${results.map(r => `**${r.title}** — ${r.text.slice(0, 400)}`).join('\n\n')}\n\n_Para respuestas con IA, configura GEMINI_API_KEY en el archivo .env._`;
+    const sources = results.map(r => ({ title: r.title, source: r.source, sourceType: r.sourceType, score: Math.round(r.score * 1000) / 1000 }));
+    return { answer, sources, chunksUsed: results.length };
   }
 
   const compressedContext = results.map(r => compress(r.text)).join('\n\n---\n\n');
@@ -40,13 +45,18 @@ ${query}
 - No inventes datos, cifras ni recomendaciones.
 - Máximo 3 párrafos.`;
 
-  const ai = new GoogleGenAI({ apiKey });
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
-    contents: prompt,
-  });
-
-  const answer = (response as any).text || 'Lo siento, no pude generar una respuesta en este momento.';
+  let answer: string;
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+    });
+    answer = (response as any).text || 'Lo siento, no pude generar una respuesta en este momento.';
+  } catch (err) {
+    console.warn('[RAG] Gemini falló, usando fallback local:', (err as Error)?.message);
+    answer = `*El asistente IA no está disponible en este momento, pero encontré información relevante en mi base de conocimiento:*\n\n${results.map(r => `**${r.title}** — ${r.text.slice(0, 400)}`).join('\n\n')}\n\n_Puedes explorar los recursos completos en las secciones del sitio._`;
+  }
 
   const sources = results.map(r => ({
     title: r.title,

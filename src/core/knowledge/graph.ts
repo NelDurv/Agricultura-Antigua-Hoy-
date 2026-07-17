@@ -3,6 +3,8 @@ import { buildUnifiedIndex, entriesToNodes } from '../search/unifiedIndex';
 
 function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
   const edges: KnowledgeRelationship[] = [];
+  const edgeSet = new Set<string>();
+  const idSet = new Set(nodes.map(n => n.id));
   const tagIndex = new Map<string, string[]>();
 
   for (const n of nodes) {
@@ -15,21 +17,23 @@ function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
 
   for (const n of nodes) {
     for (const relatedId of n.relatedTo) {
-      if (nodes.some(other => other.id === relatedId)) {
-        edges.push({ sourceId: n.id, targetId: relatedId, relation: 'related' });
+      if (idSet.has(relatedId)) {
+        const key = n.id < relatedId ? `${n.id}|${relatedId}` : `${relatedId}|${n.id}`;
+        if (!edgeSet.has(key)) {
+          edgeSet.add(key);
+          edges.push({ sourceId: n.id, targetId: relatedId, relation: 'related' });
+        }
       }
     }
   }
 
   for (const [, ids] of tagIndex) {
-    if (ids.length < 2) continue;
+    if (ids.length < 2 || ids.length > 50) continue;
     for (let i = 0; i < ids.length; i++) {
       for (let j = i + 1; j < ids.length; j++) {
-        const exists = edges.some(e =>
-          (e.sourceId === ids[i] && e.targetId === ids[j]) ||
-          (e.sourceId === ids[j] && e.targetId === ids[i])
-        );
-        if (!exists) {
+        const key = ids[i] < ids[j] ? `${ids[i]}|${ids[j]}` : `${ids[j]}|${ids[i]}`;
+        if (!edgeSet.has(key)) {
+          edgeSet.add(key);
           edges.push({ sourceId: ids[i], targetId: ids[j], relation: 'related' });
         }
       }
@@ -41,22 +45,7 @@ function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
 
 let _graph: KnowledgeGraph | null = null;
 
-function tryLoadPrebuilt(): KnowledgeGraph | null {
-  try {
-    if (typeof window === 'undefined') return null;
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/knowledge-graph.json', false);
-    xhr.send();
-    if (xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      if (data?.nodes?.length > 0) return data;
-    }
-  } catch {}
-  return null;
-}
-
-const prebuilt = tryLoadPrebuilt();
-if (prebuilt) _graph = prebuilt;
+// prebuilt knowledge-graph.json removed — graph is always built from source
 
 export function buildKnowledgeGraph(): KnowledgeGraph {
   if (_graph) return _graph;
@@ -111,7 +100,7 @@ function tokenize(text: string): string[] {
     .filter(w => w.length > 2 && !STOP_WORDS.has(w));
 }
 
-/** Fuzzy match: substring, prefix, or bigram overlap > 40% */
+/** Fuzzy match: substring, prefix, or bigram overlap > 55% */
 function fuzzyMatch(token: string, field: string): boolean {
   if (field.includes(token)) return true;
   if (token.includes(field)) return true;
@@ -126,7 +115,7 @@ function fuzzyMatch(token: string, field: string): boolean {
       if (tokenBigrams.has(field.slice(i, i + 2))) overlap++;
     }
     const maxBigrams = Math.max(token.length - 1, field.length - 1);
-    if (maxBigrams > 0 && overlap / maxBigrams > 0.4) return true;
+    if (maxBigrams > 0 && overlap / maxBigrams > 0.55) return true;
   }
   return false;
 }
@@ -151,6 +140,10 @@ function scoreNode(node: KnowledgeNode, tokens: string[]): number {
     if (fuzzyMatch(token, fullLow)) score += 3;
     if (fuzzyMatch(token, descLow)) score += 2;
   }
+
+  // Boost richer content types over glossary/statistic/news
+  const richTypes = ['course', 'article', 'manual', 'guide'];
+  if (richTypes.includes(node.type)) score += 10;
 
   return score;
 }

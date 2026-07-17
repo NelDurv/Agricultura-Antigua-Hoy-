@@ -7,6 +7,7 @@ import {
 import { useAuth, useBrain } from '../contexts';
 import { UserMembership } from '../types';
 import SearchBar from './SearchBar';
+import logoInca from '../assets/icons/inca.png';
 
 const navItems = [
   { id: 'inicio', label: 'Inicio', icon: Home, route: '/' },
@@ -56,14 +57,14 @@ export default function Navbar() {
           id="nav-logo"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-stone-50 shadow-xs border border-gold">
-            <Sprout className="h-5 w-5 text-gold" />
+            <img src={logoInca} className="h-5 w-5" alt="Inca" />
           </div>
           <div className="hidden sm:block">
-            <h1 className="font-serif text-sm sm:text-base font-bold tracking-tight text-stone-900 leading-tight">
-              Agricultura Antigua
+            <h1 className="font-serif text-sm sm:text-base font-bold tracking-tight text-primary leading-tight">
+              Técnicas Ancestrales para la Agricultura Regenerativa y Sostenible
             </h1>
-            <p className="font-mono text-[8px] text-primary font-semibold tracking-wide uppercase">
-              Saberes Milenarios para Hoy
+            <p className="font-sans text-[14px] text-emerald-700 italic leading-snug max-w-[400px]">
+              Recordando la sabiduría agrícola tradicional para resolver los retos climáticos y de suelo de hoy.
             </p>
           </div>
         </div>
