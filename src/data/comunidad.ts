@@ -10,6 +10,7 @@ import { COMMUNITY_QA_8 } from './comunidad-qa8';
 import { COMMUNITY_QA_9 } from './comunidad-qa9';
 import { COMMUNITY_QA_10 } from './comunidad-qa10';
 import { COMMUNITY_QA_11 } from './comunidad-qa11';
+import { COMMUNITY_QA_12 } from './comunidad-qa12';
 
 export const CATEGORIAS_COMUNIDAD = ["Plagas", "Suelos", "Bioinsumos", "Casos de Éxito", "Intercambio de Semillas"];
 
@@ -64,5 +65,6 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
   ...COMMUNITY_QA_8,
   ...COMMUNITY_QA_9,
   ...COMMUNITY_QA_10,
-  ...COMMUNITY_QA_11
+  ...COMMUNITY_QA_11,
+  ...COMMUNITY_QA_12
 ];

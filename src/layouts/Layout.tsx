@@ -37,6 +37,14 @@ export default function Layout() {
   const navigate = useNavigate();
   const { isChatOpen, toggleChat, unreadCount, navigateToRoute, layers } = useBrain();
 
+  // Dynamic column spans for 3-column layout: chat | layers | content
+  const hasLayers = layers.length > 0;
+  const chatCols = hasLayers ? 'md:col-span-3' : 'md:col-span-4';
+  const layersCols = 'md:col-span-4';
+  const contentCols = isChatOpen
+    ? (hasLayers ? 'md:col-span-5' : 'md:col-span-8')
+    : (hasLayers ? 'md:col-span-8' : 'md:col-span-12');
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
@@ -60,15 +68,15 @@ export default function Layout() {
 
       <AccessibilityToolbar />
 
-      {/* 12-column grid: chat (4) | content (8) */}
+      {/* 12-column grid: chat | layers | content */}
       <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-12 gap-4 overflow-hidden">
-        {/* Chat Panel — col-span-4 */}
+        {/* Chat Panel */}
         <div
           id="conversation-column"
           className={`
             fixed inset-0 z-40 overflow-y-auto md:overflow-visible md:static md:z-auto
             ${isChatOpen ? 'block' : 'hidden'}
-            md:col-span-4 md:h-full md:min-h-0
+            ${chatCols} md:h-full md:min-h-0
             bg-white/95 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none
           `}
         >
@@ -88,16 +96,17 @@ export default function Layout() {
           </div>
         </div>
 
-        {/* Main Content — col-span-8 o col-span-12 según chat */}
-        <div className={`col-span-full min-w-0 flex flex-col gap-4 overflow-y-auto ${isChatOpen ? 'md:col-span-8' : 'md:col-span-12'}`}>
-          {layers.length > 0 && (
-            <div className="hidden lg:flex flex-col gap-3 overflow-y-auto shrink-0">
-              {layers.map((layer) => (
-                <LayerPanel key={layer.id} layer={layer} />
-              ))}
-            </div>
-          )}
+        {/* Layers Column — between chat and content */}
+        {hasLayers && (
+          <div className={`hidden lg:flex flex-col gap-3 overflow-y-auto shrink-0 ${layersCols}`}>
+            {layers.map((layer) => (
+              <LayerPanel key={layer.id} layer={layer} />
+            ))}
+          </div>
+        )}
 
+        {/* Main Content */}
+        <div className={`col-span-full min-w-0 flex flex-col gap-4 overflow-y-auto ${contentCols}`}>
           <div className="flex items-center justify-between shrink-0">
             <button
               onClick={toggleChat}

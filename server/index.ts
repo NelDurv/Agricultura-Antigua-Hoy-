@@ -20,6 +20,14 @@ import { ragRouter } from './routes/rag';
 const app = express();
 const PORT = parseInt(process.env.API_PORT || '3001', 10);
 
+// Startup validation
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey === '') {
+  console.warn('⚠️  [RAG] GEMINI_API_KEY no detectada. El endpoint /api/rag/answer operará en modo fallback local.');
+} else {
+  console.log('✅ [RAG] Gemini API Key configurada. Respuestas con IA activadas.');
+}
+
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:5173'],
   methods: ['GET'],

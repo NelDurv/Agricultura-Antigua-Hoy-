@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { 
   MessageSquare, 
   ThumbsUp, 
@@ -12,7 +12,8 @@ import {
   Calendar, 
   User2,
   X,
-  Send
+  Send,
+  Search
 } from "lucide-react";
 import { COMMUNITY_POSTS } from "../data";
 import { CommunityPost, Reply } from "../types";
@@ -35,7 +36,21 @@ export default function ComunidadSection() {
   const [newPostCategory, setNewPostCategory] = useState<CommunityPost["category"]>("General");
   const [newPostContent, setNewPostContent] = useState("");
 
-  const categories = ["Todos", "General", "Suelos", "Biofertilizantes", "Riego", "Plagas", "Casos de Éxito"];
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const categories = ["Todos", "General", "Suelos", "Biofertilizantes", "Bioinsumos", "Riego", "Plagas", "Casos de Éxito"];
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+    const q = searchQuery.toLowerCase();
+    return posts.filter(post =>
+      post.id.toLowerCase().includes(q) ||
+      post.title.toLowerCase().includes(q) ||
+      post.content.toLowerCase().includes(q) ||
+      post.category.toLowerCase().includes(q)
+    );
+  }, [searchQuery, posts]);
 
   const filteredPosts = posts.filter((post) => {
     return selectedCategory === "Todos" || post.category === selectedCategory;
@@ -121,8 +136,50 @@ export default function ComunidadSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        {/* Left Col: Filters and Create Post button */}
+        {/* Left Col: Search, Create Post and Filters */}
         <div className="lg:col-span-1 space-y-4">
+          {/* Search posts */}
+          <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl space-y-2">
+            <h4 className="text-[10px] font-mono uppercase text-stone-500 font-semibold tracking-wide">Buscar pregunta existente</h4>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-stone-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="#501, pH, botrytis..."
+                className="w-full rounded-xl bg-white border border-stone-200 focus:border-emerald-500 text-[11px] pl-9 pr-3 py-2.5 outline-none transition-all"
+              />
+            </div>
+            {searchResults && (
+              <div className="max-h-48 overflow-y-auto space-y-1 scrollbar-thin">
+                {searchResults.length === 0 ? (
+                  <p className="text-[10px] text-stone-400 text-center py-2">No hay preguntas existentes con ese texto</p>
+                ) : (
+                  searchResults.slice(0, 15).map(post => (
+                    <button
+                      key={post.id}
+                      onClick={() => { setSelectedPost(post); setSearchQuery(""); }}
+                      className="w-full text-left px-2.5 py-2 rounded-xl hover:bg-white border border-transparent hover:border-stone-200 transition-all group"
+                    >
+                      <div className="flex items-start gap-1.5">
+                        <span className="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 rounded px-1 py-0.5 mt-0.5 shrink-0">
+                          {post.id.replace('qa-', '#')}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-medium text-stone-800 line-clamp-2 leading-tight group-hover:text-emerald-700 transition-colors">
+                            {post.title}
+                          </p>
+                          <span className="text-[8px] font-mono text-stone-400">{post.category}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => setShowNewPostForm(true)}
             className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-stone-50 text-xs font-semibold rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-sm"
@@ -352,6 +409,7 @@ export default function ComunidadSection() {
                   <option value="General">General</option>
                   <option value="Suelos">Suelos</option>
                   <option value="Biofertilizantes">Biofertilizantes</option>
+                  <option value="Bioinsumos">Bioinsumos</option>
                   <option value="Riego">Riego</option>
                   <option value="Plagas">Plagas</option>
                   <option value="Casos de Éxito">Casos de Éxito</option>
