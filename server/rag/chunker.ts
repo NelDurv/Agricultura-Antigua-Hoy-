@@ -5,6 +5,7 @@ import { BIBLIOTECA } from '../../src/data/biblioteca/index';
 import { GLOSARIO } from '../../src/data/herramientas';
 import { RECETAS } from '../../src/data/herramientas';
 import { MITOS, PILARES, HERO } from '../../src/data/inicio';
+import { COMMUNITY_POSTS } from '../../src/data/comunidad';
 
 function slugify(text: string): string {
   return text
@@ -156,6 +157,19 @@ export function chunkAllContent(): RagChunk[] {
       title: p.titulo,
       tags: ['pilar'],
       metadata: {},
+    });
+  }
+
+  for (const p of COMMUNITY_POSTS) {
+    const repliesText = p.replies.map(r => r.content).join(' ');
+    chunks.push({
+      id: `qa__${p.id}`,
+      text: `${p.title}. ${p.content} ${repliesText}`,
+      source: p.id,
+      sourceType: 'comunidad',
+      title: p.title,
+      tags: [p.category, 'comunidad'],
+      metadata: { author: p.author, category: p.category },
     });
   }
 

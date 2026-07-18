@@ -2,7 +2,7 @@ export interface RagChunk {
   id: string;
   text: string;
   source: string;
-  sourceType: 'course' | 'course32' | 'biblioteca' | 'glosario' | 'receta' | 'mito' | 'pilar' | 'home';
+  sourceType: 'course' | 'course32' | 'biblioteca' | 'glosario' | 'receta' | 'mito' | 'pilar' | 'home' | 'comunidad';
   title: string;
   tags: string[];
   metadata: Record<string, string>;

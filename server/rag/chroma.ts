@@ -96,7 +96,9 @@ export async function searchChunks(
   }
 
   scored.sort((a, b) => b.score - a.score);
-  const top = scored.slice(0, topK);
+  const MIN_SCORE_THRESHOLD = 0.5;
+  const filtered = scored.filter(r => r.score >= MIN_SCORE_THRESHOLD);
+  const top = filtered.slice(0, topK);
 
   return top.map(({ vec, score }) => ({
     chunkId: vec.id,

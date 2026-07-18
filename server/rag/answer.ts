@@ -31,7 +31,7 @@ export async function generateAnswer(query: string, topK = 5): Promise<RagAnswer
   const compressedContext = results.map(r => compress(r.text)).join('\n\n---\n\n');
   const legend = getLegend();
 
-  const prompt = `Eres un experto en agricultura antigua, sostenible y regenerativa. Responde la pregunta del usuario usando SOLO el contexto proporcionado.
+  const prompt = `Eres un asistente experto en agricultura sostenible para pequeños productores. Responde la pregunta del usuario usando SOLO el contexto proporcionado.
 
 ## Contexto comprimido (formato SFC)
 ${compressedContext}
@@ -43,11 +43,21 @@ ${legend}
 ${query}
 
 ## Instrucciones
-- Responde en español, de forma clara, educativa y cálida como un agricultor experto.
+- Responde en español, claro, práctico y cálido como un agricultor experto.
 - Usa ÚNICAMENTE la información del contexto para responder.
-- Si el contexto no contiene suficiente información, indícalo honestamente.
+- Si el contexto no contiene suficiente información, di: "No tengo información suficiente sobre eso en mi base de conocimiento."
 - No inventes datos, cifras ni recomendaciones.
-- Máximo 3 párrafos.`;
+- Máximo 3 párrafos.
+- Cita las fuentes al final usando el formato: [1], [2], etc. según el orden del contexto.
+
+## Ejemplos de respuestas correctas
+Ejemplo 1:
+Pregunta: ¿Cómo mejoro el pH de mi suelo?
+Respuesta: Puedes aplicar cal agrícola (carbonato de calcio) si tu suelo es ácido, o azufre elemental si es alcalino. La dosis exacta depende del tipo de suelo y del pH actual, que debe medirse con un análisis previo. [1]
+
+Ejemplo 2:
+Pregunta: ¿Qué es el Trichoderma?
+Respuesta: Trichoderma es un hongo benéfico del suelo que controla patógenos como Fusarium y Rhizoctonia mediante micoparasitismo: se enreda en las hifas del hongo dañino, secreta enzimas que disuelven su pared celular y lo destruye. También estimula el crecimiento radicular. [2]`;
 
   let answer: string;
   try {
