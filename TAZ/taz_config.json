@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "tipo": "base",
+  "fecha_creacion": "2026-07-19",
+  "ultima_actualizacion": "2026-07-19",
+  "proyectos_absorbidos": 1,
+  "stats": {
+    "patrones": 5,
+    "bugs_registrados": 11,
+    "bugs_resueltos": 11,
+    "lecciones": 6,
+    "decisiones_documentadas": 6
+  },
+  "estructura": {
+    "version_schema": "1.0",
+    "archivos_requeridos": ["TAZ.md", "patrones.md", "bugs.md", "arquitectura.md", "lecciones.md"],
+    "archivos_opcionales": ["README.md", "taz_config.json"],
+    "carpetas": ["proyectos/", "indices/"]
+  },
+  "confianza": {
+    "escala": "0.0 - 1.0",
+    "golden_threshold": 0.9,
+    "alta_threshold": 0.7,
+    "media_threshold": 0.4
+  },
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "fecha": "2026-07-19",
+      "cambios": ["Estructura inicial TAZ: manifiesto, 5 patrones, 11 bugs, 6 decisiones, 6 lecciones, proyecto Agricultura Antigua absorbido"],
+      "tipo": "creacion"
+    }
+  ]
+}

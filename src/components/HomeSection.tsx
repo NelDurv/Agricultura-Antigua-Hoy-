@@ -68,7 +68,7 @@ const HERO_SLIDES = [
     badge: "Certificación • Ruta Profesional",
     title: "Conviértete en Especialista en Agroecología de Montaña.",
     description: () => "Itinerario estructurado con certificación final. Completa los 4 niveles y obtén tu credencial con código único.",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c7f1?auto=format&fit=crop&q=100&w=2400",
+    image: "https://images.unsplash.com/photo-1492496913980-501348b61460?auto=format&fit=crop&q=100&w=2400",
     showSearch: false,
   },
 ];

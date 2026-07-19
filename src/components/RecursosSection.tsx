@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Calculator, 
   HelpCircle, 
@@ -26,7 +26,7 @@ import {
   AlertTriangle,
   ArrowRight
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MITOS, CASOS_EXITO, NUMEROS_CLAVE, RECETAS, GLOSARIO } from "../data";
 import { getRelatedNodes } from "../core/knowledge/graph";
 import { PageRenderer } from "./blocks";
@@ -34,7 +34,26 @@ import type { PageBlock } from "./blocks";
 
 export default function RecursosSection() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [subTab, setSubTab] = useState<"calculadoras" | "mitos" | "recetario" | "casos" | "glosario">("mitos");
+
+  // Handle incoming navigation state from related content links
+  useEffect(() => {
+    const state = location.state as { tab?: string; term?: string } | null;
+    if (state?.tab === 'glosario') {
+      setSubTab('glosario');
+      if (state.term) {
+        setExpandedGlosario(`glosario-${state.term}`);
+        setGlosarioQuery(state.term);
+        setTimeout(() => {
+          document.getElementById(`glosario-${state.term}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    }
+    if (state?.tab === 'recetario') {
+      setSubTab('recetario');
+    }
+  }, [location.state]);
   
   // Calculators sub-switcher
   const [activeCalc, setActiveCalc] = useState<"humedad" | "cn">("humedad");
@@ -319,13 +338,13 @@ export default function RecursosSection() {
                           <span className="text-[9px] font-mono text-stone-500 uppercase tracking-wider block font-bold">Relacionado:</span>
                           <div className="flex flex-wrap gap-1.5">
                             {related.slice(0, 3).map((node) => {
-                              const badgeStyle = {
-                                course: 'bg-emerald-500/20 text-emerald-400',
-                                recipe: 'bg-orange-500/20 text-orange-400',
-                                glossary: 'bg-indigo-500/20 text-indigo-400',
-                                article: 'bg-amber-500/20 text-amber-400',
-                                guide: 'bg-teal-500/20 text-teal-400',
-                              }[node.type] || 'bg-stone-500/20 text-stone-400';
+                              const badgeClass = {
+                                course: 'bg-emerald-500/20 text-emerald-700',
+                                recipe: 'bg-orange-500/20 text-orange-700',
+                                glossary: 'bg-indigo-500/20 text-indigo-700',
+                                article: 'bg-amber-500/20 text-amber-700',
+                                guide: 'bg-teal-500/20 text-teal-700',
+                              }[node.type] || 'bg-stone-500/20 text-stone-700';
                               return (
                                 <button
                                   key={node.id}
@@ -338,8 +357,7 @@ export default function RecursosSection() {
                                     };
                                     navigate(urlMap[node.type] || '/biblioteca');
                                   }}
-                                  className="px-2 py-1 text-[9px] font-semibold rounded-lg transition-colors"
-                                  style={{ backgroundColor: badgeStyle.split(' ')[0], color: badgeStyle.split(' ')[1] }}
+                                  className={`px-2 py-1 text-[9px] font-semibold rounded-lg transition-colors ${badgeClass}`}
                                 >
                                   {node.title}
                                 </button>
@@ -519,7 +537,7 @@ export default function RecursosSection() {
                             <p className="text-[11px] text-indigo-800">Otros recursos vinculados a esta preparación:</p>
                             <div className="flex flex-wrap gap-2 mt-1">
                               {related.slice(0, 5).map((node) => {
-                                const badgeStyle = {
+                                const badgeClass = {
                                   course: 'bg-emerald-100 text-emerald-800',
                                   recipe: 'bg-orange-100 text-orange-800',
                                   glossary: 'bg-indigo-100 text-indigo-800',
@@ -537,8 +555,7 @@ export default function RecursosSection() {
                                       };
                                       navigate(urlMap[node.type] || '/biblioteca');
                                     }}
-                                    className="px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 border border-transparent hover:border-indigo-300"
-                                    style={{ backgroundColor: badgeStyle.split(' ')[0], color: badgeStyle.split(' ')[1] }}
+                                    className={`px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 border border-transparent hover:border-indigo-300 ${badgeClass}`}
                                   >
                                     <ArrowRight className="h-3 w-3" />
                                     <span>{node.title}</span>
@@ -929,7 +946,7 @@ export default function RecursosSection() {
                   const isExpanded = expandedGlosario === `glosario-${item.termino}`;
                   const related = isExpanded ? getRelatedNodes(`glosario-${item.termino}`) : [];
                   return (
-                    <div key={idx} className="bg-white border border-stone-200/80 rounded-2xl p-5 space-y-2.5 hover:shadow-xs transition-shadow">
+                    <div id={`glosario-${item.termino}`} key={idx} className="bg-white border border-stone-200/80 rounded-2xl p-5 space-y-2.5 hover:shadow-xs transition-shadow">
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs bg-emerald-50 text-emerald-800 border border-emerald-100 font-bold px-2 py-0.5 rounded-lg">
                           {item.termino}
@@ -948,7 +965,7 @@ export default function RecursosSection() {
                       {isExpanded && related.length > 0 && (
                         <div className="pt-2 border-t border-stone-100 space-y-1.5">
                           {related.slice(0, 4).map((node) => {
-                            const badgeStyle = {
+                            const badgeClass = {
                               course: 'bg-emerald-100 text-emerald-800',
                               recipe: 'bg-orange-100 text-orange-800',
                               article: 'bg-amber-100 text-amber-800',
@@ -962,11 +979,11 @@ export default function RecursosSection() {
                                   const urlMap: Record<string, string> = {
                                     course: `/academia/${node.id}`,
                                     recipe: '/recursos',
+                                    glossary: '/recursos',
                                   };
                                   navigate(urlMap[node.type] || '/biblioteca');
                                 }}
-                                className="w-full text-left px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5"
-                                style={{ backgroundColor: badgeStyle.split(' ')[0], color: badgeStyle.split(' ')[1] }}
+                                className={`w-full text-left px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 ${badgeClass}`}
                               >
                                 <ArrowRight className="h-3 w-3 shrink-0" />
                                 <span className="truncate">{node.title}</span>

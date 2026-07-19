@@ -278,6 +278,26 @@ function normalizeComunidad(entries: NormalizedEntry[]) {
 
 let _entries: NormalizedEntry[] | null = null;
 
+export function invalidateIndex(): void {
+  _entries = null;
+}
+
+function nodeToEntry(node: KnowledgeNode): NormalizedEntry {
+  return {
+    id: node.id,
+    type: node.type,
+    title: node.title,
+    description: node.description,
+    fullText: node.fullText || '',
+    tags: node.tags,
+    keywords: node.keywords,
+    relatedTo: node.relatedTo,
+    taxons: node.taxons,
+    category: 'aprendido',
+    subcategory: 'qa',
+  };
+}
+
 export function buildUnifiedIndex(): NormalizedEntry[] {
   if (_entries) return _entries;
   const entries: NormalizedEntry[] = [];
@@ -291,6 +311,22 @@ export function buildUnifiedIndex(): NormalizedEntry[] {
   normalizeNumerosClave(entries);
   normalizeSubtemas(entries);
   normalizeComunidad(entries);
+
+  // merge dynamically learned QA from localStorage
+  try {
+    const raw = localStorage.getItem('aa_learned_qa');
+    if (raw) {
+      const learned = JSON.parse(raw) as KnowledgeNode[];
+      for (const node of learned) {
+        if (!entries.some(e => e.id === node.id)) {
+          entries.push(nodeToEntry(node));
+        }
+      }
+    }
+  } catch {
+    // localStorage not available or invalid data — skip
+  }
+
   _entries = entries;
   return entries;
 }

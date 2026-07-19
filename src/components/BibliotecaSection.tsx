@@ -524,7 +524,7 @@ export default function BibliotecaSection() {
                     <p className="text-[11px] text-amber-800">Otros recursos vinculados a este documento:</p>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {related.slice(0, 6).map((node) => {
-                        const typeBadge = {
+                        const badgeClass = {
                           course: 'bg-emerald-100 text-emerald-800',
                           recipe: 'bg-orange-100 text-orange-800',
                           glossary: 'bg-indigo-100 text-indigo-800',
@@ -537,15 +537,19 @@ export default function BibliotecaSection() {
                             key={node.id}
                             onClick={() => {
                               setSelectedDoc(null);
-                              const urlMap: Record<string, string> = {
-                                course: `/academia/${node.id}`,
-                                recipe: '/recursos',
-                                glossary: '/recursos',
-                              };
-                              navigate(urlMap[node.type] || '/biblioteca');
+                              if (node.type === 'course') {
+                                navigate(`/academia/${node.id}`);
+                              } else if (node.type === 'news') {
+                                navigate('/comunidad');
+                              } else if (['article', 'manual', 'guide', 'protocol', 'infographic'].includes(node.type)) {
+                                navigate(`/biblioteca/${node.id}`);
+                              } else if (node.type === 'glossary') {
+                                navigate('/recursos', { state: { tab: 'glosario', term: node.title } });
+                              } else {
+                                navigate('/recursos');
+                              }
                             }}
-                            className="px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 border border-transparent hover:border-amber-300"
-                            style={{ backgroundColor: typeBadge.split(' ')[0], color: typeBadge.split(' ')[1] }}
+                            className={`px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-colors flex items-center gap-1.5 border border-transparent hover:border-amber-300 ${badgeClass}`}
                           >
                             <span>{node.title}</span>
                           </button>

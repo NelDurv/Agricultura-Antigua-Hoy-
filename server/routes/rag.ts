@@ -1,4 +1,10 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Router } from 'express';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { z } from 'zod';
 import rateLimit from 'express-rate-limit';
 import { searchChunks, getCollectionStats, generateAnswer } from '../rag';
@@ -69,6 +75,39 @@ ragRouter.post('/reindex', async (_req, res) => {
   } catch (err) {
     console.error('[RAG] Reindex error:', err);
     res.status(500).json({ error: 'Error al reindexar' });
+  }
+});
+
+ragRouter.post('/learn', async (req, res) => {
+  const { question, answer, intent } = req.body || {};
+  if (!question || !answer) {
+    res.status(400).json({ error: 'Se requieren "question" y "answer"' });
+    return;
+  }
+
+  try {
+    const filePath = path.resolve(__dirname, '../../rag_data/auto-learned.json');
+    let entries: { id: string; question: string; answer: string; intent?: string; timestamp: number }[] = [];
+    if (fs.existsSync(filePath)) {
+      try {
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        entries = JSON.parse(raw);
+      } catch { /* ignore */ }
+    }
+
+    const id = `auto-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    entries.push({ id, question, answer, intent: intent || 'qa', timestamp: Date.now() });
+    fs.writeFileSync(filePath, JSON.stringify(entries, null, 2), 'utf-8');
+
+    res.json({
+      status: 'ok',
+      learnedId: id,
+      totalLearned: entries.length,
+      note: 'Use POST /api/rag/reindex to apply changes',
+    });
+  } catch (err) {
+    console.error('[RAG] Learn error:', err);
+    res.status(500).json({ error: 'Error al guardar aprendizaje' });
   }
 });
 

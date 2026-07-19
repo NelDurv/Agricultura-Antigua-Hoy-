@@ -249,6 +249,111 @@ Capa proyecto: TTL ∞ (localStorage), sin límite
 
 ## Registro de Cambios
 
+### 2026-07-19 — Sesión 36: Fix Duplicación de Paneles + Server ESM + Memoria TAZ
+
+#### Cambios realizados:
+
+1. **Fix duplicación de paneles** (`responseComposer.ts`):
+   - `buildLayers()` ahora filtra resourceIds que ya tienen `open-panel` tasks en el plan
+   - Si un recurso ya tiene workspace panel, no se crea layer duplicada
+
+2. **Fix layer con recurso incorrecto** (`BrainContext.tsx`):
+   - `openResourceLayer()` usa `getNode(resourceId)` (lookup exacto) en vez de `searchNodes(resourceId)` (búsqueda textual)
+   - Soluciona bug donde click en sugerencia A abría recurso B
+
+3. **Fix Server ESM** (`server/rag/chunker.ts`, `server/routes/rag.ts`):
+   - `__dirname` reemplazado por `fileURLToPath(import.meta.url)` para compatibilidad con `"type": "module"`
+
+4. **Fix runIndexer() bloqueante** (`server/rag/indexer.ts`, `server/routes/rag.ts`):
+   - Removida llamada automática a `runIndexer()` al iniciar el server
+   - POST /api/rag/learn responde inmediatamente sin reindexar
+   - Reindex explícito via POST /api/rag/reindex
+
+5. **Fuente Baskerville** (`src/index.css`):
+   - `--font-serif` ahora prefiere Baskerville antes que Cormorant Garamond
+
+6. **Remover "Explorar más recursos"** (`ResourceLayer.tsx`, `PanelContentView.tsx`):
+   - Botón eliminado de NodeDetailView y NodeDetailPanelView
+
+7. **Fix imagen Unsplash** (`HomeSection.tsx`):
+   - Reemplazada URL bloqueada por Firefox (OpaqueResponseBlocking)
+
+#### Archivos modificados:
+| Archivo | Cambio |
+|---|---|
+| `src/core/engine/responseComposer.ts` | buildLayers filtra resourceIds con open-panel |
+| `src/contexts/BrainContext.tsx` | openResourceLayer usa getNode |
+| `src/components/ResourceLayer.tsx` | Remove "Explorar más recursos" |
+| `src/components/workspace/PanelContentView.tsx` | Remove "Explorar más recursos" |
+| `src/components/HomeSection.tsx` | Reemplazar Unsplash image |
+| `src/index.css` | Baskerville como font-serif primario |
+| `server/rag/chunker.ts` | ESM: fileURLToPath |
+| `server/rag/indexer.ts` | Remover runIndexer automático |
+| `server/routes/rag.ts` | ESM + learn sin reindex |
+| `INFORME_TECNICO.md` | Actualizado a v1.3.0 |
+
+#### Estado: Build exitoso
+
+### 2026-07-18 — Sesión 35: Auto-Aprendizaje del Asistente + Fix Navegación + UI Feedback
+
+#### Cambios realizados:
+
+1. **Sistema de Auto-Aprendizaje** (nuevo):
+   - `src/services/learnedQA.service.ts` — CRUD de QA aprendido en localStorage + invalidación de caché
+   - `src/core/search/unifiedIndex.ts` — `invalidateIndex()` + merge de nodos aprendidos en `buildUnifiedIndex()`
+   - `src/core/knowledge/graph.ts` — `invalidateGraph()` para reconstruir el grafo dinámicamente
+   - `src/contexts/BrainContext.tsx` — `submitFeedbackCb` auto-guarda QA en feedback 'good'
+   - Cuando el usuario califica "buena" una respuesta, el par pregunta+respuesta se guarda automáticamente y queda visible en próximas búsquedas sin recargar
+
+2. **RAG Auto-Learn** (servidor):
+   - `server/rag/types.ts` — `'aprendido'` agregado a `sourceType`
+   - `server/rag/chunker.ts` — Lee `rag_data/auto-learned.json` y lo incluye en el índice RAG
+   - `server/routes/rag.ts` — Nuevo `POST /api/rag/learn` — guarda + reindexa automáticamente
+   - `vite.config.ts` — Proxy `/api` → `localhost:3001` para comunicación frontend-backend
+
+3. **Fix "Leer" button** (`ResourceLayer.tsx`, `PanelContentView.tsx`):
+   - Al hacer clic en "Leer", cierra el workspace panel antes de navegar
+   - Soluciona bug donde el `<Outlet/>` quedaba oculto (`hidden`) por el panel enfocado
+
+4. **Rediseño Feedback buttons** (`ConversationPanel.tsx`):
+   - Thumbs pasaron de `h-6 w-6` pequeños a `h-10` con texto "Útil"/"No"
+   - Colores: verde esmeralda (útil) / rojo (no útil) con borde y hover
+   - Banner "¿Te fue útil esta respuesta?" entre el mensaje y las sugerencias
+
+5. **Mejora botón de reciclaje** (`ConversationPanel.tsx`):
+   - Eliminado diálogo de confirmación — borra directo al hacer clic
+   - Icono `RotateCcw` (reciclar) con animación de rotación 180° al hover
+   - Color verde esmeralda en lugar de rojo
+
+6. **Fix navegación de contenido relacionado** (`BibliotecaSection.tsx`, `RecursosSection.tsx`):
+   - Botones de glosario ahora navegan a `/recursos` con estado `{ tab: 'glosario', term }`
+   - RecursosSection auto-expande el término y hace scroll suave
+   - Corregido bug de color invisible: clases Tailwind se aplicaban como `style={{ color: 'text-xxx' }}` (inválido) en vez de como clases reales
+
+7. **Sugerencias limitadas a 2** (`responseComposer.ts`):
+   - `results.slice(0, 4)` → `slice(0, 2)` — solo las 2 coincidencias más cercanas
+   - Eliminado botón "¿Nueva Pregunta?" (`action: 'preguntar'`)
+
+#### Archivos modificados/creados:
+| Archivo | Cambio |
+|---|---|
+| `src/services/learnedQA.service.ts` | **NUEVO** — CRUD de QA aprendido en localStorage |
+| `src/core/search/unifiedIndex.ts` | `invalidateIndex()` + merge de nodos aprendidos |
+| `src/core/knowledge/graph.ts` | `invalidateGraph()` |
+| `src/contexts/BrainContext.tsx` | Auto-aprendizaje en feedback 'good' + fetch a RAG |
+| `src/components/ConversationPanel.tsx` | Feedback rediseñado, reciclaje sin confirmación, icono RotateCcw |
+| `src/components/ResourceLayer.tsx` | "Leer" cierra workspace antes de navegar |
+| `src/components/workspace/PanelContentView.tsx` | "Leer" cierra workspace antes de navegar |
+| `src/components/BibliotecaSection.tsx` | Fix color invisible en badges, navegación mejorada a glosario |
+| `src/components/RecursosSection.tsx` | Auto-expandir glosario desde navegación, fix color badges |
+| `src/core/engine/responseComposer.ts` | 2 sugerencias máx, eliminado "¿Nueva Pregunta?" |
+| `server/rag/types.ts` | `'aprendido'` en `sourceType` |
+| `server/rag/chunker.ts` | Lectura de `auto-learned.json` |
+| `server/routes/rag.ts` | `POST /api/rag/learn` |
+| `vite.config.ts` | Proxy `/api` → `3001` |
+
+#### Estado: Build exitoso (sin nuevos errores)
+
 ### 2026-07-17 — Sesión 33: Fallos de Asistente en Respuesta a Preguntas de Usuario
 
 #### Cambios realizados:

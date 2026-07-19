@@ -1,4 +1,10 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import type { RagChunk } from './types';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { COURSES } from '../../src/data/courses/index';
 import { COURSES32 } from '../../src/data/courses32';
 import { BIBLIOTECA } from '../../src/data/biblioteca/index';
@@ -171,6 +177,29 @@ export function chunkAllContent(): RagChunk[] {
       tags: [p.category, 'comunidad'],
       metadata: { author: p.author, category: p.category },
     });
+  }
+
+  // load auto-learned QA from rag_data/auto-learned.json
+  const autoLearnedPath = path.resolve(__dirname, '../../rag_data/auto-learned.json');
+  if (fs.existsSync(autoLearnedPath)) {
+    try {
+      const raw = fs.readFileSync(autoLearnedPath, 'utf-8');
+      const learnedEntries = JSON.parse(raw) as { id: string; question: string; answer: string; intent?: string; timestamp: number }[];
+      for (const entry of learnedEntries) {
+        chunks.push({
+          id: `auto__${entry.id}`,
+          text: `${entry.question}. ${entry.answer}`,
+          source: entry.id,
+          sourceType: 'aprendido',
+          title: entry.question,
+          tags: ['aprendido', entry.intent || 'qa'],
+          metadata: { intent: entry.intent || 'qa' },
+        });
+      }
+      console.log(`[RAG] Loaded ${learnedEntries.length} auto-learned Q&A entries.`);
+    } catch (err) {
+      console.warn('[RAG] Error loading auto-learned Q&A:', err);
+    }
   }
 
   chunks.push({

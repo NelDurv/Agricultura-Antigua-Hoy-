@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, FlaskConical, GraduationCap, FileText, Clock, User, Sparkles, Tag } from 'lucide-react';
 import { useBrain, type Layer } from '../contexts/BrainContext';
@@ -86,10 +86,16 @@ function CourseView({ resourceId }: { resourceId?: string }) {
 
 function DocumentView({ resourceId }: { resourceId?: string }) {
   const navigate = useNavigate();
+  const { closeWorkspace } = useBrain();
   const doc = useMemo(() => {
     if (!resourceId) return null;
     return BIBLIOTECA.find(d => d.id === resourceId) || null;
   }, [resourceId]);
+
+  const handleLeer = useCallback(() => {
+    closeWorkspace();
+    navigate(`/biblioteca/${doc?.id}`);
+  }, [closeWorkspace, navigate, doc]);
 
   if (!doc) {
     return (
@@ -131,7 +137,7 @@ function DocumentView({ resourceId }: { resourceId?: string }) {
 
       <div className="flex gap-2">
         <button
-          onClick={() => navigate(`/biblioteca/${doc.id}`)}
+          onClick={handleLeer}
           className="flex-1 py-2.5 bg-stone-800 hover:bg-stone-700 text-white text-xs font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-1"
         >
           <BookOpen className="h-3.5 w-3.5" />
@@ -305,13 +311,6 @@ function NodeDetailView({ resourceId }: { resourceId?: string }) {
         </div>
       )}
 
-      <button
-        onClick={() => navigate('/recursos')}
-        className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-1.5"
-      >
-        <span>Explorar más recursos</span>
-        <ArrowRight className="h-3.5 w-3.5" />
-      </button>
     </div>
   );
 }

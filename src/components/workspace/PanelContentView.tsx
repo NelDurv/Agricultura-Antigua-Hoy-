@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, FlaskConical, GraduationCap, FileText, Clock, User, Sparkles, Tag } from 'lucide-react';
+import { useBrain } from '../../contexts/BrainContext';
 import { searchNodes, getNode } from '../../core/knowledge/graph';
 import { COURSES32, BIBLIOTECA, RECETAS } from '../../data';
 import type { Panel } from '../../core/engine';
@@ -78,11 +79,17 @@ function CoursePanelView({ panel }: { panel: Panel }) {
 
 function DocumentPanelView({ panel }: { panel: Panel }) {
   const navigate = useNavigate();
+  const { closeWorkspace } = useBrain();
   const resourceId = panel.params?.resourceId;
   const doc = useMemo(() => {
     if (!resourceId) return null;
     return BIBLIOTECA.find(d => d.id === resourceId) || null;
   }, [resourceId]);
+
+  const handleLeer = useCallback(() => {
+    closeWorkspace();
+    navigate(`/biblioteca/${doc?.id}`);
+  }, [closeWorkspace, navigate, doc]);
 
   if (!doc) {
     return (
@@ -117,7 +124,7 @@ function DocumentPanelView({ panel }: { panel: Panel }) {
         <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{doc.date}</span>
         <span className="px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">{doc.difficulty}</span>
       </div>
-      <button onClick={() => navigate(`/biblioteca/${doc.id}`)}
+      <button onClick={handleLeer}
         className="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-white text-xs font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-1">
         <BookOpen className="h-3.5 w-3.5" />
         <span>Leer</span>
@@ -233,11 +240,6 @@ function NodeDetailPanelView({ panel }: { panel: Panel }) {
           ))}
         </div>
       )}
-      <button onClick={() => navigate('/recursos')}
-        className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-1.5">
-        <span>Explorar más recursos</span>
-        <ArrowRight className="h-3.5 w-3.5" />
-      </button>
     </div>
   );
 }

@@ -1,11 +1,23 @@
 import React, { useRef, useEffect, useState, useCallback, type SetStateAction, type Dispatch } from "react";
 import { useNavigate } from "react-router-dom";
-import { Send, Trash2, Atom, ThumbsUp, ThumbsDown, AlertTriangle } from "lucide-react";
+import { Send, RotateCcw, Atom, ThumbsUp, ThumbsDown, Edit3 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import { useBrain } from "../contexts/BrainContext";
 import type { Message, Suggestion } from "../contexts/BrainContext";
 import { useAuth } from "../contexts";
+
+const ASSISTANT_NAME_KEY = 'aa_assistant_name';
+
+function getAssistantName(): string {
+  try { return localStorage.getItem(ASSISTANT_NAME_KEY) || 'TERRA'; }
+  catch { return 'TERRA'; }
+}
+
+function setAssistantName(name: string): void {
+  try { localStorage.setItem(ASSISTANT_NAME_KEY, name); }
+  catch { /* noop */ }
+}
 
 const AVATARS: Record<string, string> = {
   user: "\uD83D\uDC64",
@@ -43,41 +55,50 @@ const MessageItem = React.memo(function MessageItem({ msg, feedbackGiven, onFeed
         </div>
 
         {msg.role === 'assistant' && (
-          <div className="flex items-center gap-1.5 pt-1">
-            <button
-              onClick={() => onFeedback(msg.id, 'good')}
-              disabled={feedbackGiven.has(msg.id + '_good')}
-              className={`h-6 w-6 rounded-lg flex items-center justify-center transition-all ${
-                feedbackGiven.has(msg.id + '_good')
-                  ? 'bg-wheat-light/30 text-wheat'
-                  : 'text-stone-400 hover:text-wheat hover:bg-wheat-light/20'
-              }`}
-              title="Respuesta útil"
-            >
-              <ThumbsUp className="h-3 w-3" />
-            </button>
-            <button
-              onClick={() => onFeedback(msg.id, 'bad')}
-              disabled={feedbackGiven.has(msg.id + '_bad')}
-              className={`h-6 w-6 rounded-lg flex items-center justify-center transition-all ${
-                feedbackGiven.has(msg.id + '_bad')
-                  ? 'bg-red-100 text-red-500'
-                  : 'text-stone-400 hover:text-red-500 hover:bg-red-50'
-              }`}
-              title="No fue lo que buscaba"
-            >
-              <ThumbsDown className="h-3 w-3" />
-            </button>
+          <div className="pt-3 border-t border-stone-100 mt-2">
+            <p className="text-[9px] font-mono text-stone-400 mb-2 text-center">
+              {feedbackGiven.has(msg.id + '_good') || feedbackGiven.has(msg.id + '_bad')
+                ? 'Gracias por tu opinión'
+                : '¿Te fue útil esta respuesta?'
+              }
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => onFeedback(msg.id, 'good')}
+                disabled={feedbackGiven.has(msg.id + '_good')}
+                className={`flex-1 max-w-[130px] h-10 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all ${
+                  feedbackGiven.has(msg.id + '_good')
+                    ? 'bg-emerald-500 text-white shadow-md cursor-default'
+                    : 'bg-white border-2 border-emerald-300 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-500 hover:shadow-sm active:scale-95'
+                }`}
+              >
+                <ThumbsUp className="h-4 w-4" />
+                <span>Útil</span>
+              </button>
+              <button
+                onClick={() => onFeedback(msg.id, 'bad')}
+                disabled={feedbackGiven.has(msg.id + '_bad')}
+                className={`flex-1 max-w-[130px] h-10 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all ${
+                  feedbackGiven.has(msg.id + '_bad')
+                    ? 'bg-red-400 text-white shadow-md cursor-default'
+                    : 'bg-white border-2 border-red-300 text-red-500 hover:bg-red-50 hover:border-red-400 hover:shadow-sm active:scale-95'
+                }`}
+              >
+                <ThumbsDown className="h-4 w-4" />
+                <span>No</span>
+              </button>
+            </div>
           </div>
         )}
 
         {msg.suggestions && msg.suggestions.length > 0 && (
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full pt-2">
+            <p className="text-[9px] font-mono text-stone-400 text-center">Sugerencias</p>
             {msg.suggestions.map((s, i) => (
               <button
                 key={i}
                 onClick={() => onSuggestion(s)}
-                className="w-[90%] inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-white border border-stone-200 hover:border-wheat hover:bg-wheat-light/20 hover:text-[#2C2420] text-sm font-semibold text-stone-700 transition-all shadow-sm"
+                className="w-full inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-white border border-stone-200 hover:border-wheat hover:bg-wheat-light/20 hover:text-[#2C2420] text-sm font-semibold text-stone-700 transition-all shadow-sm"
               >
                 <span className="text-lg shrink-0">{s.icon || "→"}</span>
                 <span className="truncate">{s.label}</span>
@@ -132,11 +153,13 @@ const Composer = React.memo(function Composer({ composerText, setComposerText, o
 export default function ConversationPanel() {
   const { messages, composerText, sendMessage, sendClarification, setComposerText, clearConversation, submitFeedback } = useBrain();
   const [feedbackGiven, setFeedbackGiven] = useState<Set<string>>(new Set());
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [assistantName, setAssistantNameState] = useState(getAssistantName);
+  const [editingName, setEditingName] = useState(false);
   const { userName } = useAuth();
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -159,6 +182,25 @@ export default function ConversationPanel() {
     submitFeedback(id, rating);
     setFeedbackGiven(prev => new Set(prev).add(id + '_' + rating));
   }, [submitFeedback]);
+
+  const handleEditName = useCallback(() => {
+    setEditingName(true);
+    setTimeout(() => nameInputRef.current?.select(), 50);
+  }, []);
+
+  const handleSaveName = useCallback(() => {
+    const val = nameInputRef.current?.value.trim();
+    if (val) {
+      setAssistantName(val);
+      setAssistantNameState(val);
+    }
+    setEditingName(false);
+  }, []);
+
+  const handleNameKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSaveName();
+    if (e.key === 'Escape') setEditingName(false);
+  }, [handleSaveName]);
 
   const handleSuggestion = useCallback((s: Suggestion) => {
     if (s.action === "preguntar") {
@@ -189,8 +231,30 @@ export default function ConversationPanel() {
           <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-forest to-[#1A3A18] flex items-center justify-center shadow-xs">
             <Atom className="h-4 w-4 text-white" />
           </div>
-          <div>
-            <h3 className="text-xs font-bold font-serif text-stone-900">Biblioteca Viva</h3>
+          <div className="min-w-0">
+            {editingName ? (
+              <div className="flex items-center gap-1">
+                <input
+                  ref={nameInputRef}
+                  defaultValue={assistantName}
+                  onBlur={handleSaveName}
+                  onKeyDown={handleNameKeyDown}
+                  className="text-xs font-bold font-serif text-stone-900 bg-stone-50 border border-stone-300 rounded px-1.5 py-0.5 w-full outline-none focus:border-forest"
+                  autoFocus
+                />
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-xs font-bold font-serif text-stone-900 truncate">{assistantName}</h3>
+                <button
+                  onClick={handleEditName}
+                  className="h-5 w-5 rounded hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-forest transition-colors shrink-0"
+                  title="Cambiar nombre"
+                >
+                  <Edit3 className="h-3 w-3" />
+                </button>
+              </div>
+            )}
             <p className="text-[9px] text-forest font-mono font-medium">Agricultura Antigua</p>
           </div>
         </div>
@@ -199,29 +263,17 @@ export default function ConversationPanel() {
             {userName || "Invitado"}
           </span>
           <button
-            onClick={() => setShowClearConfirm(true)}
-            className="h-7 w-7 rounded-lg hover:bg-stone-100 flex items-center justify-center transition-colors text-stone-400 hover:text-red-500"
+            onClick={clearConversation}
+            className="h-8 w-8 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-400 flex items-center justify-center transition-all text-emerald-500 hover:text-emerald-700 group"
             title="Nueva conversación"
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <RotateCcw className="h-4 w-4 group-hover:rotate-[-180deg] transition-transform duration-500" />
           </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative" id="conversation-messages">
         <div className="px-4 py-4 space-y-4">
-          {messages.length > 1 && (
-            <div className="text-center pb-2">
-              <button
-                onClick={() => setShowClearConfirm(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-forest/10 text-forest hover:bg-forest/20 text-[10px] font-semibold font-mono transition-colors"
-              >
-                <Trash2 className="h-3 w-3" />
-                Limpiar historial
-              </button>
-            </div>
-          )}
-
           {messages.map((msg) => (
             <MessageItem
               key={msg.id}
@@ -233,37 +285,6 @@ export default function ConversationPanel() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-
-        {/* Clear confirmation dialog */}
-        {showClearConfirm && (
-          <div className="absolute inset-0 bg-white/95 z-10 flex items-center justify-center px-4">
-            <div className="bg-white rounded-xl shadow-xl border border-stone-200 p-5 max-w-xs w-full">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold font-serif text-stone-900">Nueva conversación</h4>
-                  <p className="text-[10px] text-stone-500 font-mono">Se borrará todo el historial</p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => { clearConversation(); setShowClearConfirm(false); }}
-                  className="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors"
-                >
-                  Borrar todo
-                </button>
-                <button
-                  onClick={() => setShowClearConfirm(false)}
-                  className="flex-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition-colors"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       <Composer

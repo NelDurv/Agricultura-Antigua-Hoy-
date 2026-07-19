@@ -1,11 +1,17 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
-import { searchNodes } from '../core/knowledge/graph';
+import { searchNodes, getNode } from '../core/knowledge/graph';
 import type { KnowledgeNode } from '../core/knowledge/types';
 import { createWorkspace, closeWorkspace as closeWs, togglePanelState, goalProcessor } from '../core/engine';
 import type { Plan, Workspace, Panel, ClarificationQuestion, IntentType, IntentContext } from '../core/engine';
 import { storage, STORAGE_KEYS, getSessionId } from '../core/persistence';
 import { submitFeedback as saveFeedback, getFeedbackStats } from '../core/feedback';
+import { addLearnedQA } from '../services/learnedQA.service';
 import { eventBus } from '../core/events';
+
+function getAssistantName(): string {
+  try { return localStorage.getItem('aa_assistant_name') || 'TERRA'; }
+  catch { return 'TERRA'; }
+}
 import { messageQueue } from '../core/messaging/messageQueue';
 import { memoryManager } from '../core/memory';
 
@@ -92,7 +98,7 @@ export function BrainProvider({ children }: { children: ReactNode }) {
     {
       id: 'system-welcome',
       role: 'system',
-      content: '¡Bienvenido a Agricultura Antigua! Soy tu asistente de aprendizaje. Pregúntame sobre cultivos, suelos, bioinsumos o selecciona una opción para comenzar.',
+      content: `¡Bienvenido a Agricultura Antigua! Soy ${getAssistantName()}, tu asistente de aprendizaje. Pregúntame sobre cultivos, suelos, bioinsumos o selecciona una opción para comenzar.`,
       timestamp: Date.now(),
       suggestions: INITIAL_SUGGESTIONS,
     },
@@ -124,6 +130,11 @@ export function BrainProvider({ children }: { children: ReactNode }) {
         seen.add(m.id);
         return true;
       });
+      // Update welcome message with current assistant name
+      const welcome = unique.find((m: any) => m.id === 'system-welcome');
+      if (welcome) {
+        welcome.content = `¡Bienvenido a Agricultura Antigua! Soy ${getAssistantName()}, tu asistente de aprendizaje. Pregúntame sobre cultivos, suelos, bioinsumos o selecciona una opción para comenzar.`;
+      }
       setMessages(unique);
     }
 
@@ -406,7 +417,7 @@ export function BrainProvider({ children }: { children: ReactNode }) {
       {
         id: 'system-welcome',
         role: 'system',
-        content: '¡Bienvenido a Agricultura Antigua! Soy tu asistente de aprendizaje. Pregúntame sobre cultivos, suelos, bioinsumos o selecciona una opción para comenzar.',
+        content: `¡Bienvenido a Agricultura Antigua! Soy ${getAssistantName()}, tu asistente de aprendizaje. Pregúntame sobre cultivos, suelos, bioinsumos o selecciona una opción para comenzar.`,
         timestamp: Date.now(),
         suggestions: INITIAL_SUGGESTIONS,
       },
@@ -471,6 +482,24 @@ export function BrainProvider({ children }: { children: ReactNode }) {
     if (!msg) return;
     const intent = lastPlan?.intent.type || 'unknown';
     saveFeedback({ messageId, query: msg.content, intentType: intent, rating, timestamp: Date.now() });
+
+    // Auto-learn: save Q&A pair on good feedback
+    if (rating === 'good') {
+      const msgIndex = messages.findIndex((m) => m.id === messageId);
+      if (msgIndex > 0) {
+        const userMsg = messages[msgIndex - 1];
+        if (userMsg.role === 'user') {
+          addLearnedQA(userMsg.content, msg.content, intent);
+          // Fire-and-forget: also notify RAG server for reindex
+          fetch('/api/rag/learn', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: userMsg.content, answer: msg.content, intent }),
+          }).catch(() => { /* server may not be running */ });
+        }
+      }
+    }
+
     eventBus.emit('feedback:submitted', { messageId, rating, intentType: intent });
   }, [messages, lastPlan]);
 
@@ -492,10 +521,8 @@ export function BrainProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const openResourceLayer = useCallback((resourceId: string) => {
-    const graphResults = searchNodes(resourceId);
-    if (graphResults.length === 0) return;
-
-    const node = graphResults[0];
+    const node = getNode(resourceId) ?? searchNodes(resourceId)[0];
+    if (!node) return;
     const taxons = node.taxons.map(t => t.toLowerCase());
     let component: Layer['component'];
     if (node.type === 'course' || taxons.includes('cursos') || taxons.includes('cursos32')) {

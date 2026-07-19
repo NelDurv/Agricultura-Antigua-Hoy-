@@ -47,6 +47,10 @@ let _graph: KnowledgeGraph | null = null;
 
 // prebuilt knowledge-graph.json removed — graph is always built from source
 
+export function invalidateGraph(): void {
+  _graph = null;
+}
+
 export function buildKnowledgeGraph(): KnowledgeGraph {
   if (_graph) return _graph;
   const entries = buildUnifiedIndex();

@@ -84,8 +84,8 @@ function buildContentFromPlan(plan: Plan, results: KnowledgeNode[], query: strin
 function buildSuggestionsFromPlan(plan: Plan, results: KnowledgeNode[]): { label: string; action: string; icon?: string; payload?: Record<string, string> }[] {
   const suggestions: { label: string; action: string; icon?: string; payload?: Record<string, string> }[] = [];
 
-  // From knowledge graph results
-  const top = results.slice(0, 4);
+  // From knowledge graph results — only 2 closest matches
+  const top = results.slice(0, 2);
   for (const r of top) {
     const icon = r.type === 'course' ? '📚' : r.type === 'recipe' ? '🧪' : r.type === 'glossary' ? '📖' : '📄';
     suggestions.push({
@@ -94,24 +94,6 @@ function buildSuggestionsFromPlan(plan: Plan, results: KnowledgeNode[]): { label
       icon,
       payload: { resourceId: r.id },
     });
-  }
-
-  // From plan tasks
-  const showContentTasks = plan.tasks.filter(t => t.type === 'show-content');
-  for (const task of showContentTasks) {
-    if (task.target && !top.find(r => r.id === task.target)) {
-      suggestions.push({
-        label: task.label.slice(0, 35),
-        action: 'layer',
-        icon: '📌',
-        payload: { resourceId: task.target },
-      });
-    }
-  }
-
-  // "Nueva Pregunta" if enough results
-  if (top.length > 1 || plan.tasks.length > 2) {
-    suggestions.push({ label: '¿Nueva Pregunta?', action: 'preguntar', icon: '💬' });
   }
 
   return suggestions;
@@ -138,11 +120,21 @@ function buildLayers(plan: Plan, results: KnowledgeNode[]): { id: string; type: 
 
   if (top.length === 0) return layers;
 
-  const best = top[0];
+  // Find which resourceIds are already covered by workspace panels
+  const panelResourceIds = new Set(
+    plan.tasks
+      .filter(t => t.type === 'open-panel' && t.params?.resourceId)
+      .map(t => t.params!.resourceId!)
+  );
+
+  // Only create layers for results NOT already shown in workspace panels
+  const layerResults = top.filter(r => !panelResourceIds.has(r.id));
+  if (layerResults.length === 0) return layers;
+
+  const best = layerResults[0];
   const bestType = best.type;
   const bestTaxon = best.taxons[0]?.toLowerCase() || '';
 
-  // Map node to layer component
   let component: string;
   if ((bestType === 'course' || bestTaxon.includes('curso')) && COURSES32.some(c => c.id === best.id)) {
     component = 'course';

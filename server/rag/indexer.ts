@@ -13,7 +13,4 @@ export async function runIndexer(): Promise<{ chunks: number; indexed: number }>
   return { chunks: chunks.length, indexed };
 }
 
-runIndexer().catch(err => {
-  console.error('[RAG] Indexer failed:', err);
-  process.exit(1);
-});
+
