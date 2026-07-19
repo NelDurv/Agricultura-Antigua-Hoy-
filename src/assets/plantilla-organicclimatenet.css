@@ -1,0 +1,267 @@
+/* =====================================================
+   Plantilla de Estilos — inspirada en OrganicClimateNET
+   https://organicclimatenet.eu/
+   ===================================================== */
+
+/* ─── Variables ─── */
+:root {
+  --ocn-white: #ffffff;
+  --ocn-cream: #f2f1db;
+  --ocn-sage: #85b096;
+  --ocn-green: #496d56;
+  --ocn-green-dark: #3a5a45;
+  --ocn-navy: #3f405b;
+  --ocn-terracotta: #d3785d;
+  --ocn-text: #333333;
+  --ocn-text-light: #6b7280;
+  --ocn-border: #e5e7eb;
+  --ocn-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  --ocn-radius: 12px;
+  --ocn-radius-sm: 8px;
+  --ocn-font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --ocn-font-heading: 'Bricolage Grotesque', 'Montserrat', serif;
+  --ocn-transition: 0.3s ease;
+}
+
+/* ─── Hero / Page Header ─── */
+.ocn-hero {
+  background: linear-gradient(135deg, var(--ocn-navy) 0%, #2d2e47 100%);
+  color: var(--ocn-white);
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ocn-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.ocn-hero h1 {
+  font-family: var(--ocn-font-heading);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.ocn-hero p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ─── Buttons ─── */
+.ocn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--ocn-font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--ocn-radius-sm);
+  cursor: pointer;
+  transition: all var(--ocn-transition);
+  text-decoration: none;
+}
+
+.ocn-btn-primary {
+  background: var(--ocn-green);
+  color: var(--ocn-white);
+}
+
+.ocn-btn-primary:hover {
+  background: var(--ocn-green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(73, 109, 86, 0.35);
+}
+
+.ocn-btn-secondary {
+  background: var(--ocn-terracotta);
+  color: var(--ocn-white);
+}
+
+.ocn-btn-secondary:hover {
+  background: #c06a4f;
+  transform: translateY(-2px);
+}
+
+.ocn-btn-outline {
+  background: transparent;
+  border: 2px solid var(--ocn-green);
+  color: var(--ocn-green);
+}
+
+.ocn-btn-outline:hover {
+  background: var(--ocn-green);
+  color: var(--ocn-white);
+}
+
+/* ─── Cards ─── */
+.ocn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.ocn-card {
+  background: var(--ocn-white);
+  border: 1px solid var(--ocn-border);
+  border-radius: var(--ocn-radius);
+  overflow: hidden;
+  box-shadow: var(--ocn-shadow);
+  transition: transform var(--ocn-transition), box-shadow var(--ocn-transition);
+}
+
+.ocn-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.ocn-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.ocn-card-body {
+  padding: 1.5rem;
+}
+
+.ocn-card-title {
+  font-family: var(--ocn-font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ocn-navy);
+  margin-bottom: 0.5rem;
+}
+
+.ocn-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ocn-text-light);
+}
+
+/* ─── Section Styles ─── */
+.ocn-section {
+  padding: 4rem 2rem;
+}
+
+.ocn-section-light {
+  background: var(--ocn-cream);
+}
+
+.ocn-section-dark {
+  background: var(--ocn-navy);
+  color: var(--ocn-white);
+}
+
+.ocn-section-title {
+  font-family: var(--ocn-font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ocn-navy);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.ocn-section-dark .ocn-section-title {
+  color: var(--ocn-white);
+}
+
+.ocn-section-subtitle {
+  font-size: 1rem;
+  color: var(--ocn-text-light);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.ocn-section-dark .ocn-section-subtitle {
+  opacity: 0.8;
+}
+
+/* ─── Stats / Numbers ─── */
+.ocn-stat {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.ocn-stat-number {
+  font-family: var(--ocn-font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ocn-green);
+  line-height: 1;
+}
+
+.ocn-stat-label {
+  font-size: 0.85rem;
+  color: var(--ocn-text-light);
+  margin-top: 0.25rem;
+}
+
+/* ─── Badge / Tag ─── */
+.ocn-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--ocn-sage);
+  color: var(--ocn-white);
+}
+
+.ocn-badge-dark {
+  background: var(--ocn-navy);
+}
+
+/* ─── Footer ─── */
+.ocn-footer {
+  background: var(--ocn-navy);
+  color: rgba(255,255,255,0.7);
+  padding: 3rem 2rem;
+  font-size: 0.85rem;
+}
+
+.ocn-footer a {
+  color: var(--ocn-sage);
+  text-decoration: none;
+}
+
+.ocn-footer a:hover {
+  color: var(--ocn-cream);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .ocn-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ocn-hero {
+    padding: 3rem 1.25rem;
+  }
+
+  .ocn-section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .ocn-card-img {
+    height: 160px;
+  }
+}

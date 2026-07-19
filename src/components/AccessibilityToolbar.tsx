@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Accessibility, Sun, Moon, Minus, Plus, Type, RefreshCw } from 'lucide-react';
+import { Accessibility, Sun, Moon, Minus, Plus, Type, RefreshCw, Monitor } from 'lucide-react';
 
 type A11ySettings = {
-  highContrast: boolean;
   fontSize: number;
-  grayscale: boolean;
   underlineLinks: boolean;
+  darkMode: boolean;
 };
 
 const STORAGE_KEY = 'agricultura-antigua-a11y';
@@ -18,14 +17,13 @@ function loadSettings(): A11ySettings {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch { /* ignore */ }
-  return { highContrast: false, fontSize: BASE_FONT, grayscale: false, underlineLinks: false };
+  return { fontSize: BASE_FONT, underlineLinks: false, darkMode: false };
 }
 
 function applySettings(s: A11ySettings) {
   const root = document.documentElement;
-  root.classList.toggle('a11y-high-contrast', s.highContrast);
-  root.classList.toggle('a11y-grayscale', s.grayscale);
   root.classList.toggle('a11y-underline-links', s.underlineLinks);
+  root.classList.toggle('dark-mode', s.darkMode);
   root.style.fontSize = s.fontSize + 'px';
   localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
 }
@@ -43,11 +41,11 @@ export default function AccessibilityToolbar() {
   }, []);
 
   const reset = useCallback(() => {
-    const defaults: A11ySettings = { highContrast: false, fontSize: BASE_FONT, grayscale: false, underlineLinks: false };
+    const defaults: A11ySettings = { fontSize: BASE_FONT, underlineLinks: false, darkMode: false };
     setSettings(defaults);
     localStorage.removeItem(STORAGE_KEY);
     document.documentElement.removeAttribute('style');
-    document.documentElement.classList.remove('a11y-high-contrast', 'a11y-grayscale', 'a11y-underline-links');
+    document.documentElement.classList.remove('a11y-underline-links', 'dark-mode');
   }, []);
 
   const adjustFont = useCallback((delta: number) => {
@@ -58,16 +56,16 @@ export default function AccessibilityToolbar() {
   }, []);
 
   return (
-    <div className="fixed left-3 top-1/3 z-50 flex flex-col items-start">
+    <div className="fixed left-3 bottom-8 z-50 flex flex-col items-start">
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2.5 py-2 shadow-md hover:bg-emerald-50 transition-all text-stone-700 hover:text-emerald-700"
+        className="flex flex-col items-center gap-0.5 bg-white border border-stone-200 rounded-r-xl rounded-l-none px-2 py-2.5 shadow-md hover:bg-wheat-light/20 transition-all text-stone-700 hover:text-[#2C2420]"
         aria-label="Accesibilidad"
         title="Herramientas de accesibilidad"
       >
         <Accessibility className="h-4 w-4" />
-        <span className="text-[9px] font-bold font-mono uppercase tracking-wider hidden md:inline">
+        <span className="text-[8px] font-bold font-mono uppercase tracking-wider hidden md:inline leading-tight text-center">
           Accesibilidad
         </span>
       </button>
@@ -75,17 +73,17 @@ export default function AccessibilityToolbar() {
       {/* Dropdown panel */}
       {open && (
         <div className="mt-1 bg-white border border-stone-200 rounded-xl shadow-xl p-3 w-52 space-y-2">
-          {/* High contrast toggle */}
+          {/* Dark mode toggle */}
           <button
-            onClick={() => update({ highContrast: !settings.highContrast })}
+            onClick={() => update({ darkMode: !settings.darkMode })}
             className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] font-semibold transition-all ${
-              settings.highContrast
-                ? 'bg-stone-900 text-stone-100'
+              settings.darkMode
+                ? 'bg-stone-800 text-stone-100'
                 : 'bg-stone-100 text-stone-800 hover:bg-stone-200'
             }`}
           >
-            {settings.highContrast ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-            <span>Contraste oscuro</span>
+            {settings.darkMode ? <Moon className="h-3.5 w-3.5" /> : <Monitor className="h-3.5 w-3.5" />}
+            <span>{settings.darkMode ? 'Modo oscuro' : 'Modo claro'}</span>
           </button>
 
           {/* Font size controls */}
@@ -112,21 +110,6 @@ export default function AccessibilityToolbar() {
               <Plus className="h-3 w-3" />
             </button>
           </div>
-
-          {/* Grayscale */}
-          <button
-            onClick={() => update({ grayscale: !settings.grayscale })}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] font-semibold transition-all ${
-              settings.grayscale
-                ? 'bg-stone-200 text-stone-800'
-                : 'bg-stone-100 text-stone-800 hover:bg-stone-200'
-            }`}
-          >
-            <div className="h-3.5 w-3.5 rounded-full border border-stone-400 flex items-center justify-center">
-              <div className="h-2 w-2 rounded-full bg-stone-400" />
-            </div>
-            <span>Blanco y negro</span>
-          </button>
 
           {/* Underline links */}
           <button

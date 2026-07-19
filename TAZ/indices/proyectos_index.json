@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "ultima_actualizacion": "2026-07-19",
+  "proyectos": [
+    {
+      "id": "agricultura-antigua",
+      "nombre": "Agricultura Antigua",
+      "stack": ["React", "TypeScript", "Express", "ChromaDB"],
+      "absorbido": "2026-07-19",
+      "stats": {
+        "bugs": 11,
+        "patrones": 5,
+        "decisiones": 6
+      }
+    }
+  ],
+  "total_proyectos": 1
+}

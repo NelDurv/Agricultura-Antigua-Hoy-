@@ -1,6 +1,6 @@
 export type KnowledgeType =
   | 'course' | 'article' | 'manual' | 'protocol' | 'guide' | 'infographic'
-  | 'video' | 'recipe' | 'glossary' | 'tool' | 'news' | 'research';
+  | 'video' | 'recipe' | 'glossary' | 'tool' | 'news' | 'research' | 'statistic';
 
 export type DifficultyLevel = 'Bajo' | 'Medio' | 'Alto';
 export type CourseLevel = 'Principiante' | 'Intermedio' | 'Avanzado';
@@ -10,7 +10,9 @@ export interface KnowledgeNode {
   type: KnowledgeType;
   title: string;
   description: string;
+  fullText: string;
   tags: string[];
+  keywords: string[];
   relatedTo: string[];
   taxons: string[];
   difficulty?: DifficultyLevel | CourseLevel;

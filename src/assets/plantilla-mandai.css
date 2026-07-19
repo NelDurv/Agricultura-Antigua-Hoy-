@@ -1,0 +1,561 @@
+/* =====================================================
+   Plantilla de Estilos — inspirada en Mandai Wildlife Reserve
+   https://www.mandai.com/en.html
+   Colores: verde #009B4D, amarillo #FFCC00, marfil #FAF5E9
+   ===================================================== */
+
+/* ─── Variables ─── */
+:root {
+  --ocn-white: #ffffff;
+  --ocn-cream: #faf5e9;
+  --ocn-sage: #e6f5ec;
+  --ocn-green: #009b4d;
+  --ocn-green-dark: #007a3d;
+  --ocn-navy: #1a1a2e;
+  --ocn-terracotta: #ffcc00;
+  --ocn-text: #1a1a2e;
+  --ocn-text-light: #6b7280;
+  --ocn-border: #e5e7eb;
+  --ocn-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --ocn-radius: 16px;
+  --ocn-radius-sm: 10px;
+  --ocn-font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --ocn-font-heading: 'Bricolage Grotesque', 'Montserrat', serif;
+  --ocn-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* md-* alias */
+  --md-white: #ffffff;
+  --md-ivory: #faf5e9;
+  --md-green: #009b4d;
+  --md-green-dark: #007a3d;
+  --md-green-light: #e6f5ec;
+  --md-yellow: #ffcc00;
+  --md-yellow-light: #fff8d6;
+  --md-yellow-dark: #e6b800;
+  --md-text: #1a1a2e;
+  --md-text-muted: #6b7280;
+  --md-border: #e5e7eb;
+  --md-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --md-shadow-hover: 0 8px 40px rgba(0,155,77,0.12);
+  --md-radius: 16px;
+  --md-radius-sm: 10px;
+  --md-font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --md-font-display: 'Bricolage Grotesque', 'Montserrat', serif;
+  --md-font-mono: 'SF Mono', 'Fira Code', monospace;
+  --md-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===========================================
+   ocn-* classes (drop-in replacement)
+   =========================================== */
+
+/* ─── Hero ─── */
+.ocn-hero {
+  background: linear-gradient(135deg, #009b4d 0%, #007a3d 50%, #006b34 100%);
+  color: var(--ocn-white);
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ocn-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.ocn-hero h1 {
+  font-family: var(--ocn-font-heading);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.ocn-hero p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ─── Buttons ─── */
+.ocn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-family: var(--ocn-font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--ocn-radius-sm);
+  cursor: pointer;
+  transition: all var(--ocn-transition);
+  text-decoration: none;
+}
+
+.ocn-btn-primary {
+  background: var(--ocn-green);
+  color: var(--ocn-white);
+}
+
+.ocn-btn-primary:hover {
+  background: var(--ocn-green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 155, 77, 0.35);
+}
+
+.ocn-btn-secondary {
+  background: var(--ocn-terracotta);
+  color: var(--ocn-navy);
+}
+
+.ocn-btn-secondary:hover {
+  background: var(--md-yellow-dark);
+  transform: translateY(-2px);
+}
+
+.ocn-btn-outline {
+  background: transparent;
+  border: 2px solid var(--ocn-green);
+  color: var(--ocn-green);
+}
+
+.ocn-btn-outline:hover {
+  background: var(--ocn-green);
+  color: var(--ocn-white);
+}
+
+/* ─── Cards ─── */
+.ocn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.ocn-card {
+  background: var(--ocn-white);
+  border: 1px solid var(--ocn-border);
+  border-radius: var(--ocn-radius);
+  overflow: hidden;
+  box-shadow: var(--ocn-shadow);
+  transition: transform var(--ocn-transition), box-shadow var(--ocn-transition);
+}
+
+.ocn-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--md-shadow-hover);
+}
+
+.ocn-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.ocn-card-body {
+  padding: 1.5rem;
+}
+
+.ocn-card-title {
+  font-family: var(--ocn-font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ocn-navy);
+  margin-bottom: 0.5rem;
+}
+
+.ocn-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ocn-text-light);
+}
+
+/* ─── Section Styles ─── */
+.ocn-section {
+  padding: 4rem 2rem;
+}
+
+.ocn-section-light {
+  background: var(--ocn-cream);
+}
+
+.ocn-section-dark {
+  background: var(--ocn-navy);
+  color: var(--ocn-white);
+}
+
+.ocn-section-title {
+  font-family: var(--ocn-font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ocn-navy);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.ocn-section-dark .ocn-section-title {
+  color: var(--ocn-white);
+}
+
+.ocn-section-subtitle {
+  font-size: 1rem;
+  color: var(--ocn-text-light);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.ocn-section-dark .ocn-section-subtitle {
+  opacity: 0.8;
+}
+
+/* ─── Stats / Numbers ─── */
+.ocn-stat {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.ocn-stat-number {
+  font-family: var(--ocn-font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ocn-green);
+  line-height: 1;
+}
+
+.ocn-stat-label {
+  font-size: 0.85rem;
+  color: var(--ocn-text-light);
+  margin-top: 0.25rem;
+}
+
+/* ─── Badge / Tag ─── */
+.ocn-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--md-green-light);
+  color: var(--ocn-green);
+}
+
+.ocn-badge-dark {
+  background: var(--ocn-navy);
+  color: var(--ocn-white);
+}
+
+/* ─── Footer ─── */
+.ocn-footer {
+  background: #006b34;
+  color: rgba(255,255,255,0.7);
+  padding: 3rem 2rem;
+  font-size: 0.85rem;
+}
+
+.ocn-footer a {
+  color: var(--md-yellow);
+  text-decoration: none;
+}
+
+.ocn-footer a:hover {
+  color: var(--ocn-white);
+}
+
+/* ===========================================
+   md-* classes (Mandai-specific)
+   =========================================== */
+
+/* ─── Hero ─── */
+.md-hero {
+  background: linear-gradient(135deg, #009b4d 0%, #007a3d 50%, #006b34 100%);
+  color: var(--md-white);
+  padding: 5rem 2rem;
+  border-radius: var(--md-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.md-hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -5%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255, 204, 0, 0.1);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.md-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255, 204, 0, 0.06);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.md-hero h1 {
+  font-family: var(--md-font-display);
+  font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 720px;
+  position: relative;
+}
+
+.md-hero p {
+  font-size: 1rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 600px;
+  position: relative;
+}
+
+/* ─── Buttons ─── */
+.md-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-family: var(--md-font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--md-transition);
+  text-decoration: none;
+}
+
+.md-btn-primary {
+  background: var(--md-green);
+  color: var(--md-white);
+}
+
+.md-btn-primary:hover {
+  background: var(--md-green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 155, 77, 0.35);
+}
+
+.md-btn-accent {
+  background: var(--md-yellow);
+  color: var(--md-text);
+}
+
+.md-btn-accent:hover {
+  background: var(--md-yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 204, 0, 0.35);
+}
+
+.md-btn-outline {
+  background: transparent;
+  border: 2px solid var(--md-green);
+  color: var(--md-green);
+}
+
+.md-btn-outline:hover {
+  background: var(--md-green);
+  color: var(--md-white);
+}
+
+/* ─── Cards ─── */
+.md-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.md-card {
+  background: var(--md-white);
+  border: 1px solid var(--md-border);
+  border-radius: var(--md-radius);
+  overflow: hidden;
+  box-shadow: var(--md-shadow);
+  transition: transform var(--md-transition), box-shadow var(--md-transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.md-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--md-shadow-hover);
+}
+
+.md-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.md-card-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.md-card-title {
+  font-family: var(--md-font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--md-text);
+  line-height: 1.3;
+}
+
+.md-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--md-text-muted);
+}
+
+/* ─── Sections ─── */
+.md-section {
+  padding: 4rem 2rem;
+}
+
+.md-section-light {
+  background: var(--md-ivory);
+}
+
+.md-section-green {
+  background: var(--md-green);
+  color: var(--md-white);
+}
+
+.md-section-title {
+  font-family: var(--md-font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--md-text);
+  margin-bottom: 0.75rem;
+}
+
+.md-section-green .md-section-title {
+  color: var(--md-white);
+}
+
+.md-section-subtitle {
+  font-size: 1rem;
+  color: var(--md-text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.md-section-green .md-section-subtitle {
+  color: rgba(255,255,255,0.85);
+}
+
+/* ─── Badge / Tag ─── */
+.md-badge {
+  display: inline-block;
+  font-family: var(--md-font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--md-green-light);
+  color: var(--md-green);
+  border: 1px solid rgba(0, 155, 77, 0.15);
+}
+
+.md-badge-yellow {
+  background: var(--md-yellow-light);
+  color: #8a7000;
+  border-color: rgba(255, 204, 0, 0.3);
+}
+
+/* ─── Stats ─── */
+.md-stat {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.md-stat-number {
+  font-family: var(--md-font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--md-green);
+  line-height: 1;
+}
+
+.md-stat-label {
+  font-size: 0.85rem;
+  color: var(--md-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ─── Accent highlight ─── */
+.md-highlight {
+  background: var(--md-yellow-light);
+  border-left: 4px solid var(--md-yellow);
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--md-radius-sm) var(--md-radius-sm) 0;
+}
+
+/* ─── Footer ─── */
+.md-footer {
+  background: #006b34;
+  color: rgba(255,255,255,0.7);
+  padding: 3rem 2rem;
+  font-size: 0.85rem;
+}
+
+.md-footer a {
+  color: var(--md-yellow);
+  text-decoration: none;
+}
+
+.md-footer a:hover {
+  color: var(--md-white);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .ocn-grid,
+  .md-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ocn-hero,
+  .md-hero {
+    padding: 3rem 1.25rem;
+  }
+
+  .ocn-section,
+  .md-section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .ocn-card-img,
+  .md-card-img {
+    height: 160px;
+  }
+}

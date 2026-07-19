@@ -21,9 +21,9 @@ describe('App - navegacion y estructura', () => {
 });
 
 describe('App - funcionalidad de tabs', () => {
-  it('tiene 9 tabs de navegacion', () => {
+  it('tiene 6 tabs de navegacion', () => {
     render(<App />);
-    const tabNames = ['Inicio', 'Rutas & Campus', 'Biblioteca', 'Academia', 'Comunidad', 'Web AI-Ready', 'Herramientas', 'Instituciones', 'Mi Perfil'];
+    const tabNames = ['Inicio', 'Campus', 'Biblioteca', 'Academia', 'Comunidad', 'Herramientas'];
     tabNames.forEach(name => {
       expect(screen.getByText(name)).toBeInTheDocument();
     });

@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider, ProgressProvider, UIProvider } from './contexts';
+import { AuthProvider, ProgressProvider, UIProvider, BrainProvider } from './contexts';
 import Layout from './layouts/Layout';
 import HomeSection from './components/HomeSection';
 
@@ -10,7 +10,6 @@ const AcademiaSection = lazy(() => import('./components/AcademiaSection'));
 const ComunidadSection = lazy(() => import('./components/ComunidadSection'));
 const RecursosSection = lazy(() => import('./components/RecursosSection'));
 const InstitucionesSection = lazy(() => import('./components/InstitucionesSection'));
-const PerfilSection = lazy(() => import('./components/PerfilSection'));
 const AIReadySection = lazy(() => import('./components/AIReadySection'));
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -18,7 +17,9 @@ function Providers({ children }: { children: React.ReactNode }) {
     <UIProvider>
       <AuthProvider>
         <ProgressProvider>
-          {children}
+          <BrainProvider>
+            {children}
+          </BrainProvider>
         </ProgressProvider>
       </AuthProvider>
     </UIProvider>
@@ -42,7 +43,6 @@ export default function App() {
             <Route path="aiready" element={<AIReadySection />} />
             <Route path="recursos" element={<RecursosSection />} />
             <Route path="instituciones" element={<InstitucionesSection />} />
-            <Route path="perfil" element={<PerfilSection />} />
           </Route>
         </Routes>
       </BrowserRouter>

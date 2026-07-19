@@ -1,143 +1,10 @@
 import type { KnowledgeNode, KnowledgeRelationship, KnowledgeGraph } from './types';
-import { COURSES } from '../../data/courses/index';
-import { BIBLIOTECA } from '../../data/biblioteca/index';
-import { RECETAS, GLOSARIO } from '../../data/recursos/index';
-import { PILARES, MITOS } from '../../data/home/index';
-import type { Pilar, Mito } from '../../types';
-
-const typeMap: Record<string, string> = {
-  'Artículos': 'article',
-  'Manuales': 'manual',
-  'Fichas Técnicas': 'guide',
-  'Protocolos': 'protocol',
-  'Guías': 'guide',
-  'Infografías': 'infographic',
-};
-
-function extractIngredientKeywords(ingredients: string[], knownTerms: string[]): string[] {
-  const keywords: string[] = [];
-  const stopWords = new Set(['de', 'la', 'el', 'en', 'del', 'con', 'sin', 'kg', 'l', 'g', 'ml']);
-  for (const ing of ingredients) {
-    for (const word of ing.toLowerCase().split(/[\s,]+/)) {
-      const clean = word.replace(/^[\d.]+/, '').trim();
-      if (clean.length > 3 && !stopWords.has(clean) && !/^\d/.test(clean)) {
-        keywords.push(clean);
-      }
-    }
-  }
-  // Prioritize known technical terms
-  const matched = keywords.filter(k => knownTerms.some(t => t.toLowerCase().includes(k)));
-  return [...new Set([...matched, ...keywords.slice(0, 8)])];
-}
-
-const KNOWN_TERMS = [
-  'agua', 'azufre', 'cal', 'melaza', 'microorganismos', 'estiércol', 'compost',
-  'caldo', 'sulfocálcico', 'biodinámica', 'silicio', 'ORP', 'IASS', 'MPASi',
-  'biosilicificación', 'quelatación', 'glomalina', 'rH', 'CICE', 'humus',
-  'lombriz', 'bokashi', 'micorrizas', 'trichoderma', 'bacillus', 'fosforita',
-  'roca', 'mineral', 'suelo', 'abono', 'fermentado', 'bioinsumos', 'ceniza',
-];
-
-function buildNodes(): KnowledgeNode[] {
-  const nodes: KnowledgeNode[] = [];
-
-  for (const c of COURSES) {
-    nodes.push({
-      id: c.id,
-      type: 'course',
-      title: c.title,
-      description: c.description,
-      tags: [c.category, c.level, ...c.title.toLowerCase().split(' ').slice(0, 5)],
-      relatedTo: [],
-      taxons: ['cursos', c.category],
-      difficulty: c.level,
-    });
-  }
-
-  for (const d of BIBLIOTECA) {
-    nodes.push({
-      id: d.id,
-      type: (typeMap[d.category] || 'article') as any,
-      title: d.title,
-      description: d.description,
-      tags: d.tags,
-      relatedTo: d.relatedCourses,
-      taxons: ['biblioteca', d.category],
-      difficulty: d.difficulty,
-    });
-  }
-
-  for (const r of RECETAS) {
-    const ingredientTags = extractIngredientKeywords(r.ingredientes, KNOWN_TERMS);
-    nodes.push({
-      id: r.id,
-      type: 'recipe',
-      title: r.titulo,
-      description: r.descripcion,
-      tags: [r.categoria, r.tiempo, ...ingredientTags],
-      relatedTo: [],
-      taxons: ['recursos', 'recetas', r.categoria],
-      difficulty: r.tiempo.includes('hora') ? 'Principiante' : r.tiempo.includes('día') ? 'Intermedio' : undefined,
-    });
-  }
-
-  for (const g of GLOSARIO) {
-    const defKeywords = g.definicion
-      .toLowerCase()
-      .replace(/[^a-záéíóúñü\s]/g, '')
-      .split(/\s+/)
-      .filter(w => w.length > 4 && !['para', 'como', 'una', 'del', 'las', 'los', 'con', 'mide', 'donde', 'este', 'esta', 'proceso', 'capacidad', 'producida'].includes(w))
-      .slice(0, 5);
-    nodes.push({
-      id: `glosario-${g.termino}`,
-      type: 'glossary',
-      title: g.termino,
-      description: g.definicion,
-      tags: [g.termino, ...defKeywords],
-      relatedTo: [],
-      taxons: ['recursos', 'glosario'],
-    });
-  }
-
-  for (const p of PILARES) {
-    const textTags = p.descripcion
-      .toLowerCase()
-      .replace(/[^a-záéíóúñü\s]/g, '')
-      .split(/\s+/)
-      .filter(w => w.length > 5 && !['para', 'como', 'una', 'del', 'las', 'los', 'con', 'que', 'más', 'este', 'esta', 'entre', 'sobre', 'tiene', 'hasta', 'todo', 'pero', 'muy'].includes(w))
-      .slice(0, 4);
-    nodes.push({
-      id: `pilar-${p.id}`,
-      type: 'research',
-      title: p.titulo,
-      description: p.descripcion,
-      tags: [...p.temas.slice(0, 5), ...textTags],
-      relatedTo: [],
-      taxons: ['inicio', 'pilares', p.id],
-    });
-  }
-
-  for (const m of MITOS) {
-    const tags = [
-      m.titulo.toLowerCase().split(' ').slice(0, 4),
-      ...m.realidad.toLowerCase().split(' ').filter(w => ['suelo', 'planta', 'fertilizante', 'materia', 'orgánica', 'fotosíntesis', 'agua', 'oxígeno', 'energía', 'producción', 'pH', 'ORP', 'nitrógeno', 'carbono', 'microorganismos', 'raíces', 'cosecha', 'minerales'].includes(w.toLowerCase())),
-    ].flat();
-    nodes.push({
-      id: m.id,
-      type: 'research',
-      title: m.titulo,
-      description: m.realidad,
-      tags: [...new Set(tags)].slice(0, 8),
-      relatedTo: [],
-      taxons: ['inicio', 'mitos', m.id],
-    });
-  }
-
-  return nodes;
-}
+import { buildUnifiedIndex, entriesToNodes } from '../search/unifiedIndex';
 
 function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
   const edges: KnowledgeRelationship[] = [];
+  const edgeSet = new Set<string>();
+  const idSet = new Set(nodes.map(n => n.id));
   const tagIndex = new Map<string, string[]>();
 
   for (const n of nodes) {
@@ -150,21 +17,23 @@ function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
 
   for (const n of nodes) {
     for (const relatedId of n.relatedTo) {
-      if (nodes.some(other => other.id === relatedId)) {
-        edges.push({ sourceId: n.id, targetId: relatedId, relation: 'related' });
+      if (idSet.has(relatedId)) {
+        const key = n.id < relatedId ? `${n.id}|${relatedId}` : `${relatedId}|${n.id}`;
+        if (!edgeSet.has(key)) {
+          edgeSet.add(key);
+          edges.push({ sourceId: n.id, targetId: relatedId, relation: 'related' });
+        }
       }
     }
   }
 
   for (const [, ids] of tagIndex) {
-    if (ids.length < 2) continue;
+    if (ids.length < 2 || ids.length > 50) continue;
     for (let i = 0; i < ids.length; i++) {
       for (let j = i + 1; j < ids.length; j++) {
-        const exists = edges.some(e =>
-          (e.sourceId === ids[i] && e.targetId === ids[j]) ||
-          (e.sourceId === ids[j] && e.targetId === ids[i])
-        );
-        if (!exists) {
+        const key = ids[i] < ids[j] ? `${ids[i]}|${ids[j]}` : `${ids[j]}|${ids[i]}`;
+        if (!edgeSet.has(key)) {
+          edgeSet.add(key);
           edges.push({ sourceId: ids[i], targetId: ids[j], relation: 'related' });
         }
       }
@@ -176,9 +45,16 @@ function buildEdges(nodes: KnowledgeNode[]): KnowledgeRelationship[] {
 
 let _graph: KnowledgeGraph | null = null;
 
+// prebuilt knowledge-graph.json removed — graph is always built from source
+
+export function invalidateGraph(): void {
+  _graph = null;
+}
+
 export function buildKnowledgeGraph(): KnowledgeGraph {
   if (_graph) return _graph;
-  const nodes = buildNodes();
+  const entries = buildUnifiedIndex();
+  const nodes = entriesToNodes(entries);
   const edges = buildEdges(nodes);
   _graph = { nodes, edges };
   return _graph;
@@ -208,12 +84,83 @@ export function getNodesByType(type: string): KnowledgeNode[] {
   return buildKnowledgeGraph().nodes.filter(n => n.type === type);
 }
 
+// ─────────────────────────────────────
+// Search — tokenized + scored + fullText + keywords
+// ─────────────────────────────────────
+
+const STOP_WORDS = new Set([
+  'que', 'del', 'las', 'los', 'con', 'para', 'como', 'una', 'más',
+  'este', 'esta', 'entre', 'sobre', 'tiene', 'hasta', 'todo', 'pero',
+  'muy', 'cómo', 'qué', 'por', 'puede', 'debe', 'hace', 'hacer',
+  'cuál', 'eres', 'sabes', 'dime', 'quiero', 'necesito', 'ayuda',
+  'hola', 'gracias', 'bueno', 'buena', 'son', 'sus', 'han', 'era',
+]);
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-záéíóúñüA-ZÁÉÍÓÚÑÜ0-9\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !STOP_WORDS.has(w));
+}
+
+/** Fuzzy match: substring, prefix, or bigram overlap > 55% */
+function fuzzyMatch(token: string, field: string): boolean {
+  if (field.includes(token)) return true;
+  if (token.includes(field)) return true;
+  if (token.length >= 4 && field.length >= 4) {
+    const minLen = Math.min(token.length, field.length);
+    const maxPrefix = Math.min(minLen, Math.max(token.length, field.length) - 2);
+    if (maxPrefix >= 4 && token.slice(0, maxPrefix) === field.slice(0, maxPrefix)) return true;
+    const tokenBigrams = new Set<string>();
+    for (let i = 0; i < token.length - 1; i++) tokenBigrams.add(token.slice(i, i + 2));
+    let overlap = 0;
+    for (let i = 0; i < field.length - 1; i++) {
+      if (tokenBigrams.has(field.slice(i, i + 2))) overlap++;
+    }
+    const maxBigrams = Math.max(token.length - 1, field.length - 1);
+    if (maxBigrams > 0 && overlap / maxBigrams > 0.55) return true;
+  }
+  return false;
+}
+
+function scoreNode(node: KnowledgeNode, tokens: string[]): number {
+  let score = 0;
+  const titleLow = node.title.toLowerCase();
+  const descLow = node.description.toLowerCase();
+  const fullLow = node.fullText?.toLowerCase() || '';
+  const kwLow = node.keywords?.map(k => k.toLowerCase()) || [];
+  const tagLow = node.tags.map(t => t.toLowerCase());
+  const taxLow = node.taxons.map(t => t.toLowerCase());
+
+  if (tokens.length === 1 && node.id.toLowerCase() === tokens[0]) return 100;
+  if (node.id.toLowerCase().includes(tokens.join('-'))) score += 50;
+
+  for (const token of tokens) {
+    if (fuzzyMatch(token, titleLow)) score += 10;
+    if (kwLow.some(k => fuzzyMatch(token, k))) score += 9;
+    if (tagLow.some(t => fuzzyMatch(token, t))) score += 8;
+    if (taxLow.some(t => fuzzyMatch(token, t))) score += 6;
+    if (fuzzyMatch(token, fullLow)) score += 3;
+    if (fuzzyMatch(token, descLow)) score += 2;
+  }
+
+  // Boost richer content types over glossary/statistic/news
+  const richTypes = ['course', 'article', 'manual', 'guide'];
+  if (richTypes.includes(node.type)) score += 10;
+
+  return score;
+}
+
 export function searchNodes(query: string): KnowledgeNode[] {
-  const q = query.toLowerCase();
-  return buildKnowledgeGraph().nodes.filter(n =>
-    n.title.toLowerCase().includes(q) ||
-    n.description.toLowerCase().includes(q) ||
-    n.tags.some(t => t.toLowerCase().includes(q)) ||
-    n.taxons.some(t => t.toLowerCase().includes(q))
-  );
+  const tokens = tokenize(query);
+  if (tokens.length === 0) return buildKnowledgeGraph().nodes.slice(0, 10);
+
+  const scored = buildKnowledgeGraph()
+    .nodes
+    .map(n => ({ node: n, score: scoreNode(n, tokens) }))
+    .filter(entry => entry.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  return scored.map(entry => entry.node);
 }

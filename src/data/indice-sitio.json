@@ -1,0 +1,469 @@
+{
+  "version": "1.0.0",
+  "ultima_actualizacion": "2026-07-15",
+  "obra": "Agricultura Antigua — Campus Agroecológico",
+  "lema": "Sabiduría ancestral + Ciencia de frontera",
+
+  "cultivos": {
+    "maiz": {
+      "nombre": "Maíz",
+      "tags": ["grano", "milpa", "tradicional", "básico"],
+      "parametros": { "ph_suelo": "5.5-6.8", "temp_optima": "25-30°C", "dias_ciclo": "100-150" },
+      "paginas": ["cursos/c1", "cursos/c11", "home"],
+      "conceptos_clave": ["milpa", "nixtamalización", "teocintle", "5 espigas"],
+      "secciones_glosario": ["suelos", "general"]
+    },
+    "frijol": {
+      "nombre": "Frijol",
+      "tags": ["leguminosa", "milpa", "proteína"],
+      "parametros": { "ph_suelo": "6.0-7.0", "temp_optima": "18-27°C", "dias_ciclo": "70-120" },
+      "paginas": ["cursos/c1", "home"],
+      "conceptos_clave": ["rhizobium", "fijación nitrógeno", "milpa"],
+      "secciones_glosario": ["general"]
+    },
+    "calabaza": {
+      "nombre": "Calabaza",
+      "tags": ["milpa", "cobertura", "cucurbitácea"],
+      "parametros": { "ph_suelo": "6.0-7.5", "temp_optima": "22-30°C", "dias_ciclo": "80-120" },
+      "paginas": ["cursos/c1", "home"],
+      "conceptos_clave": ["cobertura vegetal", "milpa"],
+      "secciones_glosario": []
+    },
+    "arroz": {
+      "nombre": "Arroz",
+      "tags": ["grano", "inundación", "SRI", "récord"],
+      "parametros": { "ph_suelo": "5.0-6.5", "temp_optima": "25-35°C", "dias_ciclo": "90-180" },
+      "paginas": ["cursos/c1", "home"],
+      "conceptos_clave": ["SRI", "Sumant Kumar", "22.4 t/ha", "arroz flotante"],
+      "secciones_glosario": ["suelos"]
+    },
+    "tomate": {
+      "nombre": "Tomate",
+      "tags": ["hortaliza", "invernadero", "fruto"],
+      "parametros": { "ph_suelo": "5.5-6.8", "ce_max": "2.5 mS/cm", "temp_optima": "22-27°C" },
+      "paginas": ["cursos/riego-keyline", "biblioteca/modelo-holandes-cea"],
+      "conceptos_clave": ["pudrición apical", "VPD", "LED", "CO2"],
+      "secciones_glosario": ["general"]
+    },
+    "trigo": {
+      "nombre": "Trigo",
+      "tags": ["grano", "día largo", "templado"],
+      "parametros": { "ph_suelo": "6.0-7.5", "temp_optima": "15-24°C", "dias_ciclo": "110-150" },
+      "paginas": [],
+      "conceptos_clave": ["planta de día largo"],
+      "secciones_glosario": ["clima"]
+    },
+    "cebada": {
+      "nombre": "Cebada",
+      "tags": ["grano", "tolerante sales", "Babilonia"],
+      "parametros": { "ph_suelo": "6.0-8.0", "temp_optima": "15-22°C" },
+      "paginas": ["home"],
+      "conceptos_clave": ["sustitución osmótica", "tolerancia salina"],
+      "secciones_glosario": []
+    },
+    "soja": {
+      "nombre": "Soja",
+      "tags": ["leguminosa", "oleaginosa", "día corto"],
+      "parametros": { "ph_suelo": "6.0-7.0", "temp_optima": "22-28°C" },
+      "paginas": [],
+      "conceptos_clave": ["planta de día corto", "fijación nitrógeno"],
+      "secciones_glosario": ["clima"]
+    },
+    "espinaca": {
+      "nombre": "Espinaca",
+      "tags": ["hortaliza", "día largo", "hoja"],
+      "parametros": { "ph_suelo": "6.0-7.5", "temp_optima": "15-20°C" },
+      "paginas": [],
+      "conceptos_clave": ["planta de día largo"],
+      "secciones_glosario": ["clima"]
+    },
+    "lechuga": {
+      "nombre": "Lechuga",
+      "tags": ["hortaliza", "día largo", "hoja"],
+      "parametros": { "ph_suelo": "6.0-7.0", "temp_optima": "15-20°C" },
+      "paginas": [],
+      "conceptos_clave": [],
+      "secciones_glosario": []
+    },
+    "pepino": {
+      "nombre": "Pepino",
+      "tags": ["hortaliza", "cucurbitácea", "día neutro"],
+      "parametros": { "ph_suelo": "6.0-7.0", "temp_optima": "22-28°C" },
+      "paginas": [],
+      "conceptos_clave": ["planta de día neutro"],
+      "secciones_glosario": ["clima"]
+    },
+    "vid": {
+      "nombre": "Vid",
+      "tags": ["frutal", "caldo sulfocálcico", "hongo"],
+      "parametros": { "ph_suelo": "5.5-7.0", "temp_optima": "20-28°C" },
+      "paginas": ["biblioteca/ficha-caldo-sulfocalcico"],
+      "conceptos_clave": ["caldo sulfocálcico", "cenicilla", "roya"],
+      "secciones_glosario": []
+    },
+    "citricos": {
+      "nombre": "Cítricos",
+      "tags": ["frutal", "control biológico", "China"],
+      "paginas": ["home"],
+      "conceptos_clave": ["hormigas tejederas", "Oecophylla smaragdina"],
+      "secciones_glosario": []
+    },
+    "palma_datilera": {
+      "nombre": "Palma Datilera",
+      "tags": ["frutal", "Babilonia", "oasis"],
+      "paginas": ["home"],
+      "conceptos_clave": ["oasis tres niveles", "barrera de calor"],
+      "secciones_glosario": []
+    }
+  },
+
+  "temas": {
+    "suelo-vivo": {
+      "titulo": "Suelo Vivo",
+      "subtitulo": "El Ecosistema Invisible",
+      "icono": "🌍",
+      "subtemas": [
+        "Microbiología de Consorcio (600 microorganismos del bosque)",
+        "Descompactación Mecánica y Biológica",
+        "Energía y ORP (Potencial Óxido-Reducción)",
+        "Salud Física del Suelo (porosidad, oxígeno)",
+        "Infiltración y Retención de Agua (1% MO = 144,000 L/ha)",
+        "Ciclos Físico-Químico-Biológicos",
+        "IASS - Índice de Sustentabilidad del Suelo"
+      ],
+      "cursos_relacionados": ["suelo-vivo", "compostaje-avanzado"],
+      "paginas": ["home", "campus"],
+      "tags": ["microbiología", "ORP", "materia orgánica", "descompactación"]
+    },
+    "nutricion-vegetal": {
+      "titulo": "Nutrición Vegetal Integral",
+      "subtitulo": "Cosechando el Sol",
+      "icono": "☀️",
+      "subtemas": [
+        "La Regla del 95/5 (C-H-O: 95% de la planta es gratis)",
+        "Nutrición Lumínica (Cuántica) - Captura de fotones",
+        "Nutrición Carbónica (CO₂)",
+        "Nutrición de Hidrógeno (Agua)",
+        "Bioquímica del Silicio",
+        "Biosilicificación - Fitolitos y Tricomas",
+        "Fertilizantes Híbridos de Lenta Liberación"
+      ],
+      "cursos_relacionados": ["c1", "c3"],
+      "paginas": ["home"],
+      "tags": ["silicio", "CO2", "fotosíntesis", "95/5"]
+    },
+    "bioinsumos": {
+      "titulo": "Bioinsumos — La Biofábrica Utopía",
+      "subtitulo": "9 Estaciones de Producción",
+      "icono": "🧪",
+      "subtemas": [
+        "Estación 1: Microorganismos de Montaña (Sólidos)",
+        "Estación 2: Microorganismos Benéficos (Líquidos)",
+        "Estación 3: Estiércol Falso (Sólido Nutritivo)",
+        "Estación 4: Biol Potenciado",
+        "Estación 5: Multimineral Quelado (60 minerales)",
+        "Estación 6: Ácidos Húmicos y Fúlvicos",
+        "Estación 7: Fungicidas Orgánicos (Sulfocálcico, Bordelés)",
+        "Estación 8: Insecticidas Orgánicos (Jabón Potásico, Neem)",
+        "Estación 9: Programa Integrado de Control"
+      ],
+      "cursos_relacionados": ["c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
+      "paginas": ["home", "campus"],
+      "tags": ["MM", "biol", "quelatación", "caldo sulfocálcico", "jabón potásico"]
+    },
+    "agricultura-tradicional": {
+      "titulo": "Agricultura Tradicional",
+      "subtitulo": "Sabiduría Ancestral",
+      "icono": "🌾",
+      "subtemas": [
+        "Sistema Milpa Maya - 9 mazorcas por planta",
+        "Terrazas Incas y Diseño Hidrológico",
+        "Chinampas Aztecas y Agricultura de Humedales",
+        "Control de Arvenses - La maleza como aliada",
+        "Ingeniería Hidráulica Jemer (Camboya)",
+        "Sistema Subak de Bali (Indonesia)",
+        "Policultura del Arrozal Inundado (China)",
+        "Tecnologías e Innovación China (Ao Tian)",
+        "Sistemas del Monzón y Tanques (India Antigua)",
+        "Control de Ríos y Desalinización (Babilonia)",
+        "Rescate de la Sabiduría Ancestral",
+        "Descolonización Científica y Tecnológica",
+        "El mito del maíz que se multiplicaba"
+      ],
+      "cursos_relacionados": [],
+      "paginas": ["home"],
+      "tags": ["milpa", "chinampas", "terrazas", "subak", "jemer", "babilonia"]
+    },
+    "ciencia-moderna": {
+      "titulo": "Ciencia Moderna",
+      "subtitulo": "Tecnología de Frontera",
+      "icono": "🔬",
+      "subtemas": [
+        "Metagenómica - ADN del suelo y microbiomas",
+        "Microscopía Electrónica de Barrido (SEM)",
+        "ORP - Medición de la Energía del Suelo",
+        "Dispositivos Analíticos Móviles (pH, CE, ORP)",
+        "Arado Yomex - Descompactación a 60-80 cm",
+        "Innovaciones Tecnológicas (Apps, drones, sensores)",
+        "SRI - Sistema de Intensificación del Arroz"
+      ],
+      "cursos_relacionados": [],
+      "paginas": ["home"],
+      "tags": ["metagenómica", "SEM", "ORP", "Yomex", "SRI"]
+    },
+    "biofertilizantes": {
+      "titulo": "Biofertilizantes y Caldos Minerales",
+      "icono": "🧪",
+      "subtemas": [
+        "Fermentación anaeróbica (Caldo Súper Magro)",
+        "Caldo Sulfocálcico",
+        "Pasta Bordelesa",
+        "Jabón Potásico",
+        "Quelatación biológica de minerales"
+      ],
+      "cursos_relacionados": ["biofertilizantes"],
+      "paginas": ["campus", "biblioteca"],
+      "tags": ["súper magro", "sulfocálcico", "bordelés", "jabón potásico"]
+    },
+    "bokashi": {
+      "titulo": "Abonos Fermentados tipo Bokashi",
+      "icono": "♻️",
+      "subtemas": [
+        "Termofilia y microbiología del Bokashi",
+        "Relación C:N (25:1 a 30:1)",
+        "Control de temperatura (55-65°C)",
+        "Volteos diarios y maduración en 15 días"
+      ],
+      "cursos_relacionados": ["bokashi-avanzado"],
+      "paginas": ["campus", "biblioteca/protocolo-bocashi"],
+      "tags": ["bokashi", "termófilo", "C:N", "fermentación aeróbica"]
+    },
+    "control-biologico": {
+      "titulo": "Control Biológico de Plagas",
+      "icono": "🐞",
+      "subtemas": [
+        "Identificación de insectos benéficos",
+        "Hongos entomopatógenos (Beauveria, Metarhizium)",
+        "Biopreparados repelentes",
+        "Policultivos y corredores biológicos"
+      ],
+      "cursos_relacionados": ["control-biologico"],
+      "paginas": ["campus", "biblioteca/guia-identificacion-plagas"],
+      "tags": ["control biológico", "Beauveria", "crisopas", "mariquitas"]
+    },
+    "riego-keyline": {
+      "titulo": "Diseño Hidrológico Keyline",
+      "icono": "💧",
+      "subtemas": [
+        "Topografía y líneas clave",
+        "Diseño de represas y jagüeyes",
+        "Implementación en campo"
+      ],
+      "cursos_relacionados": ["riego-keyline"],
+      "paginas": ["campus"],
+      "tags": ["keyline", "captación agua", "infiltración", "P.A. Yeomans"]
+    },
+    "agroforesteria": {
+      "titulo": "Sistemas Agroforestales Sintrópicos",
+      "icono": "🌳",
+      "subtemas": [
+        "Sucesión ecológica y estratificación",
+        "Diseño de bosque comestible",
+        "Poda dinámica"
+      ],
+      "cursos_relacionados": ["agroforesteria"],
+      "paginas": ["campus"],
+      "tags": ["sintrópica", "Ernst Götsch", "sucesión", "poda dinámica"]
+    },
+    "semillas": {
+      "titulo": "Semillas Criollas",
+      "icono": "🌱",
+      "subtemas": [
+        "Selección de plantas madre",
+        "Técnicas de cosecha y almacenamiento",
+        "Bancos comunitarios de semillas"
+      ],
+      "cursos_relacionados": ["semillas-criollas"],
+      "paginas": ["campus"],
+      "tags": ["semillas criollas", "biodiversidad", "bancos de semillas"]
+    },
+    "compostaje": {
+      "titulo": "Compostaje Termófilo y Lombricultura",
+      "icono": "🪱",
+      "subtemas": [
+        "Física y química del compostaje",
+        "Pilas estáticas aireadas",
+        "Camas de lombricultura"
+      ],
+      "cursos_relacionados": ["compostaje-avanzado"],
+      "paginas": ["campus", "biblioteca/ficha-compostaje-domestico"],
+      "tags": ["compost", "termófilo", "lombriz roja californiana", "C:N"]
+    },
+    "huertos-urbanos": {
+      "titulo": "Huertos Urbanos y Agricultura Familiar",
+      "icono": "🏡",
+      "subtemas": [
+        "Diseño del espacio productivo",
+        "Calendario de siembra",
+        "Asociaciones de cultivos"
+      ],
+      "cursos_relacionados": ["huertos-urbanos"],
+      "paginas": ["campus"],
+      "tags": ["huerto urbano", "agricultura familiar", "soberanía alimentaria"]
+    }
+  },
+
+  "conceptos_clave": [
+    { "concepto": "Regla del 95/5", "descripcion": "95% de la planta es C-H-O gratis del aire y agua; solo 5% es NPK y minerales del suelo", "tags": ["nutrición", "fotosíntesis", "eficiencia"] },
+    { "concepto": "ORP (Potencial Óxido-Reducción)", "descripcion": "Mide la carga de electrones/energía del suelo. Suelo sano: -100 a -300 mV", "tags": ["energía", "suelo", "medición"] },
+    { "concepto": "rH", "descripcion": "Coeficiente que integra pH y ORP para una visión completa del estado energético del suelo", "tags": ["suelo", "energía", "medición"] },
+    { "concepto": "IASS", "descripcion": "Índice de Sustentabilidad del Suelo. Valora física, química y biología. Óptimo: 30-40%", "tags": ["suelo", "sustentabilidad", "índice"] },
+    { "concepto": "Biosilicificación", "descripcion": "Conversión biológica de H₄SiO₄ soluble en SiO₂ amorfo (fitolitos) en la planta", "tags": ["silicio", "defensa", "fitolitos"] },
+    { "concepto": "Glomalina", "descripcion": "Glicoproteína producida por hongos micorrícicos que estabiliza agregados del suelo", "tags": ["suelo", "hongos", "estructura"] },
+    { "concepto": "Quelatación biológica", "descripcion": "Encapsular minerales con ácidos orgánicos para evitar su fijación en el suelo y hacerlos asimilables", "tags": ["minerales", "nutrición", "bioinsumos"] },
+    { "concepto": "CICE", "descripcion": "Capacidad de Intercambio Catiónico del suelo para retener e intercambiar cationes", "tags": ["suelo", "nutrición", "química"] },
+    { "concepto": "Fotosíntesis", "descripcion": "Proceso que convierte CO₂ + H₂O + luz solar en glucosa y O₂. Sostiene la vida en la Tierra", "tags": ["planta", "energía", "azúcares"] },
+    { "concepto": "ATP", "descripcion": "Moneda energética de la célula. 28 ATP con oxígeno vs. 2 ATP sin oxígeno", "tags": ["energía", "respiración", "metabolismo"] },
+    { "concepto": "Fitorremediación", "descripcion": "Uso de plantas para absorber contaminantes del suelo", "tags": ["suelo", "contaminación", "limpieza"] },
+    { "concepto": "Fertilizantes Híbridos de Lenta Liberación", "descripcion": "Combinación de minerales quelatados + matriz orgánica que libera nutrientes gradualmente", "tags": ["nutrición", "innovación", "eficiencia"] },
+    { "concepto": "Estrategia I (Absorción de Hierro)", "descripcion": "Usada por la mayoría de plantas: acidifican rizósfera y reducen Fe³⁺ a Fe²⁺", "tags": ["hierro", "nutrición", "fisiología"] },
+    { "concepto": "Estrategia II (Absorción de Hierro)", "descripcion": "Propia de gramíneas: liberan fitosideróforos que capturan Fe³⁺", "tags": ["hierro", "gramíneas", "fitosideróforos"] },
+    { "concepto": "Milpa Maya", "descripcion": "Sistema de policultivo maíz-frijol-calabaza. Hasta 9 mazorcas/planta con nutrición mineral", "tags": ["ancestral", "Mesoamérica", "policultivo"] },
+    { "concepto": "Terrazas Incas", "descripcion": "Sistemas andinos de laderas escalonadas con drenaje multicapa e inercia térmica de piedra", "tags": ["ancestral", "Andes", "hidrología"] },
+    { "concepto": "Chinampas", "descripcion": "Islas artificiales flotantes aztecas en lagos someros. Hasta 5 cosechas/año", "tags": ["ancestral", "Mesoamérica", "humedales"] },
+    { "concepto": "Subak", "descripcion": "Democracia hídrica de Bali con templos del agua y sincronización contra plagas", "tags": ["ancestral", "Indonesia", "riego"] },
+    { "concepto": "Baray (Jemer)", "descripcion": "Megarreservorios elevados de Angkor. Ej: Baray Occidental de 8 × 2.2 km", "tags": ["ancestral", "Camboya", "hidráulica"] },
+    { "concepto": "SRI", "descripcion": "Sistema de Intensificación del Arroz. 22.4 t/ha (récord), 5 kg semilla/ha, 50% menos agua", "tags": ["arroz", "innovación", "récord"] },
+    { "concepto": "Suelo reducido vs. oxidado", "descripcion": "Reducido (-100 a -300 mV): rico en electrones y vida. Oxidado (+200 a +400 mV): consume energía", "tags": ["ORP", "energía", "salud del suelo"] },
+    { "concepto": "Ley del Mínimo (Liebig)", "descripcion": "El nutriente menos disponible limita la producción, no el total aplicado", "tags": ["nutrición", "limitante", "eficiencia"] }
+  ],
+
+  "paginas": {
+    "/": { "titulo": "Inicio", "secciones": ["hero", "pilares", "mitos", "numeros-clave", "casos-exito"], "resumen": "Landing page con los 5 pilares, 9 mitos, 8 números clave y 3 casos de éxito" },
+    "/campus": { "titulo": "Campus Virtual", "secciones": ["cursos", "cursos-32", "biblioteca"], "resumen": "9 cursos regulares + 32 cursos del modelo Utopía + 9 documentos de biblioteca" },
+    "/biblioteca": { "titulo": "Biblioteca", "secciones": ["fichas", "protocolos", "guías", "artículos"], "resumen": "Documentos técnicos descargables con parámetros, protocolos y guías de campo" },
+    "/herramientas": { "titulo": "Herramientas", "secciones": ["recetas", "glosario", "instrumentos", "ciclos-lunares"], "resumen": "3 recetas de bioinsumos, ~876 términos de glosario, 4 instrumentos de medición, fases lunares" },
+    "/comunidad": { "titulo": "Comunidad", "secciones": ["posts", "categorias"], "resumen": "Foro con publicaciones sobre plagas, suelos, bioinsumos, casos de éxito e intercambio de semillas" },
+    "/academia": { "titulo": "Academia", "secciones": ["estudiantes", "estadisticas"], "resumen": "Panel de estudiantes: 4 inscritos, 1 completado, 2 en progreso" }
+  },
+
+  "cursos_regulares": [
+    { "id": "suelo-vivo", "titulo": "Suelo Vivo: Microbiología y Regeneración", "nivel": "Principiante", "duracion": "12h", "clases": 4, "premium": false },
+    { "id": "biofertilizantes", "titulo": "Biofertilizantes y Caldos Minerales", "nivel": "Principiante", "duracion": "10h", "clases": 3, "premium": false },
+    { "id": "bokashi-avanzado", "titulo": "Abonos Fermentados tipo Bokashi", "nivel": "Intermedio", "duracion": "15h", "clases": 3, "premium": true },
+    { "id": "control-biologico", "titulo": "Control Biológico de Plagas y Enfermedades", "nivel": "Intermedio", "duracion": "14h", "clases": 4, "premium": false },
+    { "id": "riego-keyline", "titulo": "Diseño Hidrológico Keyline", "nivel": "Avanzado", "duracion": "18h", "clases": 4, "premium": true },
+    { "id": "agroforesteria", "titulo": "Sistemas Agroforestales Sintrópicos", "nivel": "Avanzado", "duracion": "20h", "clases": 4, "premium": true },
+    { "id": "semillas-criollas", "titulo": "Producción y Conservación de Semillas Criollas", "nivel": "Principiante", "duracion": "8h", "clases": 3, "premium": false },
+    { "id": "compostaje-avanzado", "titulo": "Compostaje Termófilo y Lombricultura", "nivel": "Intermedio", "duracion": "12h", "clases": 3, "premium": false },
+    { "id": "huertos-urbanos", "titulo": "Huertos Urbanos y Agricultura Familiar", "nivel": "Principiante", "duracion": "6h", "clases": 3, "premium": false }
+  ],
+
+  "cursos_modelo_utopia": [
+    { "id": "c1", "numero": 1, "titulo": "Fundamentos y el 'Reloj' de la Agricultura Orgánica" },
+    { "id": "c2", "numero": 2, "titulo": "Biofábrica Estaciones 1-3 (Microorganismos y Activación)" },
+    { "id": "c3", "numero": 3, "titulo": "Minerales, Quelatación y Protección (Estaciones 5-8)" },
+    { "id": "c4", "numero": 4, "titulo": "Nutrición Lumínica y Carbónica (Estaciones 4 y 9)" },
+    { "id": "c5", "numero": 5, "titulo": "Calibración y Monitoreo Avanzado de Biofertilizantes" },
+    { "id": "c6", "numero": 6, "titulo": "Preparación del Suelo: Descompactación y Piso de Arado" },
+    { "id": "c7", "numero": 7, "titulo": "Fertilización de Base y Manejo de Rastrojos" },
+    { "id": "c8", "numero": 8, "titulo": "Manejo de Plagas y Enfermedades con Bioinsumos" },
+    { "id": "c9", "numero": 9, "titulo": "Programa Integrado de Control y Monitoreo Biológico" },
+    { "id": "c10", "numero": 10, "titulo": "Cultivos Específicos I: Maíz, Fríjol y Milpa" },
+    { "id": "c11", "numero": 11, "titulo": "Cultivos Específicos II: Arroz, Trigo y Granos" },
+    { "id": "c12", "numero": 12, "titulo": "Cultivos Específicos III: Hortalizas y Frutales" },
+    { "id": "c13", "numero": 13, "titulo": "Elaboración de Ácidos Húmicos y Fúlvicos" },
+    { "id": "c14", "numero": 14, "titulo": "Fertilización Híbrida y Nutrición de Precisión" },
+    { "id": "c15", "numero": 15, "titulo": "Agricultura Sintrópica y Policultivos" },
+    { "id": "c16", "numero": 16, "titulo": "Manejo del Agua: Captación, Almacenamiento y Riego Eficiente" },
+    { "id": "c17", "numero": 17, "titulo": "Biología del Suelo: Hongos, Bacterias, Protozoos y Nematodos" },
+    { "id": "c18", "numero": 18, "titulo": "Silicio: El Elemento Maestro de la Nutrición Vegetal" },
+    { "id": "c19", "numero": 19, "titulo": "Micronutrientes: Zn, Cu, B, Mo, Mn, Fe, Cl, Ni" },
+    { "id": "c20", "numero": 20, "titulo": "Compostaje Avanzado y Lombricultura Industrial" },
+    { "id": "c21", "numero": 21, "titulo": "Biofertilizantes Líquidos: Bioles, Tés y Extractos Fermentados" },
+    { "id": "c22", "numero": 22, "titulo": "Manejo Ecológico de Arvenses (Malezas)" },
+    { "id": "c23", "numero": 23, "titulo": "Producción de Semillas Criollas y Bancos Comunitarios" },
+    { "id": "c24", "numero": 24, "titulo": "Microorganismos Eficientes (EM) y Consorcios Microbianos" },
+    { "id": "c25", "numero": 25, "titulo": "Diseño de Biofábricas de Bajo Costo (10 m²)" },
+    { "id": "c26", "numero": 26, "titulo": "Indicadores de Salud del Suelo: pH, ORP, rH, CE, IASS" },
+    { "id": "c27", "numero": 27, "titulo": "Sistemas de Riego por Goteo y Fertirriego Orgánico" },
+    { "id": "c28", "numero": 28, "titulo": "Manejo de Estrés Térmico en Cultivos" },
+    { "id": "c29", "numero": 29, "titulo": "Agricultura Regenerativa y Secuestro de Carbono" },
+    { "id": "c30", "numero": 30, "titulo": "Mercados Locales y Certificación Participativa" },
+    { "id": "c31", "numero": 31, "titulo": "Administración de la Finca Orgánica" },
+    { "id": "c32", "numero": 32, "titulo": "Proyecto Final: Diseño de un Sistema Productivo Regenerativo" }
+  ],
+
+  "biblioteca": [
+    { "id": "ficha-compostaje-domestico", "titulo": "Guía de Parámetros Críticos en Compostaje", "categoria": "Fichas Técnicas", "dificultad": "Bajo", "tags": ["Compost", "Suelos", "Humedad", "Temperatura"] },
+    { "id": "protocolo-microorganismos-montana", "titulo": "Protocolo de Captura y Multiplicación de MM", "categoria": "Protocolos", "dificultad": "Medio", "tags": ["MM", "Microbiología", "Inóculo"] },
+    { "id": "guia-bioestimulantes-foliares", "titulo": "Guía de Aplicación Eficiente de Bioestimulantes", "categoria": "Guías", "dificultad": "Bajo", "tags": ["Bioestimulantes", "Foliar", "Nutrición"] },
+    { "id": "modelo-holandes-cea", "titulo": "Sistemas de Cultivo de Alto Rendimiento en Invernaderos de Holanda", "categoria": "Artículos", "dificultad": "Alto", "tags": ["Invernaderos", "LED", "CO2", "Fisiología"] },
+    { "id": "ficha-caldo-sulfocalcico", "titulo": "Preparación y Aplicación del Caldo Sulfocálcico", "categoria": "Fichas Técnicas", "dificultad": "Medio", "tags": ["Caldo Sulfocálcico", "Azufre", "Cal", "Hongo"] },
+    { "id": "guia-abonos-verdes", "titulo": "Guía de Abonos Verdes y Coberturas Vegetales", "categoria": "Guías", "dificultad": "Bajo", "tags": ["Abonos Verdes", "Cobertura", "Nitrógeno"] },
+    { "id": "protocolo-bocashi", "titulo": "Protocolo de Elaboración de Abono Fermentado Bokashi", "categoria": "Protocolos", "dificultad": "Medio", "tags": ["Bokashi", "Fermentación", "Microorganismos"] },
+    { "id": "guia-identificacion-plagas", "titulo": "Guía de Identificación de Plagas y Enemigos Naturales", "categoria": "Guías", "dificultad": "Medio", "tags": ["Plagas", "Identificación", "Control Biológico"] },
+    { "id": "ficha-riego-goteo", "titulo": "Ficha Técnica: Diseño de Riego por Goteo para Fincas Familiares", "categoria": "Fichas Técnicas", "dificultad": "Medio", "tags": ["Riego", "Goteo", "Diseño", "Ahorro de Agua"] }
+  ],
+
+  "recetas": [
+    { "id": "biol-2", "titulo": "Microorganismos Benéficos (Estación 2)", "categoria": "Bioinsumos", "tiempo": "8 días" },
+    { "id": "caldo-sulfocalcico", "titulo": "Caldo Sulfocálcico", "categoria": "Caldos Minerales", "tiempo": "1 hora" },
+    { "id": "empanizado-semillas", "titulo": "Empanizado de Semillas", "categoria": "Tratamiento de Semillas", "tiempo": "24 horas" }
+  ],
+
+  "instrumentos": [
+    { "id": "ph-metro", "titulo": "pH-metro", "rango_ideal": "5.5 - 6.5 foliares" },
+    { "id": "electroconductimetro", "titulo": "Electroconductímetro (CE)", "rango_ideal": "1.5 - 3.0 mS/cm" },
+    { "id": "orp-medidor", "titulo": "Medidor ORP", "rango_ideal": "-100 a -300 mV (suelo reducido)" },
+    { "id": "sensor-humedad", "titulo": "Sensor de Humedad / Prueba del Puño", "rango_ideal": "50% humedad" }
+  ],
+
+  "glosario_secciones": {
+    "suelos": { "archivo": "glosario-suelos.ts", "terminos": 252, "subsecciones": ["ORP y Energía", "Geología", "Meteorización", "Mineralogía", "Textura y Estructura", "Materia Orgánica", "Química del Suelo", "pH y Acidez", "Microbiología del Suelo", "Hongos del Suelo", "Bacterias del Suelo", "Fauna del Suelo", "Degradación", "Conservación", "Enmiendas"] },
+    "riego": { "archivo": "glosario-riego.ts", "terminos": 37, "subsecciones": ["Agua del Suelo", "Riego y Métodos", "Calidad del Agua", "Drenaje"] },
+    "clima": { "archivo": "glosario-clima.ts", "terminos": 53, "subsecciones": ["Climatología", "Radiación Solar", "Fotoperiodo", "Temperatura", "Humedad", "Viento", "Eventos Climáticos"] },
+    "micronutrientes": { "archivo": "glosario-micronutrientes.ts", "terminos": 180, "subsecciones": ["Hierro (Fe)", "Manganeso (Mn)", "Zinc (Zn)", "Cobre (Cu)", "Boro (B)", "Molibdeno (Mo)", "Cloro (Cl)", "Níquel (Ni)"] },
+    "general": { "archivo": "glosario-general.ts", "terminos": 695, "subsecciones": ["Bioquímica Vegetal", "Fotosíntesis", "Respiración", "Nutrición", "Hormonas", "Defensa", "Fisiología del Estrés", "Taxonomía", "Morfología", "Reproducción", "Genética"] }
+  },
+
+  "comunidad_categorias": ["Plagas", "Suelos", "Bioinsumos", "Casos de Éxito", "Intercambio de Semillas"],
+  "comunidad_posts": 1002,
+
+  "academia": {
+    "total_estudiantes": 4,
+    "completados": 1,
+    "en_progreso": 2,
+    "sin_iniciar": 1
+  },
+
+  "tags": {
+    "suelo": { "titulo": "Suelo", "conceptos_asociados": ["ORP", "IASS", "materia orgánica", "descompactación", "microbiología"] },
+    "nutricion": { "titulo": "Nutrición Vegetal", "conceptos_asociados": ["95/5", "silicio", "quelatación", "NPK", "micronutrientes"] },
+    "bioinsumos": { "titulo": "Bioinsumos", "conceptos_asociados": ["MM", "biol", "bokashi", "caldo sulfocálcico", "jabón potásico"] },
+    "agua": { "titulo": "Agua y Riego", "conceptos_asociados": ["keyline", "capilaridad", "infiltración", "capacidad de campo"] },
+    "clima": { "titulo": "Clima y Ambiente", "conceptos_asociados": ["fotoperiodo", "temperatura óptima", "VPD", "radiación solar"] },
+    "plagas": { "titulo": "Plagas y Enfermedades", "conceptos_asociados": ["control biológico", "Beauveria", "caldo sulfocálcico", "trampas cromáticas"] },
+    "ancestral": { "titulo": "Sabiduría Ancestral", "conceptos_asociados": ["milpa", "chinampas", "terrazas", "subak", "babilonia"] },
+    "herramientas": { "titulo": "Herramientas y Medición", "conceptos_asociados": ["pH-metro", "ORP", "CE", "prueba del puño"] },
+    "semillas": { "titulo": "Semillas", "conceptos_asociados": ["criollas", "bancos comunitarios", "empanizado", "selección"] },
+    "agroforesteria": { "titulo": "Agroforestería", "conceptos_asociados": ["sintrópica", "sucesión", "poda dinámica", "estratificación"] }
+  },
+
+  "metadata": {
+    "total_cultivos_indexados": 14,
+    "total_temas": 16,
+    "total_conceptos_clave": 22,
+    "total_paginas": 6,
+    "total_cursos_regulares": 9,
+    "total_cursos_modelo_utopia": 32,
+    "total_documentos_biblioteca": 9,
+    "total_recetas": 3,
+    "total_instrumentos": 4,
+    "total_terminos_glosario": 1217,
+    "total_secciones_glosario": 5,
+    "total_tags": 10,
+    "total_estudiantes": 4,
+    "total_posts_comunidad": 1002
+  }
+}

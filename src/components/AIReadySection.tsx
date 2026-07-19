@@ -4,8 +4,9 @@
  */
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
-  Bot, 
+  Atom, 
   Database, 
   Rss, 
   Mail, 
@@ -20,11 +21,40 @@ import {
   Code,
   FileText,
   Terminal,
-  Check
+  Check,
+  ShieldCheck,
+  ArrowLeft
 } from "lucide-react";
 import { COURSES, BIBLIOTECA } from "../data";
 
+const ACCESS_KEY = 'aa_aiready_access';
+const AIREADY_PASSWORD = 'aa-admin';
+
+function checkAccess(): boolean {
+  try {
+    const raw = sessionStorage.getItem(ACCESS_KEY);
+    if (!raw) return false;
+    const { ts } = JSON.parse(raw);
+    return Date.now() - ts < 24 * 60 * 60 * 1000;
+  } catch { return false; }
+}
+
+function grantAccess(): void {
+  sessionStorage.setItem(ACCESS_KEY, JSON.stringify({ ts: Date.now() }));
+}
+
+function revokeAccess(): void {
+  sessionStorage.removeItem(ACCESS_KEY);
+}
+
+// Clean up old localStorage key if present from previous versions
+try { localStorage.removeItem(ACCESS_KEY); } catch { /* noop */ }
+
 export default function AIReadySection() {
+  const navigate = useNavigate();
+  const [granted, setGranted] = useState(checkAccess());
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState<"teoria" | "playground" | "comparador">("teoria");
   const [subTab, setSubTab] = useState<"schema" | "faq" | "eeat">("schema");
   const [selectedDataset, setSelectedDataset] = useState<"courses" | "library" | "recipes">("courses");
@@ -117,6 +147,54 @@ export default function AIReadySection() {
   };
 
   const schemaString = JSON.stringify(getSchemaJSON(), null, 2);
+
+  const handleUnlock = () => {
+    if (password === AIREADY_PASSWORD) {
+      grantAccess();
+      setGranted(true);
+      setError(false);
+      setPassword('');
+    } else {
+      setError(true);
+    }
+  };
+
+  if (!granted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-stone-950 px-4">
+        <div className="w-full max-w-sm bg-stone-900 border border-stone-700 rounded-3xl p-8 space-y-6 text-center shadow-2xl">
+          <div className="mx-auto h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center">
+            <ShieldCheck className="h-8 w-8 text-gold" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-serif text-xl font-bold text-stone-100">Acceso Restringido</h2>
+            <p className="text-sm text-stone-400 leading-relaxed">
+              Esta sección es solo para personal autorizado. Ingresa la contraseña para continuar.
+            </p>
+          </div>
+          <form onSubmit={(e) => { e.preventDefault(); handleUnlock(); }} className="space-y-4">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              placeholder="Contraseña de acceso"
+              className="w-full px-4 py-3 rounded-xl bg-stone-800 border border-stone-600 text-stone-100 text-sm outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 placeholder:text-stone-500 text-center"
+              autoFocus
+            />
+            {error && <p className="text-xs text-red-400 font-medium">Contraseña incorrecta</p>}
+            <button type="submit"
+              className="w-full py-3 bg-primary hover:bg-gold hover:text-stone-950 text-stone-50 text-sm font-bold rounded-xl transition-all">
+              Desbloquear
+            </button>
+          </form>
+          <button onClick={() => navigate('/')}
+            className="text-xs text-stone-500 hover:text-stone-300 transition-colors flex items-center justify-center gap-1 mx-auto">
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver al inicio
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -224,13 +302,14 @@ export default function AIReadySection() {
     <div className="space-y-8 py-4" id="ai-ready-section">
       {/* Dynamic Header Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-[#0c2a43] via-[#091b29] to-[#040c14] border border-stone-800 p-6 sm:p-8 text-stone-100 shadow-xl" id="aiready-hero">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=100&w=2400" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
         <div className="absolute top-0 right-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-1/3 -mb-20 h-72 w-72 rounded-full bg-gold/15 blur-3xl"></div>
 
         <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-4 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
-              <Bot className="h-4 w-4 animate-pulse" />
+              <Atom className="h-4 w-4 animate-pulse" />
               <span>Plataforma "AI-Ready" Homologada</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-white leading-tight">

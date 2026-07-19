@@ -10,7 +10,7 @@ export const COURSES: Course[] = [
     category: "Nutrición de Suelos",
     duration: "12 horas",
     lessonsCount: 4,
-    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c3aa?auto=format&fit=crop&q=80&w=600",
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600",
     rating: 4.9,
     isPremium: false,
     author: "Ing. Alejandro Salazar - Especialista en Microbiología de Suelos",
@@ -148,7 +148,124 @@ export const COURSES: Course[] = [
         }
       }
     ]
-  }
+  },
+  {
+    id: "control-biologico",
+    title: "Control Biológico de Plagas y Enfermedades",
+    description: "Estrategias naturales para el manejo de plagas usando depredadores, hongos entomopatógenos y plantas repelentes.",
+    extendedDescription: "Aprende a identificar insectos benéficos, preparar biopreparados y diseñar un ecosistema de cultivo que se defienda solo.",
+    level: "Intermedio",
+    category: "Manejo de Plagas",
+    duration: "14 horas",
+    lessonsCount: 4,
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600",
+    rating: 4.7,
+    isPremium: false,
+    author: "Ing. Lucía Mendoza - Entomóloga Agrícola",
+    modules: [
+      { id: "cb-m1", title: "Identificación de insectos benéficos y plagas", duration: "4h", type: "lecture", content: "Reconocimiento en campo de depredadores naturales como mariquitas, crisopas y avispas parasitoides, así como hongos entomopatógenos (Beauveria bassiana, Metarhizium anisopliae)." },
+      { id: "cb-m2", title: "Preparación de biopreparados repelentes", duration: "5h", type: "practical", content: "Guía de elaboración de purines de ajo, ají, ruda y cola de caballo, más caldo de ceniza para control de insectos chupadores." },
+      { id: "cb-m3", title: "Diseño de policultivos y corredores biológicos", duration: "3h", type: "lecture", content: "Planificación de franjas florales, setos vivos y cultivos trampa para atraer biodiversidad funcional." },
+      { id: "cb-m4", title: "Evaluación de efectividad", duration: "2h", type: "quiz", content: "Cuestionario sobre umbrales de daño y manejo integrado.", quiz: { question: "¿Qué indicador determina que una plaga ha superado el umbral de acción?", options: ["Presencia de cualquier insecto en el cultivo", "El porcentaje de daño económico esperado supera el costo del control", "La aparición de la primera hoja mordida", "La presencia de telarañas en el envés"], correctAnswer: 1 } }
+    ]
+  },
+  {
+    id: "riego-keyline",
+    title: "Diseño Hidrológico Keyline",
+    description: "Captación, infiltración y distribución eficiente del agua en terrenos inclinados.",
+    extendedDescription: "Domina el sistema Keyline de P.A. Yeomans para transformar laderas erosionadas en fincas productivas con agua todo el año.",
+    level: "Avanzado",
+    category: "Manejo del Agua",
+    duration: "18 horas",
+    lessonsCount: 4,
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=600",
+    rating: 4.8,
+    isPremium: true,
+    author: "Arq. Pablo Rojas - Diseñador de Sistemas Keyline",
+    modules: [
+      { id: "rk-m1", title: "Topografía y líneas clave", duration: "5h", type: "lecture", content: "Uso de nivel A, curvas a nivel y determinación de la línea clave para el diseño de canales de desviación." },
+      { id: "rk-m2", title: "Diseño de represas y jagüeyes", duration: "5h", type: "practical", content: "Cálculo de volumen de captación y dimensionamiento de estructuras de almacenamiento de agua." },
+      { id: "rk-m3", title: "Implementación en campo", duration: "5h", type: "practical", content: "Trazo y construcción de canales Keyline con maquinaria mínima y herramientas manuales." },
+      { id: "rk-m4", title: "Evaluación final", duration: "3h", type: "quiz", content: "Examen integral de diseño hidrológico.", quiz: { question: "¿Cuál es el objetivo principal del patrón Keyline?", options: ["Drenar el agua lo más rápido posible", "Distribuir el agua horizontalmente para maximizar la infiltración", "Canalizar toda el agua a un solo punto de almacenamiento", "Crear terrazas planas para cultivo intensivo"], correctAnswer: 1 } }
+    ]
+  },
+  {
+    id: "agroforesteria",
+    title: "Sistemas Agroforestales Sintrópicos",
+    description: "Diseño de bosques comestibles con sucesión ecológica para regenerar suelos y producir alimentos.",
+    extendedDescription: "Aprende los principios de la agricultura sintrópica desarrollada por Ernst Götsch: poda dinámica, estratificación vertical y ciclos de nutrientes.",
+    level: "Avanzado",
+    category: "Diseño de Sistemas",
+    duration: "20 horas",
+    lessonsCount: 4,
+    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=600",
+    rating: 4.9,
+    isPremium: true,
+    author: "Ing. Camila Torres - Especialista en Agroforestería",
+    modules: [
+      { id: "af-m1", title: "Sucesión ecológica y estratificación", duration: "6h", type: "lecture", content: "Principios de la agricultura sintrópica: plantas pioneras, secundarias y climácicas trabajando juntas." },
+      { id: "af-m2", title: "Diseño de bosque comestible", duration: "6h", type: "practical", content: "Selección de especies, distribución espacial y densidad de plantación para máxima producción de biomasa." },
+      { id: "af-m3", title: "Manejo de poda dinámica", duration: "5h", type: "practical", content: "Técnicas de poda para acelerar la sucesión y mantener la productividad del sistema." },
+      { id: "af-m4", title: "Evaluación de diseño", duration: "3h", type: "quiz", content: "Cuestionario sobre diseño de sistemas agroforestales.", quiz: { question: "¿Qué función cumple la poda dinámica en un sistema sintrópico?", options: ["Reducir la sombra sobre los cultivos", "Aportar biomasa fresca al suelo y reactivar la sucesión ecológica", "Eliminar ramas enfermas únicamente", "Facilitar la cosecha de frutos"], correctAnswer: 1 } }
+    ]
+  },
+  {
+    id: "semillas-criollas",
+    title: "Producción y Conservación de Semillas Criollas",
+    description: "Bancos de semillas comunitarios, selección participativa y multiplicación de variedades adaptadas.",
+    extendedDescription: "Preserva la biodiversidad agrícola aprendiendo a producir, seleccionar y almacenar semillas criollas adaptadas a tu microclima.",
+    level: "Principiante",
+    category: "Biodiversidad",
+    duration: "8 horas",
+    lessonsCount: 3,
+    image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=600",
+    rating: 4.6,
+    isPremium: false,
+    author: "Téc. Rosa Mamani - Custodia de Semillas",
+    modules: [
+      { id: "sc-m1", title: "Selección de plantas madre", duration: "3h", type: "lecture", content: "Criterios para seleccionar las mejores plantas: vigor, sanidad, precocidad, rendimiento y adaptación local." },
+      { id: "sc-m2", title: "Técnicas de cosecha y almacenamiento", duration: "3h", type: "practical", content: "Métodos tradicionales de secado, limpieza y almacenamiento en envases herméticos con ceniza y plantas repelentes." },
+      { id: "sc-m3", title: "Bancos comunitarios", duration: "2h", type: "quiz", content: "Cuestionario sobre gestión de semilleros.", quiz: { question: "¿Cuál es la condición óptima para almacenar semillas criollas?", options: ["Alta humedad y temperatura ambiente", "Lugar seco, oscuro y fresco con temperatura entre 4-10°C", "Exposición directa al sol para mantenerlas secas", "Refrigeración a -18°C"], correctAnswer: 1 } }
+    ]
+  },
+  {
+    id: "compostaje-avanzado",
+    title: "Compostaje Termófilo y Lombricultura",
+    description: "Técnicas avanzadas de transformación de residuos orgánicos en abonos de alta calidad.",
+    extendedDescription: "Domina la termofilia, el manejo de pilas estáticas aireadas y la cría intensiva de lombrices rojas californianas.",
+    level: "Intermedio",
+    category: "Nutrición de Suelos",
+    duration: "12 horas",
+    lessonsCount: 3,
+    image: "https://images.unsplash.com/photo-1592150621744-aca64f48394a?auto=format&fit=crop&q=80&w=600",
+    rating: 4.7,
+    isPremium: false,
+    author: "Biól. Fernando Cruz - Manejo de Residuos Orgánicos",
+    modules: [
+      { id: "co-m1", title: "Física y química del compostaje", duration: "4h", type: "lecture", content: "Fases del compostaje: mesófila, termófila, enfriamiento y maduración. Control de temperatura, humedad y oxígeno." },
+      { id: "co-m2", title: "Construcción de pilas y camas", duration: "5h", type: "practical", content: "Diseño de pilas estáticas aireadas con tubería de PVC, camas de lombricultura y sistemas de riego de humus." },
+      { id: "co-m3", title: "Control de calidad del abono", duration: "3h", type: "quiz", content: "Evaluación final de compostaje.", quiz: { question: "¿Qué indica un olor a amoníaco en una pila de compost?", options: ["Exceso de materiales verdes y falta de oxígeno", "Compost perfectamente maduro", "Presencia de lombrices", "Baja temperatura"], correctAnswer: 0 } }
+    ]
+  },
+  {
+    id: "huertos-urbanos",
+    title: "Huertos Urbanos y Agricultura Familiar",
+    description: "Diseño y manejo de huertos en espacios reducidos para la soberanía alimentaria del hogar.",
+    extendedDescription: "Aprende a producir alimentos sanos en tu casa, balcón o terraza usando principios agroecológicos, reciclaje de residuos orgánicos y cultivos asociados de alta densidad.",
+    level: "Principiante",
+    category: "Agricultura Familiar",
+    duration: "6 horas",
+    lessonsCount: 3,
+    image: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=600",
+    rating: 4.5,
+    isPremium: false,
+    author: "Téc. Andrea Ruiz - Promotora de Huertos Urbanos",
+    modules: [
+      { id: "hu-m1", title: "Diseño del espacio productivo", duration: "2h", type: "lecture", content: "Evaluación de espacio disponible, orientación solar, selección de contenedores y sustratos para huertos urbanos." },
+      { id: "hu-m2", title: "Calendario de siembra y asociaciones", duration: "2h", type: "practical", content: "Planificación de cultivos de estación, rotación en camas pequeñas y asociaciones benéficas (maíz-frijol-calabaza)." },
+      { id: "hu-m3", title: "Manejo ecológico en casa", duration: "2h", type: "quiz", content: "Evaluación de conceptos de agricultura urbana.", quiz: { question: "¿Cuál es la ventaja principal de los cultivos asociados?", options: ["Mayor uso de fertilizantes", "Control natural de plagas y mejor aprovechamiento del espacio", "Menor necesidad de riego", "Cosecha más rápida"], correctAnswer: 1 } }
+    ]
+  },
 ];
 
 export function getCourseById(id: string): Course | undefined {

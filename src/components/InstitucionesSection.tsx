@@ -4,33 +4,23 @@
  */
 
 import React, { useState } from "react";
-import { 
-  Users, 
-  FileSpreadsheet, 
-  Plus, 
-  Search, 
-  TrendingUp, 
-  CheckCircle2, 
+import {
+  Users,
+  FileSpreadsheet,
+  Plus,
+  Search,
+  TrendingUp,
+  CheckCircle2,
   X,
   PlusCircle
 } from "lucide-react";
-
-interface EstudianteInstitucional {
-  id: string;
-  name: string;
-  comunidad: string;
-  course: string;
-  progress: number;
-  startDate: string;
-}
+import { INSTITUCIONES_ESTUDIANTES } from "../data";
+import type { EstudianteInstitucional } from "../data";
+import { PageRenderer } from "./blocks";
+import type { PageBlock } from "./blocks";
 
 export default function InstitucionesSection() {
-  const [estudiantes, setEstudiantes] = useState<EstudianteInstitucional[]>([
-    { id: "e1", name: "Don José Velásquez", comunidad: "Vereda El Vergel", course: "Suelo Vivo: Microbiología y Regeneración", progress: 100, startDate: "14/05/2026" },
-    { id: "e2", name: "Mercedes Anchundia", comunidad: "Comunidad Las Delicias", course: "Suelo Vivo: Microbiología y Regeneración", progress: 75, startDate: "01/06/2026" },
-    { id: "e3", name: "Héctor Fabio Ortiz", comunidad: "Cooperativa San Isidro", course: "Biofertilizantes y Caldos Minerales", progress: 33, startDate: "12/06/2026" },
-    { id: "e4", name: "Rosa María Guamán", comunidad: "Asociación Tierras Verdes", course: "Abonos Fermentados tipo Bokashi", progress: 0, startDate: "29/06/2026" },
-  ]);
+  const [estudiantes, setEstudiantes] = useState<EstudianteInstitucional[]>(INSTITUCIONES_ESTUDIANTES);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newName, setNewName] = useState("");
@@ -71,13 +61,16 @@ export default function InstitucionesSection() {
   return (
     <div className="space-y-8 py-4" id="instituciones-section">
       {/* Header */}
-      <div className="space-y-2">
-        <span className="font-mono text-[10px] text-emerald-700 tracking-wider uppercase font-semibold">Consola Cooperativa</span>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Panel para Instituciones</h2>
-        <p className="text-xs text-stone-600 max-w-2xl">
-          Diseñado para cooperativas de productores, municipios y ONGs que implementan programas de capacitación agrícola asistida en sus comunidades. Monitorea el avance de tus agricultores asociados en tiempo real.
-        </p>
-      </div>
+      <PageRenderer blocks={[{
+        type: 'hero',
+        id: 'instituciones-hero',
+        props: {
+          badge: 'Consola Cooperativa',
+          title: 'Panel para Instituciones',
+          subtitle: 'Diseñado para cooperativas de productores, municipios y ONGs que implementan programas de capacitación agrícola asistida en sus comunidades. Monitorea el avance de tus agricultores asociados en tiempo real.',
+          backgroundImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=100&w=2400',
+        },
+      }]} />
 
       {/* Metrics Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" id="inst-metrics">
